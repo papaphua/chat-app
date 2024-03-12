@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ChatApp.Server.Application\ChatApp.Server.Application.csproj" />
+      <ProjectReference Include="..\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
