@@ -17,7 +17,7 @@ public static class HostingExtensions
         builder.Services.AddControllers();
 
         builder.Services.AddSwaggerGen();
-        
+
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(defaultConnection));
 
         builder.Services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
@@ -31,6 +31,13 @@ public static class HostingExtensions
             .AsMatchingInterface()
             .WithScopedLifetime());
 
+        builder.Services.Scan(scan => scan
+            .FromAssemblyOf<IUnitOfWork>()
+            .AddClasses(classes => classes
+                .Where(type => type.IsClass && type.Name.EndsWith("Service")))
+            .AsMatchingInterface()
+            .WithScopedLifetime());
+
         return builder.Build();
     }
 
@@ -41,7 +48,7 @@ public static class HostingExtensions
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        
+
         app.MapControllers();
 
         return app;
@@ -50,8 +57,6 @@ public static class HostingExtensions
     public static void LogRegisteredServices(this IServiceCollection services)
     {
         foreach (var service in services)
-        {
             Log.Information("Registered service: {ServiceType}", service.ServiceType.Name);
-        }
     }
 }
