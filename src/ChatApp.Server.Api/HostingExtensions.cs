@@ -4,6 +4,7 @@ using ChatApp.Server.Domain.Users;
 using ChatApp.Server.Infrastructure;
 using ChatApp.Server.Infrastructure.Core.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace ChatApp.Server.Api;
 
@@ -36,5 +37,13 @@ public static class HostingExtensions
         app.MapControllers();
 
         return app;
+    }
+
+    public static void LogRegisteredServices(this IServiceCollection services)
+    {
+        foreach (var service in services)
+        {
+            Log.Information("Registered service: {ServiceType}", service.ServiceType.Name);
+        }
     }
 }
