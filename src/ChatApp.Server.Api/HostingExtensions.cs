@@ -51,6 +51,7 @@ public static class HostingExtensions
     {
         if (app.Environment.IsDevelopment())
         {
+            app.UseWebAssemblyDebugging();
             app.UseSwagger();
             app.UseSwaggerUI();
         }

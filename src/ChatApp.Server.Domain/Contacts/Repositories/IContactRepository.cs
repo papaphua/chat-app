@@ -4,4 +4,5 @@ namespace ChatApp.Server.Domain.Contacts.Repositories;
 
 public interface IContactRepository : IRepository<Contact>
 {
+    Task<Contact?> GetByIdAsync(Guid id, bool includeAvatar = false);
 }

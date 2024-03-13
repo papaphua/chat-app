@@ -5,4 +5,6 @@ namespace ChatApp.Server.Domain.Users.Repositories;
 public interface IUserAvatarRepository : IRepository<UserAvatar>
 {
     Task<UserAvatar?> GetByIdsAsync(Guid userId, Guid resourceId);
+
+    Task<UserAvatar?> GetLatestByIdAsync(Guid userId);
 }

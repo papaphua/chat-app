@@ -16,4 +16,12 @@ public sealed class UserAvatarRepository(ApplicationDbContext dbContext)
             .Include(avatar => avatar.Resource)
             .FirstOrDefaultAsync(avatar => avatar.UserId == userId && avatar.ResourceId == resourceId);
     }
+
+    public async Task<UserAvatar?> GetLatestByIdAsync(Guid userId)
+    {
+        return await _dbContext.Set<UserAvatar>()
+            .Include(avatar => avatar.Resource)
+            .OrderBy(avatar => avatar.Resource.Timestamp)
+            .FirstOrDefaultAsync();
+    }
 }

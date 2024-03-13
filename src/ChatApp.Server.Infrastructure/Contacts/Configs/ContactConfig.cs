@@ -8,9 +8,9 @@ public sealed class ContactConfig : IEntityTypeConfiguration<Contact>
 {
     public void Configure(EntityTypeBuilder<Contact> builder)
     {
-        builder.HasOne(contact => contact.User)
+        builder.HasOne(contact => contact.Partner)
             .WithMany()
-            .HasForeignKey(contact => contact.UserId)
+            .HasForeignKey(contact => contact.PartnerId)
             .OnDelete(DeleteBehavior.ClientCascade);
 
         builder.HasOne(contact => contact.Avatar)
