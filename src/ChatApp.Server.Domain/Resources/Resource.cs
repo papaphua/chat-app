@@ -9,6 +9,8 @@ public sealed class Resource(string name, byte[] bytes, FileExtension extension)
     public byte[] Bytes { get; set; } = bytes;
 
     public FileExtension Extension { get; set; } = extension;
+    
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public Guid Id { get; set; } = Guid.NewGuid();
 }

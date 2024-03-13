@@ -38,6 +38,9 @@ public static class HostingExtensions
             .AsMatchingInterface()
             .WithScopedLifetime());
 
+        builder.Services.AddAutoMapper(options =>
+            options.AddMaps(typeof(IUnitOfWork).Assembly));
+
         return builder.Build();
     }
 
