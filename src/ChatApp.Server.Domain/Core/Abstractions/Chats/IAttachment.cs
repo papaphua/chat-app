@@ -1,6 +1,6 @@
 ﻿using ChatApp.Server.Domain.Resources;
 
-namespace ChatApp.Server.Domain.Core.Abstractions;
+namespace ChatApp.Server.Domain.Core.Abstractions.Chats;
 
 public interface IAttachment<TMessage>
     where TMessage : IEntity

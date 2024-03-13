@@ -1,6 +1,6 @@
 ﻿using ChatApp.Server.Domain.Users;
 
-namespace ChatApp.Server.Domain.Core.Abstractions;
+namespace ChatApp.Server.Domain.Core.Abstractions.Chats;
 
 public interface IMessage<TChat, TAttachment, TReaction>
     where TChat : IEntity

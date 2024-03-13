@@ -1,4 +1,5 @@
 ﻿using ChatApp.Server.Domain.Core.Abstractions;
+using ChatApp.Server.Domain.Core.Abstractions.Chats;
 using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Directs;

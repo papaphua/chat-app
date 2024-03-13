@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Server.Domain.Core.Abstractions;
+﻿namespace ChatApp.Server.Domain.Core.Abstractions.Chats;
 
 public interface IAdministratedChat<TMembership, TMessage, TRole, TAvatar>
     : IChat<TMembership, TMessage>
