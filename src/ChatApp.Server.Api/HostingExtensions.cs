@@ -1,5 +1,6 @@
 ﻿using ChatApp.Server.Application.Core.Abstractions;
 using ChatApp.Server.Domain.Core.Abstractions;
+using ChatApp.Server.Domain.Core.Identity;
 using ChatApp.Server.Domain.Users;
 using ChatApp.Server.Infrastructure;
 using ChatApp.Server.Infrastructure.Core.Abstractions;
@@ -22,7 +23,9 @@ public static class HostingExtensions
 
         builder.Services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-        builder.Services.AddIdentityCore<User>().AddEntityFrameworkStores<ApplicationDbContext>();
+        builder.Services.AddIdentityCore<User>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddUserValidator<CustomUserValidator>();
 
         builder.Services.Scan(scan => scan
             .FromAssembliesOf(typeof(Repository<>), typeof(IRepository<>))
