@@ -1,6 +1,5 @@
 ﻿using ChatApp.Server.Domain.Core;
 using ChatApp.Server.Domain.Core.Abstractions;
-using ChatApp.Server.Domain.Resources.Enums;
 
 namespace ChatApp.Server.Domain.Resources;
 
