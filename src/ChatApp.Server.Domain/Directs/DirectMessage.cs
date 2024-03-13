@@ -24,4 +24,6 @@ public sealed class DirectMessage(Guid chatId, Guid senderId, string? content = 
     public ICollection<DirectAttachment> Attachments { get; set; } = default!;
 
     public ICollection<DirectReaction> Reactions { get; set; } = default!;
+
+    public ICollection<DirectDeletion> Deletions { get; set; } = default!;
 }

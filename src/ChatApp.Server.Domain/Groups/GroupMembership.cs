@@ -17,5 +17,5 @@ public sealed class GroupMembership(Guid chatId, Guid memberId, Guid? roleId = n
 
     public Guid? RoleId { get; set; } = roleId;
 
-    public GroupRole? Role { get; set; } = default;
+    public GroupRole? Role { get; set; }
 }
