@@ -30,4 +30,14 @@ public sealed class ProfileController(
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
+    
+    [HttpPut("username")]
+    public async Task<IResult> UpdateUserName(string username)
+    {
+        var result = await profileService.UpdateUserNameAsync(UserId, username);
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
 }
