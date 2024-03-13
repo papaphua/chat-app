@@ -2,9 +2,9 @@
 
 namespace ChatApp.Server.Domain.Core;
 
-public static class AvatarExtensions
+public static class AvatarFileExtensions
 {
-    private static readonly Dictionary<string, FileExtension> AvatarExtensionMapping = new()
+    public static readonly Dictionary<string, FileExtension> AvatarExtensionMapping = new()
     {
         { "jpg", FileExtension.Jpg },
         { "jpeg", FileExtension.Jpeg },

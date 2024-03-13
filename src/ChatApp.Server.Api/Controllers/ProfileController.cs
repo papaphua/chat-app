@@ -40,4 +40,24 @@ public sealed class ProfileController(
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
+
+    [HttpPost("avatar")]
+    public async Task<IResult> AddAvatar(IFormFile file)
+    {
+        var result = await profileService.AddAvatarAsync(UserId, file.ToNewResourceDto());
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("avatar/{resourceId:guid}")]
+    public async Task<IResult> RemoveAvatar(Guid resourceId)
+    {
+        var result = await profileService.RemoveAvatarAsync(UserId, resourceId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }
