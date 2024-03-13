@@ -5,6 +5,6 @@ public interface IChat<TMembership, TMessage>
     where TMessage : IEntity
 {
     ICollection<TMembership> Memberships { get; set; }
-    
+
     ICollection<TMessage> Messages { get; set; }
 }

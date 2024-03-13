@@ -5,11 +5,11 @@ namespace ChatApp.Server.Domain.Core.Abstractions;
 public interface IDeletion<TMessage>
     where TMessage : IEntity
 {
-    public Guid MessageId { get; set; }
+    Guid MessageId { get; set; }
 
-    public TMessage Message { get; set; }
+    TMessage Message { get; set; }
 
-    public Guid UserId { get; set; }
+    Guid UserId { get; set; }
 
-    public User User { get; set; }
+    User User { get; set; }
 }

@@ -11,7 +11,7 @@ public sealed class DirectMessage(Guid chatId, Guid senderId, string? content = 
     public Guid ChatId { get; set; } = chatId;
 
     public Direct Chat { get; set; } = default!;
-    
+
     public Guid SenderId { get; set; } = senderId;
 
     public User Sender { get; set; } = default!;

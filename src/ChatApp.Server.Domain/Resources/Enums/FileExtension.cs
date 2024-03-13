@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Server.Domain.Core;
+﻿namespace ChatApp.Server.Domain.Resources.Enums;
 
 public enum FileExtension
 {

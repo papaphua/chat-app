@@ -1,14 +1,14 @@
 ﻿using ChatApp.Server.Domain.Core.Abstractions;
 using ChatApp.Server.Domain.Users;
 
-namespace ChatApp.Server.Domain.Directs;
+namespace ChatApp.Server.Domain.Groups;
 
-public sealed class DirectDeletion(Guid messageId, Guid userId)
-    : IEntity, IDeletion<DirectMessage>
+public sealed class GroupDeletion(Guid messageId, Guid userId)
+    : IEntity, IDeletion<GroupMessage>
 {
     public Guid MessageId { get; set; } = messageId;
 
-    public DirectMessage Message { get; set; } = default!;
+    public GroupMessage Message { get; set; } = default!;
 
     public Guid UserId { get; set; } = userId;
 

@@ -1,8 +1,10 @@
-﻿using ChatApp.Server.Domain.Users;
+﻿using ChatApp.Server.Domain.Core.Abstractions;
+using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Contacts;
 
 public sealed class Contact(Guid ownerId, Guid userId, string? firstName = default, string? lastName = default)
+    : IEntity<Guid>
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 

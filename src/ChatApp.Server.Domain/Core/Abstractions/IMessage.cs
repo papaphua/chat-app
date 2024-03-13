@@ -8,9 +8,9 @@ public interface IMessage<TChat, TAttachment, TReaction>
     where TReaction : IEntity
 {
     Guid ChatId { get; set; }
-    
+
     TChat Chat { get; set; }
-    
+
     Guid SenderId { get; set; }
 
     User Sender { get; set; }
