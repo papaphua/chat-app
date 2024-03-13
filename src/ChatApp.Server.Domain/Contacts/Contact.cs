@@ -3,7 +3,7 @@ using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Contacts;
 
-public sealed class Contact(Guid ownerId, Guid partnerId, string? firstName = default, string? lastName = default)
+public sealed class Contact(Guid ownerId, Guid partnerId, string? lastName = default)
     : IEntity<Guid>
 {
     public Guid OwnerId { get; set; } = ownerId;
@@ -14,7 +14,7 @@ public sealed class Contact(Guid ownerId, Guid partnerId, string? firstName = de
 
     public User Partner { get; set; } = default!;
 
-    public string? FirstName { get; set; } = firstName;
+    public string FirstName { get; set; }
 
     public string? LastName { get; set; } = lastName;
 

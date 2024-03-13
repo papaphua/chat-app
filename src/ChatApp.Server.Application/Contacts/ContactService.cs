@@ -3,9 +3,11 @@ using ChatApp.Server.Application.Contacts.Dtos;
 using ChatApp.Server.Application.Core;
 using ChatApp.Server.Application.Core.Abstractions;
 using ChatApp.Server.Application.Shared.Dtos;
+using ChatApp.Server.Domain.Contacts;
 using ChatApp.Server.Domain.Contacts.Errors;
 using ChatApp.Server.Domain.Contacts.Repositories;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
+using ChatApp.Server.Domain.Users.Errors;
 using ChatApp.Server.Domain.Users.Repositories;
 
 namespace ChatApp.Server.Application.Contacts;
@@ -47,7 +49,30 @@ public sealed class ContactService(
 
     public async Task<Result<Guid>> AddContactAsync(Guid userId, Guid partnerId, NameDto dto)
     {
-        throw new NotImplementedException();
+        var partner = await userRepository.GetByIdAsync(partnerId);
+        
+        if(partner is null) 
+            return Result<Guid>.Failure(UserErrors.NotFound);
+        
+        var contact = await contactRepository.GetByOwnerIdAndPartnerId(userId, partner.Id);
+
+        if (contact is not null)
+            return Result<Guid>.Failure(ContactErrors.AlreadyExist);
+
+        contact = new Contact(userId, partner.Id);
+        mapper.Map(dto, contact);
+
+        try
+        {
+            await contactRepository.AddAsync(contact);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<Guid>.Failure(ContactErrors.AddError);
+        }
+        
+        return Result<Guid>.Success(contact.Id);
     }
 
     public async Task<Result> RemoveContactAsync(Guid userId, Guid contactId)

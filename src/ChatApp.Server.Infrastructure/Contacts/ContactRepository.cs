@@ -21,4 +21,10 @@ public sealed class ContactRepository(ApplicationDbContext dbContext)
 
         return await query.FirstOrDefaultAsync(contact => contact.Id == id);
     }
+
+    public async Task<Contact?> GetByOwnerIdAndPartnerId(Guid ownerId, Guid partnerId)
+    {
+        return await _dbContext.Set<Contact>()
+            .FirstOrDefaultAsync(contact => contact.OwnerId == ownerId && contact.PartnerId == partnerId);
+    }
 }

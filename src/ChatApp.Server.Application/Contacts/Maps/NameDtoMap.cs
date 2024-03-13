@@ -8,6 +8,10 @@ public sealed class NameDtoMap : Profile
 {
     public NameDtoMap()
     {
-        CreateMap<NameDto, Contact>();
+        CreateMap<NameDto, Contact>()
+            .ForMember(dest => dest.LastName, opt =>
+                opt.MapFrom(src => string.IsNullOrWhiteSpace(src.LastName)
+                    ? null
+                    : src.LastName));;
     }
 }

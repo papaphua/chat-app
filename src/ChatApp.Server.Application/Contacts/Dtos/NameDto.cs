@@ -1,8 +1,11 @@
-﻿namespace ChatApp.Server.Application.Contacts.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ChatApp.Server.Application.Contacts.Dtos;
 
 public sealed class NameDto
 {
-    public string? FirstName { get; set; }
+    [Required]
+    public string FirstName { get; set; } = default!;
 
     public string? LastName { get; set; }
 }
