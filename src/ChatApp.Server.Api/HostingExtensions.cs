@@ -16,6 +16,8 @@ public static class HostingExtensions
 
         builder.Services.AddControllers();
 
+        builder.Services.AddSwaggerGen();
+        
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(defaultConnection));
 
         builder.Services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
@@ -34,6 +36,12 @@ public static class HostingExtensions
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+        
         app.MapControllers();
 
         return app;
