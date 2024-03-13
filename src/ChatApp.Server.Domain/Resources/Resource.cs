@@ -1,8 +1,9 @@
 ﻿using ChatApp.Server.Domain.Core;
+using ChatApp.Server.Domain.Core.Abstractions;
 
 namespace ChatApp.Server.Domain.Resources;
 
-public sealed class Resource(string name, byte[] bytes, FileExtension extension)
+public sealed class Resource(string name, byte[] bytes, FileExtension extension) : IEntity<Guid>
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 

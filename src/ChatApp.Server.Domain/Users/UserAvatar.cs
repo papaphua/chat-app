@@ -1,8 +1,9 @@
-﻿using ChatApp.Server.Domain.Resources;
+﻿using ChatApp.Server.Domain.Core.Abstractions;
+using ChatApp.Server.Domain.Resources;
 
 namespace ChatApp.Server.Domain.Users;
 
-public sealed class UserAvatar(Guid userId, Guid resourceId)
+public sealed class UserAvatar(Guid userId, Guid resourceId) : IEntity
 {
     public Guid UserId { get; set; } = userId;
 
