@@ -6,4 +6,6 @@ namespace ChatApp.Server.Application.Profiles;
 public interface IProfileService
 {
     Task<Result<ProfileDto>> GetProfileAsync(Guid userId);
+
+    Task<Result<DetailsDto>> UpdateDetailsAsync(Guid userId, DetailsDto dto);
 }
