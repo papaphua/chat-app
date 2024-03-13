@@ -19,6 +19,6 @@ public sealed class User : IdentityUser<Guid>, IEntity<Guid>
     public ICollection<Contact> Contacts { get; set; } = default!;
 
     public ICollection<DirectMembership> DirectMemberships { get; set; } = default!;
-    
+
     public ICollection<GroupMembership> GroupMemberships { get; set; } = default!;
 }

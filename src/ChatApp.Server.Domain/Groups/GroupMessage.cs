@@ -7,6 +7,7 @@ namespace ChatApp.Server.Domain.Groups;
 public sealed class GroupMessage(Guid chatId, Guid senderId, string? content = default)
     : IEntity<Guid>, IMessage<Group, GroupAttachment, GroupReaction>
 {
+    public ICollection<GroupDeletion> Deletions { get; set; } = default!;
     public Guid Id { get; set; } = Guid.NewGuid();
 
     public Guid ChatId { get; set; } = chatId;
@@ -19,11 +20,9 @@ public sealed class GroupMessage(Guid chatId, Guid senderId, string? content = d
 
     public string? Content { get; set; } = content;
 
-    public DateTime Timestamp { get; set; }  = DateTime.UtcNow;
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public ICollection<GroupAttachment> Attachments { get; set; } = default!;
 
     public ICollection<GroupReaction> Reactions { get; set; } = default!;
-    
-    public ICollection<GroupDeletion> Deletions { get; set; } = default!;
 }

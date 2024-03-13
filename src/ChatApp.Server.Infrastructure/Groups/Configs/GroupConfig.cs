@@ -15,11 +15,11 @@ public sealed class GroupConfig : IEntityTypeConfiguration<Group>
         builder.HasMany(group => group.Messages)
             .WithOne(message => message.Chat)
             .HasForeignKey(message => message.ChatId);
-        
+
         builder.HasMany(group => group.Avatars)
             .WithOne(avatar => avatar.Chat)
             .HasForeignKey(message => message.ChatId);
-        
+
         builder.HasMany(group => group.Roles)
             .WithOne(role => role.Chat)
             .HasForeignKey(role => role.ChatId);

@@ -7,6 +7,7 @@ namespace ChatApp.Server.Domain.Directs;
 public sealed class DirectMessage(Guid chatId, Guid senderId, string? content = default)
     : IEntity<Guid>, IMessage<Direct, DirectAttachment, DirectReaction>
 {
+    public ICollection<DirectDeletion> Deletions { get; set; } = default!;
     public Guid Id { get; set; } = Guid.NewGuid();
 
     public Guid ChatId { get; set; } = chatId;
@@ -24,6 +25,4 @@ public sealed class DirectMessage(Guid chatId, Guid senderId, string? content = 
     public ICollection<DirectAttachment> Attachments { get; set; } = default!;
 
     public ICollection<DirectReaction> Reactions { get; set; } = default!;
-
-    public ICollection<DirectDeletion> Deletions { get; set; } = default!;
 }

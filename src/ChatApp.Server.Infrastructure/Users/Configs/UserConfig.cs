@@ -9,7 +9,7 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("User");
-        
+
         builder.HasMany(user => user.Avatars)
             .WithOne(avatar => avatar.User)
             .HasForeignKey(avatar => avatar.UserId);
@@ -21,7 +21,7 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
         builder.HasMany(user => user.DirectMemberships)
             .WithOne(membership => membership.Member)
             .HasForeignKey(membership => membership.MemberId);
-        
+
         builder.HasMany(user => user.GroupMemberships)
             .WithOne(membership => membership.Member)
             .HasForeignKey(membership => membership.MemberId);

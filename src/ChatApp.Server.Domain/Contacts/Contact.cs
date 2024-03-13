@@ -6,8 +6,6 @@ namespace ChatApp.Server.Domain.Contacts;
 public sealed class Contact(Guid ownerId, Guid userId, string? firstName = default, string? lastName = default)
     : IEntity<Guid>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     public Guid OwnerId { get; set; } = ownerId;
 
     public User Owner { get; set; } = default!;
@@ -23,4 +21,5 @@ public sealed class Contact(Guid ownerId, Guid userId, string? firstName = defau
     public Guid? AvatarId { get; set; }
 
     public ContactAvatar? Avatar { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 }
