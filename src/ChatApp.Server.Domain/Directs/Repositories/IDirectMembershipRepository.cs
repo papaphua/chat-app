@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Directs.Repositories;
 
-public interface IDirectMembershipRepository : IRepository<DirectMembership>
-{
-}
+public interface IDirectMembershipRepository : IRepository<DirectMembership>;

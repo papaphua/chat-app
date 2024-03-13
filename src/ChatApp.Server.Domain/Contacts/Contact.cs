@@ -1,9 +1,10 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using ChatApp.Server.Domain.Core.Abstractions;
 using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Contacts;
 
-public sealed class Contact(Guid ownerId, Guid partnerId, string? lastName = default)
+public sealed class Contact(Guid ownerId, Guid partnerId)
     : IEntity<Guid>
 {
     public Guid OwnerId { get; set; } = ownerId;
@@ -14,9 +15,11 @@ public sealed class Contact(Guid ownerId, Guid partnerId, string? lastName = def
 
     public User Partner { get; set; } = default!;
 
-    public string FirstName { get; set; }
+    [MaxLength(64)]
+    public string FirstName { get; set; } = default!;
 
-    public string? LastName { get; set; } = lastName;
+    [MaxLength(64)]
+    public string? LastName { get; set; }
 
     public Guid? AvatarId { get; set; }
 

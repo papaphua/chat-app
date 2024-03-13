@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Directs.Repositories;
 
-public interface IDirectReactionRepository : IRepository<DirectReaction>
-{
-}
+public interface IDirectReactionRepository : IRepository<DirectReaction>;

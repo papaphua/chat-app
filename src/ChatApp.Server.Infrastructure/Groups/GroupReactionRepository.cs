@@ -5,6 +5,4 @@ using ChatApp.Server.Infrastructure.Core.Abstractions;
 namespace ChatApp.Server.Infrastructure.Groups;
 
 public sealed class GroupReactionRepository(ApplicationDbContext dbContext)
-    : Repository<GroupReaction>(dbContext), IGroupReactionRepository
-{
-}
+    : Repository<GroupReaction>(dbContext), IGroupReactionRepository;

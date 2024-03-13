@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Groups.Repositories;
 
-public interface IGroupRoleRepository : IRepository<GroupRole>
-{
-}
+public interface IGroupRoleRepository : IRepository<GroupRole>;

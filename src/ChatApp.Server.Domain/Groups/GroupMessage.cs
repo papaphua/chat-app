@@ -1,10 +1,11 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using ChatApp.Server.Domain.Core.Abstractions;
 using ChatApp.Server.Domain.Core.Abstractions.Chats;
 using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Groups;
 
-public sealed class GroupMessage(Guid chatId, Guid senderId, string? content = default)
+public sealed class GroupMessage(Guid chatId, Guid senderId)
     : IEntity<Guid>, IMessage<Group, GroupAttachment, GroupReaction>
 {
     public ICollection<GroupDeletion> Deletions { get; set; } = default!;
@@ -18,7 +19,8 @@ public sealed class GroupMessage(Guid chatId, Guid senderId, string? content = d
 
     public User Sender { get; set; } = default!;
 
-    public string? Content { get; set; } = content;
+    [MaxLength(4096)]
+    public string? Content { get; set; }
 
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 

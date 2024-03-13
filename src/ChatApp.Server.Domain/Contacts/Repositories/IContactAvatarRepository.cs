@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Contacts.Repositories;
 
-public interface IContactAvatarRepository : IRepository<ContactAvatar>
-{
-}
+public interface IContactAvatarRepository : IRepository<ContactAvatar>;

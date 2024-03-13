@@ -12,6 +12,6 @@ public sealed class NameDtoMap : Profile
             .ForMember(dest => dest.LastName, opt =>
                 opt.MapFrom(src => string.IsNullOrWhiteSpace(src.LastName)
                     ? null
-                    : src.LastName));;
+                    : src.LastName));
     }
 }

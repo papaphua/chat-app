@@ -1,10 +1,11 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using ChatApp.Server.Domain.Core.Abstractions;
 using ChatApp.Server.Domain.Core.Abstractions.Chats;
 using ChatApp.Server.Domain.Core.Abstractions.Groups;
 
 namespace ChatApp.Server.Domain.Groups;
 
-public sealed class GroupRole(Guid chatId, string name)
+public sealed class GroupRole(Guid chatId)
     : IEntity<Guid>, IRole<Group>, IGroupRoleRight
 {
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -23,5 +24,6 @@ public sealed class GroupRole(Guid chatId, string name)
 
     public Group Chat { get; set; } = default!;
 
-    public string Name { get; set; } = name;
+    [MaxLength(32)] 
+    public string Name { get; set; } = default!;
 }

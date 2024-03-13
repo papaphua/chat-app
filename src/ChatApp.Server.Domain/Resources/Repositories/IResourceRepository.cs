@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Resources.Repositories;
 
-public interface IResourceRepository : IRepository<Resource>
-{
-}
+public interface IResourceRepository : IRepository<Resource>;

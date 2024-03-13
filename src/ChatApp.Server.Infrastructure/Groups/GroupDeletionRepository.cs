@@ -5,6 +5,4 @@ using ChatApp.Server.Infrastructure.Core.Abstractions;
 namespace ChatApp.Server.Infrastructure.Groups;
 
 public sealed class GroupDeletionRepository(ApplicationDbContext dbContext)
-    : Repository<GroupDeletion>(dbContext), IGroupDeletionRepository
-{
-}
+    : Repository<GroupDeletion>(dbContext), IGroupDeletionRepository;

@@ -16,7 +16,6 @@ public sealed class ContactService(
     IUserRepository userRepository,
     IContactRepository contactRepository,
     IUserAvatarRepository userAvatarRepository,
-    IContactAvatarRepository contactAvatarRepository,
     IMapper mapper,
     IUnitOfWork unitOfWork) 
     : IContactService

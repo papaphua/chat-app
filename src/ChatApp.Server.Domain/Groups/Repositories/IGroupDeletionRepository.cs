@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Groups.Repositories;
 
-public interface IGroupDeletionRepository : IRepository<GroupDeletion>
-{
-}
+public interface IGroupDeletionRepository : IRepository<GroupDeletion>;

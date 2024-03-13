@@ -5,6 +5,4 @@ using ChatApp.Server.Infrastructure.Core.Abstractions;
 namespace ChatApp.Server.Infrastructure.Directs;
 
 public sealed class DirectDeletionRepository(ApplicationDbContext dbContext)
-    : Repository<DirectDeletion>(dbContext), IDirectDeletionRepository
-{
-}
+    : Repository<DirectDeletion>(dbContext), IDirectDeletionRepository;

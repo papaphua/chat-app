@@ -5,6 +5,4 @@ using ChatApp.Server.Infrastructure.Core.Abstractions;
 namespace ChatApp.Server.Infrastructure.Groups;
 
 public sealed class GroupRoleRepository(ApplicationDbContext dbContext)
-    : Repository<GroupRole>(dbContext), IGroupRoleRepository
-{
-}
+    : Repository<GroupRole>(dbContext), IGroupRoleRepository;

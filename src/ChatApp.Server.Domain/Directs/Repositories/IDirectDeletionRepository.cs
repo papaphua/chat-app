@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Directs.Repositories;
 
-public interface IDirectDeletionRepository : IRepository<DirectDeletion>
-{
-}
+public interface IDirectDeletionRepository : IRepository<DirectDeletion>;

@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Groups.Repositories;
 
-public interface IGroupMembershipRepository : IRepository<GroupMembership>
-{
-}
+public interface IGroupMembershipRepository : IRepository<GroupMembership>;

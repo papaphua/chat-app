@@ -2,6 +2,4 @@
 
 namespace ChatApp.Server.Domain.Directs.Repositories;
 
-public interface IDirectAttachmentRepository : IRepository<DirectAttachment>
-{
-}
+public interface IDirectAttachmentRepository : IRepository<DirectAttachment>;

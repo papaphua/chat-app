@@ -5,6 +5,4 @@ using ChatApp.Server.Infrastructure.Core.Abstractions;
 namespace ChatApp.Server.Infrastructure.Directs;
 
 public sealed class DirectReactionRepository(ApplicationDbContext dbContext)
-    : Repository<DirectReaction>(dbContext), IDirectReactionRepository
-{
-}
+    : Repository<DirectReaction>(dbContext), IDirectReactionRepository;
