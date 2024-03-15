@@ -8,6 +8,8 @@ public sealed class ContactDtoMap : Profile
 {
     public ContactDtoMap()
     {
-        CreateMap<Contact, ContactDto>();
+        CreateMap<Contact, ContactDto>()
+            .ForMember(dest => dest.UserId, opt =>
+                opt.MapFrom(src => src.PartnerId));
     }
 }

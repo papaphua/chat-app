@@ -13,5 +13,7 @@ public sealed class NameDtoMap : Profile
                 opt.MapFrom(src => string.IsNullOrWhiteSpace(src.LastName)
                     ? null
                     : src.LastName));
+
+        CreateMap<Contact, NameDto>();
     }
 }

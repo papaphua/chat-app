@@ -12,6 +12,7 @@ public sealed class PriorityAvatarDtoMap : Profile
         CreateMap<ContactAvatar, PriorityAvatarDto>()
             .ForMember(dest => dest.Timestamp, opt =>
                 opt.MapFrom(src => src.Resource.Timestamp));
+        
         CreateMap<UserAvatar, PriorityAvatarDto>()
             .ForMember(dest => dest.Timestamp, opt =>
                 opt.MapFrom(src => src.Resource.Timestamp));

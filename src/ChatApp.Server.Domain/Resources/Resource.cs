@@ -3,14 +3,13 @@ using ChatApp.Server.Domain.Core.Abstractions;
 
 namespace ChatApp.Server.Domain.Resources;
 
-public sealed class Resource(string name, byte[] bytes, FileExtension extension) : IEntity<Guid>
+public sealed class Resource : IEntity<Guid>
 {
-    [MaxLength(64)]
-    public string Name { get; set; } = name;
+    [MaxLength(64)] public string Name { get; set; } = default!;
 
-    public byte[] Bytes { get; set; } = bytes;
+    public byte[] Bytes { get; set; } = default!;
 
-    public FileExtension Extension { get; set; } = extension;
+    public FileExtension Extension { get; set; }
     
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
