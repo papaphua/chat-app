@@ -89,7 +89,7 @@ public sealed class ProfileService(
 
     public async Task<Result> RemoveAvatarAsync(Guid userId, Guid resourceId)
     {
-        var avatar = await userAvatarRepository.GetByIdsAsync(userId, resourceId);
+        var avatar = await userAvatarRepository.GetByIdsAsync(userId, resourceId, true);
         
         if(avatar is null)
             return Result.Failure(UserAvatarErrors.NotFound);

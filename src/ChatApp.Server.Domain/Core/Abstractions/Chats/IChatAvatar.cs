@@ -12,4 +12,6 @@ public interface IChatAvatar<TChat>
     Guid ResourceId { get; set; }
 
     Resource Resource { get; set; }
+    
+    DateTime Timestamp { get; set; }
 }

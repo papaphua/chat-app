@@ -12,4 +12,6 @@ public sealed class UserAvatar(Guid userId, Guid resourceId) : IEntity
     public Guid ResourceId { get; set; } = resourceId;
 
     public Resource Resource { get; set; } = default!;
+    
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }

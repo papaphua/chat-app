@@ -16,8 +16,8 @@ public sealed class UserRepository(ApplicationDbContext dbContext)
             .AsQueryable();
 
         if (includeAvatars)
-            query = query.Include(user => user.Avatars)
-                .ThenInclude(avatar => avatar.Resource);
+            query = query.Include(user => 
+                user.Avatars.OrderByDescending(avatar => avatar.Timestamp));
 
         return await query.FirstOrDefaultAsync(user => user.Id == id);
     }

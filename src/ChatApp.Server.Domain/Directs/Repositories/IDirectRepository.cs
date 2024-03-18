@@ -4,7 +4,7 @@ namespace ChatApp.Server.Domain.Directs.Repositories;
 
 public interface IDirectRepository : IRepository<Direct>
 {
-    Task<Direct?> GetByIdAsync(Guid id, bool includeMemberships = false, bool includeMemberAvatars = false);
+    Task<Direct?> GetByIdAsync(Guid id, bool includeMembers = false, bool includeMemberAvatars = false);
 
-    Task<Direct?> GetByMemberIds(Guid memberId1, Guid memberId2, bool includeMemberships = false);
+    Task<Direct?> GetByMemberIds(Guid memberId1, Guid memberId2, bool includeMembers = false);
 }

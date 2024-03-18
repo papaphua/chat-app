@@ -10,8 +10,6 @@ public sealed class Resource : IEntity<Guid>
     public byte[] Bytes { get; set; } = default!;
 
     public FileExtension Extension { get; set; }
-    
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public Guid Id { get; set; } = Guid.NewGuid();
 }

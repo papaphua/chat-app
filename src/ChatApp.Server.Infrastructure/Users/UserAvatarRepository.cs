@@ -10,18 +10,21 @@ public sealed class UserAvatarRepository(ApplicationDbContext dbContext)
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 
-    public async Task<UserAvatar?> GetByIdsAsync(Guid userId, Guid resourceId)
+    public async Task<UserAvatar?> GetByIdsAsync(Guid userId, Guid resourceId, bool includeResource = false)
     {
-        return await _dbContext.Set<UserAvatar>()
-            .Include(avatar => avatar.Resource)
-            .FirstOrDefaultAsync(avatar => avatar.UserId == userId && avatar.ResourceId == resourceId);
+        var query = _dbContext.Set<UserAvatar>()
+            .AsQueryable();
+
+        if (includeResource)
+            query = query.Include(avatar => avatar.Resource);
+        
+        return await query.FirstOrDefaultAsync(avatar => avatar.UserId == userId && avatar.ResourceId == resourceId);
     }
 
     public async Task<UserAvatar?> GetLatestByUserIdAsync(Guid userId)
     {
         return await _dbContext.Set<UserAvatar>()
-            .Include(avatar => avatar.Resource)
-            .OrderBy(avatar => avatar.Resource.Timestamp)
-            .FirstOrDefaultAsync();
+            .OrderByDescending(avatar => avatar.Timestamp)
+            .FirstOrDefaultAsync(user => user.UserId == userId);
     }
 }

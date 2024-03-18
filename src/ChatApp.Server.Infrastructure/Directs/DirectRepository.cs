@@ -10,31 +10,29 @@ public sealed class DirectRepository(ApplicationDbContext dbContext)
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 
-    public async Task<Direct?> GetByIdAsync(Guid id, bool includeMemberships = false, bool includeMemberAvatars = false)
+    public async Task<Direct?> GetByIdAsync(Guid id, bool includeMembers = false, bool includeMemberAvatars = false)
     {
         var query = _dbContext.Set<Direct>()
             .AsQueryable();
 
-        if (includeMemberships)
-        {
+        if (includeMembers)
             query = query.Include(direct => direct.Memberships)
                 .ThenInclude(membership => membership.Member);
-
-            if (includeMemberAvatars)
-                query = query.Include(direct => direct.Memberships)
-                    .ThenInclude(membership => membership.Member.Avatars)
-                    .ThenInclude(avatar => avatar.Resource);
-        }
+        
+        if (includeMemberAvatars)
+            query = query.Include(direct => direct.Memberships)
+                .ThenInclude(membership =>
+                    membership.Member.Avatars.OrderByDescending(avatar => avatar.Timestamp));
 
         return await query.FirstOrDefaultAsync(direct => direct.Id == id);
     }
 
-    public async Task<Direct?> GetByMemberIds(Guid memberId1, Guid memberId2, bool includeMemberships = false)
+    public async Task<Direct?> GetByMemberIds(Guid memberId1, Guid memberId2, bool includeMembers = false)
     {
         var query = _dbContext.Set<Direct>()
             .AsQueryable();
 
-        if (includeMemberships)
+        if (includeMembers)
             query = query.Include(direct => direct.Memberships)
                 .ThenInclude(membership => membership.Member);
 

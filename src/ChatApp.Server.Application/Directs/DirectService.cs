@@ -45,9 +45,8 @@ public sealed class DirectService(
             mapper.Map(contact, dto);
 
         dto.Avatars = dto.Avatars.OrderByDescending(avatar => avatar.Priority)
-            .ThenByDescending(avatar => avatar.Timestamp)
             .ToList();
-
+        
         return Result<DirectDto>.Success(dto);
     }
 

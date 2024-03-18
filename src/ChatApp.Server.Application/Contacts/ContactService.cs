@@ -120,7 +120,7 @@ public sealed class ContactService(
         if (!AvatarValidator.IsValid(dto.Extension))
             return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.Invalid);
         
-        var contact = await contactRepository.GetByIdAsync(contactId, true);
+        var contact = await contactRepository.GetByIdAsync(contactId, includeAvatarResource: true);
 
         if (contact is null || contact.OwnerId != userId)
             return Result<PriorityAvatarDto>.Failure(ContactErrors.NotFound);
@@ -137,7 +137,6 @@ public sealed class ContactService(
         {
             if (contact.Avatar is not null)
             {
-                resource.Timestamp = DateTime.UtcNow;
                 resourceRepository.Update(resource);
             }
             else
@@ -166,7 +165,7 @@ public sealed class ContactService(
 
     public async Task<Result> RemoveAvatarAsync(Guid userId, Guid contactId)
     {
-        var contact = await contactRepository.GetByIdAsync(contactId, true);
+        var contact = await contactRepository.GetByIdAsync(contactId, includeAvatarResource: true);
 
         if (contact is null || contact.OwnerId != userId)
             return Result<PriorityAvatarDto>.Failure(ContactErrors.NotFound);

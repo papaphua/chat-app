@@ -8,8 +8,6 @@ public sealed class AvatarDtoMap : Profile
 {
     public AvatarDtoMap()
     {
-        CreateMap<UserAvatar, AvatarDto>()
-            .ForMember(dest => dest.Timestamp, opt =>
-                opt.MapFrom(src => src.Resource.Timestamp));
+        CreateMap<UserAvatar, AvatarDto>();
     }
 }

@@ -14,4 +14,6 @@ public sealed class GroupAvatar(Guid chatId, Guid resourceId)
     public Guid ResourceId { get; set; } = resourceId;
 
     public Resource Resource { get; set; } = default!;
+    
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }
