@@ -22,9 +22,15 @@ public sealed class ContactRepository(ApplicationDbContext dbContext)
         return await query.FirstOrDefaultAsync(contact => contact.Id == id);
     }
 
-    public async Task<Contact?> GetByOwnerIdAndPartnerId(Guid ownerId, Guid partnerId)
+    public async Task<Contact?> GetByOwnerIdAndPartnerId(Guid ownerId, Guid partnerId, bool includeAvatar = false)
     {
-        return await _dbContext.Set<Contact>()
-            .FirstOrDefaultAsync(contact => contact.OwnerId == ownerId && contact.PartnerId == partnerId);
+        var query = _dbContext.Set<Contact>()
+            .AsQueryable();
+
+        if (includeAvatar)
+            query = query.Include(contact => contact.Avatar)
+                .ThenInclude(avatar => avatar!.Resource);
+
+        return await query.FirstOrDefaultAsync(contact => contact.OwnerId == ownerId && contact.PartnerId == partnerId);
     }
 }

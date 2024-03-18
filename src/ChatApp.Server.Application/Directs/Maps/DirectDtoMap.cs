@@ -15,6 +15,8 @@ public sealed class DirectDtoMap : Profile
         CreateMap<Direct, DirectDto>();
 
         CreateMap<User, DirectDto>()
+            .ForMember(dest => dest.Id, opt => 
+                opt.Ignore())
             .ForMember(dest => dest.UserId, opt =>
                 opt.MapFrom(src => src.Id));
 

@@ -17,7 +17,7 @@ public sealed class UserAvatarRepository(ApplicationDbContext dbContext)
             .FirstOrDefaultAsync(avatar => avatar.UserId == userId && avatar.ResourceId == resourceId);
     }
 
-    public async Task<UserAvatar?> GetLatestByIdAsync(Guid userId)
+    public async Task<UserAvatar?> GetLatestByUserIdAsync(Guid userId)
     {
         return await _dbContext.Set<UserAvatar>()
             .Include(avatar => avatar.Resource)

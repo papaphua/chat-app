@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ChatApp.Server.Application.Core;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Contacts;
 using ChatApp.Server.Domain.Users;
@@ -11,10 +12,14 @@ public sealed class PriorityAvatarDtoMap : Profile
     {
         CreateMap<ContactAvatar, PriorityAvatarDto>()
             .ForMember(dest => dest.Timestamp, opt =>
-                opt.MapFrom(src => src.Resource.Timestamp));
+                opt.MapFrom(src => src.Resource.Timestamp))
+            .ForMember(dest => dest.Priority, opt => 
+                opt.MapFrom(src => AvatarPriority.Contact));
         
         CreateMap<UserAvatar, PriorityAvatarDto>()
             .ForMember(dest => dest.Timestamp, opt =>
-                opt.MapFrom(src => src.Resource.Timestamp));
+                opt.MapFrom(src => src.Resource.Timestamp))
+            .ForMember(dest => dest.Priority, opt => 
+                opt.MapFrom(src => AvatarPriority.User));
     }
 }

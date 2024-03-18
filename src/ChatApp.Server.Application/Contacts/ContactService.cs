@@ -35,16 +35,11 @@ public sealed class ContactService(
 
         if (contact.Avatar is null)
         {
-            var latestUserAvatar = await userAvatarRepository.GetLatestByIdAsync(contact.PartnerId);
+            var latestUserAvatar = await userAvatarRepository.GetLatestByUserIdAsync(contact.PartnerId);
 
             if (latestUserAvatar is null) return Result<ContactDto>.Success(dto);
 
             dto.Avatar = mapper.Map<PriorityAvatarDto>(latestUserAvatar);
-            dto.Avatar.Priority = AvatarPriority.User;
-        }
-        else
-        {
-            dto.Avatar!.Priority = AvatarPriority.Contact;
         }
 
         return Result<ContactDto>.Success(dto);
@@ -165,7 +160,6 @@ public sealed class ContactService(
         await transaction.CommitAsync();
         
         var response = mapper.Map<PriorityAvatarDto>(contact.Avatar);
-        response.Priority = AvatarPriority.Contact;
 
         return Result<PriorityAvatarDto>.Success(response);
     }
