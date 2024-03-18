@@ -1,6 +1,6 @@
 ﻿using ChatApp.Server.Application.Core;
 
-namespace ChatApp.Server.Application.Contacts.Dtos;
+namespace ChatApp.Server.Application.Shared.Dtos;
 
 public sealed class PriorityAvatarDto
 {

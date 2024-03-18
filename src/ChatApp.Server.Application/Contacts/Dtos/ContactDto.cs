@@ -1,4 +1,6 @@
-﻿namespace ChatApp.Server.Application.Contacts.Dtos;
+﻿using ChatApp.Server.Application.Shared.Dtos;
+
+namespace ChatApp.Server.Application.Contacts.Dtos;
 
 public sealed class ContactDto
 {

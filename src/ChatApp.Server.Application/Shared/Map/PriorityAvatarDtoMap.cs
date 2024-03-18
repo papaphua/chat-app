@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using ChatApp.Server.Application.Contacts.Dtos;
+using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Contacts;
 using ChatApp.Server.Domain.Users;
 
-namespace ChatApp.Server.Application.Contacts.Maps;
+namespace ChatApp.Server.Application.Shared.Map;
 
 public sealed class PriorityAvatarDtoMap : Profile
 {
