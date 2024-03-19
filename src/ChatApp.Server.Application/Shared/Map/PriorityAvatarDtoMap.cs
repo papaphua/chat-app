@@ -11,11 +11,11 @@ public sealed class PriorityAvatarDtoMap : Profile
     public PriorityAvatarDtoMap()
     {
         CreateMap<ContactAvatar, PriorityAvatarDto>()
-            .ForMember(dest => dest.Priority, opt => 
+            .ForMember(dest => dest.Priority, opt =>
                 opt.MapFrom(src => AvatarPriority.Contact));
-        
+
         CreateMap<UserAvatar, PriorityAvatarDto>()
-            .ForMember(dest => dest.Priority, opt => 
+            .ForMember(dest => dest.Priority, opt =>
                 opt.MapFrom(src => AvatarPriority.User));
     }
 }

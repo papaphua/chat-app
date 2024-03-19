@@ -22,11 +22,8 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
-    if (app.Environment.IsDevelopment())
-    {
-        builder.Services.LogRegisteredServices();
-    }
-    
+    if (app.Environment.IsDevelopment()) builder.Services.LogRegisteredServices();
+
     app.Run();
 }
 catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex is not HostAbortedException)

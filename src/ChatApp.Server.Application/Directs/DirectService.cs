@@ -46,7 +46,7 @@ public sealed class DirectService(
 
         dto.Avatars = dto.Avatars.OrderByDescending(avatar => avatar.Priority)
             .ToList();
-        
+
         return Result<DirectDto>.Success(dto);
     }
 

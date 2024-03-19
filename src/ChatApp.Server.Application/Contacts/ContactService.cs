@@ -119,7 +119,7 @@ public sealed class ContactService(
     {
         if (!AvatarValidator.IsValid(dto.Extension))
             return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.Invalid);
-        
+
         var contact = await contactRepository.GetByIdAsync(contactId, includeAvatarResource: true);
 
         if (contact is null || contact.OwnerId != userId)
@@ -157,7 +157,7 @@ public sealed class ContactService(
         }
 
         await transaction.CommitAsync();
-        
+
         var response = mapper.Map<PriorityAvatarDto>(contact.Avatar);
 
         return Result<PriorityAvatarDto>.Success(response);
@@ -169,8 +169,8 @@ public sealed class ContactService(
 
         if (contact is null || contact.OwnerId != userId)
             return Result<PriorityAvatarDto>.Failure(ContactErrors.NotFound);
-        
-        if(contact.Avatar is null)
+
+        if (contact.Avatar is null)
             return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.NotFound);
 
         try
@@ -182,7 +182,7 @@ public sealed class ContactService(
         {
             return Result.Failure(ContactAvatarErrors.RemoveError);
         }
-        
+
         return Result.Success();
     }
 }

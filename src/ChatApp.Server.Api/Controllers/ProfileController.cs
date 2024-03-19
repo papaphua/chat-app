@@ -15,7 +15,7 @@ public sealed class ProfileController(
     public async Task<IResult> GetProfile()
     {
         var result = await profileService.GetProfileAsync(UserId);
-        
+
         return result.IsSuccess
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
@@ -25,17 +25,17 @@ public sealed class ProfileController(
     public async Task<IResult> UpdateDetails(DetailsDto dto)
     {
         var result = await profileService.UpdateDetailsAsync(UserId, dto);
-        
+
         return result.IsSuccess
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
-    
+
     [HttpPut("username")]
     public async Task<IResult> UpdateUserName(string username)
     {
         var result = await profileService.UpdateUserNameAsync(UserId, username);
-        
+
         return result.IsSuccess
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
@@ -45,17 +45,17 @@ public sealed class ProfileController(
     public async Task<IResult> AddAvatar(IFormFile file)
     {
         var result = await profileService.AddAvatarAsync(UserId, file.ToNewResourceDto());
-        
+
         return result.IsSuccess
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
-    
+
     [HttpDelete("avatar/{resourceId:guid}")]
     public async Task<IResult> RemoveAvatar(Guid resourceId)
     {
         var result = await profileService.RemoveAvatarAsync(UserId, resourceId);
-        
+
         return result.IsSuccess
             ? Results.Ok()
             : result.ToProblemDetails();

@@ -1,11 +1,8 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
-using ChatApp.Server.Domain.Core.Abstractions.Chats;
-using ChatApp.Server.Domain.Resources;
+﻿using ChatApp.Server.Domain.Resources;
 
 namespace ChatApp.Server.Domain.Directs;
 
 public sealed class DirectAttachment(Guid messageId, Guid resourceId)
-    : IEntity, IAttachment<DirectMessage>
 {
     public Guid MessageId { get; set; } = messageId;
 

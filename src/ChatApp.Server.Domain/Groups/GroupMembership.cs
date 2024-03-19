@@ -1,15 +1,12 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
-using ChatApp.Server.Domain.Core.Abstractions.Chats;
-using ChatApp.Server.Domain.Users;
+﻿using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Groups;
 
-public sealed class GroupMembership(Guid chatId, Guid memberId)
-    : IEntity, IAdministratedMembership<Group, GroupRole>
+public sealed class GroupMembership(Guid groupId, Guid memberId)
 {
-    public Guid ChatId { get; set; } = chatId;
+    public Guid GroupId { get; set; } = groupId;
 
-    public Group Chat { get; set; } = default!;
+    public Group Group { get; set; } = default!;
 
     public Guid MemberId { get; set; } = memberId;
 

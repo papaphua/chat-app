@@ -18,7 +18,7 @@ public sealed class DirectRepository(ApplicationDbContext dbContext)
         if (includeMembers)
             query = query.Include(direct => direct.Memberships)
                 .ThenInclude(membership => membership.Member);
-        
+
         if (includeMemberAvatars)
             query = query.Include(direct => direct.Memberships)
                 .ThenInclude(membership =>

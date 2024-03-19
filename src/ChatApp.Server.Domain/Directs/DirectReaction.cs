@@ -1,12 +1,9 @@
 ﻿using ChatApp.Server.Domain.Core;
-using ChatApp.Server.Domain.Core.Abstractions;
-using ChatApp.Server.Domain.Core.Abstractions.Chats;
 using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Directs;
 
 public sealed class DirectReaction(Guid messageId, Guid userId, ReactionType type)
-    : IEntity<Guid>, IReaction<DirectMessage>
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 

@@ -6,5 +6,6 @@ public interface IContactRepository : IRepository<Contact>
 {
     Task<Contact?> GetByIdAsync(Guid id, bool includeAvatar = false, bool includeAvatarResource = false);
 
-    Task<Contact?> GetByOwnerIdAndPartnerId(Guid ownerId, Guid partnerId, bool includeAvatar = false, bool includeAvatarResource = false);
+    Task<Contact?> GetByOwnerIdAndPartnerId(Guid ownerId, Guid partnerId, bool includeAvatar = false,
+        bool includeAvatarResource = false);
 }

@@ -14,7 +14,10 @@ public static class UserErrors
         $"{nameof(User)}.{nameof(UpdateError)}",
         "Could not update user, try again later.");
 
-    public static Error IdentityError(IEnumerable<IdentityError> errors) => Error.Validation(
-        $"{nameof(User)}.{nameof(IdentityError)}",
-        errors.ConvertToString());
+    public static Error IdentityError(IEnumerable<IdentityError> errors)
+    {
+        return Error.Validation(
+            $"{nameof(User)}.{nameof(IdentityError)}",
+            errors.ConvertToString());
+    }
 }

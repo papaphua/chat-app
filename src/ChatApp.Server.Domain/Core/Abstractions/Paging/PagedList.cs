@@ -1,7 +1,7 @@
 ﻿namespace ChatApp.Server.Domain.Core.Abstractions.Paging;
 
 public sealed class PagedList<T> : List<T>
-    where T : IEntity
+    where T : class
 {
     public PagedList(IEnumerable<T> items, int totalCount, int currentPage, int pageSize)
     {

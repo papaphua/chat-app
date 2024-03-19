@@ -50,10 +50,7 @@ public static class FormFileExtensions
 
     private static FileExtension GetFileExtension(string extension)
     {
-        if (ExtensionMapping.TryGetValue(extension.ToLower(), out var result))
-        {
-            return result;
-        }
+        if (ExtensionMapping.TryGetValue(extension.ToLower(), out var result)) return result;
 
         throw new ArgumentException("Unsupported file extension.");
     }

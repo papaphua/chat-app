@@ -1,9 +1,8 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
-using ChatApp.Server.Domain.Resources;
+﻿using ChatApp.Server.Domain.Resources;
 
 namespace ChatApp.Server.Domain.Users;
 
-public sealed class UserAvatar(Guid userId, Guid resourceId) : IEntity
+public sealed class UserAvatar(Guid userId, Guid resourceId)
 {
     public Guid UserId { get; set; } = userId;
 
@@ -12,6 +11,6 @@ public sealed class UserAvatar(Guid userId, Guid resourceId) : IEntity
     public Guid ResourceId { get; set; } = resourceId;
 
     public Resource Resource { get; set; } = default!;
-    
+
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }

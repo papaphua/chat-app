@@ -8,7 +8,7 @@ public sealed class GroupMembershipConfig : IEntityTypeConfiguration<GroupMember
 {
     public void Configure(EntityTypeBuilder<GroupMembership> builder)
     {
-        builder.HasKey(membership => new { membership.ChatId, membership.MemberId });
+        builder.HasKey(membership => new { ChatId = membership.GroupId, membership.MemberId });
 
         builder.HasOne(membership => membership.Role)
             .WithMany()

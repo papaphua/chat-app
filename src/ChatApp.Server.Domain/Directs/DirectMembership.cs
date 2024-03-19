@@ -1,20 +1,18 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
-using ChatApp.Server.Domain.Core.Abstractions.Chats;
-using ChatApp.Server.Domain.Users;
+﻿using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Directs;
 
-public sealed class DirectMembership(Guid chatId, Guid memberId)
-    : IEntity, IMembership<Direct>
+public sealed class DirectMembership(Guid directId, Guid memberId)
 {
-    public bool IsChatSelfDeleted { get; set; }
+    public Guid DirectId { get; set; } = directId;
 
-    public DateTime? ChatSelfDeletedTimestamp { get; set; }
-    public Guid ChatId { get; set; } = chatId;
-
-    public Direct Chat { get; set; } = default!;
+    public Direct Direct { get; set; } = default!;
 
     public Guid MemberId { get; set; } = memberId;
 
     public User Member { get; set; } = default!;
+
+    public bool IsChatSelfDeleted { get; set; }
+
+    public DateTime? ChatSelfDeletedTimestamp { get; set; }
 }

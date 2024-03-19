@@ -35,7 +35,7 @@ public sealed class ContactController(
     public async Task<IResult> RemoveContact(Guid contactId)
     {
         var result = await contactService.RemoveContactAsync(UserId, contactId);
-        
+
         return result.IsSuccess
             ? Results.Ok()
             : result.ToProblemDetails();
@@ -45,27 +45,27 @@ public sealed class ContactController(
     public async Task<IResult> UpdateName(Guid contactId, NameDto dto)
     {
         var result = await contactService.UpdateNameAsync(UserId, contactId, dto);
-        
+
         return result.IsSuccess
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
-    
+
     [HttpPut("{contactId:guid}/avatar")]
     public async Task<IResult> SetAvatar(Guid contactId, IFormFile file)
     {
         var result = await contactService.SetAvatarAsync(UserId, contactId, file.ToNewResourceDto());
-        
+
         return result.IsSuccess
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
-    
+
     [HttpDelete("{contactId:guid}/avatar")]
     public async Task<IResult> RemoveAvatar(Guid contactId)
     {
         var result = await contactService.RemoveAvatarAsync(UserId, contactId);
-        
+
         return result.IsSuccess
             ? Results.Ok()
             : result.ToProblemDetails();

@@ -8,11 +8,8 @@ public static class IdentityErrorExtensions
     public static string ConvertToString(this IEnumerable<IdentityError> errors)
     {
         var stringBuilder = new StringBuilder();
-        
-        foreach (var error in errors)
-        {
-            stringBuilder.Append(error.Description);
-        }
+
+        foreach (var error in errors) stringBuilder.Append(error.Description);
 
         return stringBuilder.ToString();
     }

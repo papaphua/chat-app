@@ -1,9 +1,7 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
-
-namespace ChatApp.Server.Infrastructure.Core.Abstractions;
+﻿namespace ChatApp.Server.Infrastructure.Core.Abstractions;
 
 public abstract class Repository<TEntity>(ApplicationDbContext dbContext)
-    where TEntity : class, IEntity
+    where TEntity : class
 {
     public async Task AddAsync(TEntity entity)
     {

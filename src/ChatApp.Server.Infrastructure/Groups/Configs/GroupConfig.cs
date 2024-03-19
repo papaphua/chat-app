@@ -9,19 +9,19 @@ public sealed class GroupConfig : IEntityTypeConfiguration<Group>
     public void Configure(EntityTypeBuilder<Group> builder)
     {
         builder.HasMany(group => group.Memberships)
-            .WithOne(membership => membership.Chat)
-            .HasForeignKey(membership => membership.ChatId);
+            .WithOne(membership => membership.Group)
+            .HasForeignKey(membership => membership.GroupId);
 
         builder.HasMany(group => group.Messages)
-            .WithOne(message => message.Chat)
-            .HasForeignKey(message => message.ChatId);
+            .WithOne(message => message.Group)
+            .HasForeignKey(message => message.GroupId);
 
         builder.HasMany(group => group.Avatars)
-            .WithOne(avatar => avatar.Chat)
-            .HasForeignKey(message => message.ChatId);
+            .WithOne(avatar => avatar.Group)
+            .HasForeignKey(message => message.GroupId);
 
         builder.HasMany(group => group.Roles)
-            .WithOne(role => role.Chat)
-            .HasForeignKey(role => role.ChatId);
+            .WithOne(role => role.Group)
+            .HasForeignKey(role => role.GroupId);
     }
 }

@@ -6,6 +6,5 @@ public sealed class NewMessageDto
 {
     public string? Content { get; set; }
 
-    [RequiredIfNull(nameof(Content))]
-    public List<NewResourceDto> Attachments { get; set; } = default!;
+    [RequiredIfNull(nameof(Content))] public List<NewResourceDto> Attachments { get; set; } = default!;
 }

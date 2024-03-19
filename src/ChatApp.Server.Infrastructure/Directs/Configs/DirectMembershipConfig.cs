@@ -8,6 +8,6 @@ public sealed class DirectMembershipConfig : IEntityTypeConfiguration<DirectMemb
 {
     public void Configure(EntityTypeBuilder<DirectMembership> builder)
     {
-        builder.HasKey(membership => new { membership.ChatId, membership.MemberId });
+        builder.HasKey(membership => new { ChatId = membership.DirectId, membership.MemberId });
     }
 }

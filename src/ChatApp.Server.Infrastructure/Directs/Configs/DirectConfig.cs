@@ -9,11 +9,11 @@ public sealed class DirectConfig : IEntityTypeConfiguration<Direct>
     public void Configure(EntityTypeBuilder<Direct> builder)
     {
         builder.HasMany(direct => direct.Memberships)
-            .WithOne(membership => membership.Chat)
-            .HasForeignKey(membership => membership.ChatId);
+            .WithOne(membership => membership.Direct)
+            .HasForeignKey(membership => membership.DirectId);
 
         builder.HasMany(direct => direct.Messages)
-            .WithOne(message => message.Chat)
-            .HasForeignKey(message => message.ChatId);
+            .WithOne(message => message.Direct)
+            .HasForeignKey(message => message.DirectId);
     }
 }

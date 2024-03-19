@@ -1,11 +1,8 @@
-﻿using ChatApp.Server.Domain.Core.Abstractions;
-using ChatApp.Server.Domain.Core.Abstractions.Chats;
-using ChatApp.Server.Domain.Users;
+﻿using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Groups;
 
 public sealed class GroupDeletion(Guid messageId, Guid userId)
-    : IEntity, IDeletion<GroupMessage>
 {
     public Guid MessageId { get; set; } = messageId;
 

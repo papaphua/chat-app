@@ -1,7 +1,7 @@
 ﻿namespace ChatApp.Server.Domain.Core.Abstractions;
 
 public interface IRepository<in TEntity>
-    where TEntity : IEntity
+    where TEntity : class
 {
     Task AddAsync(TEntity entity);
 

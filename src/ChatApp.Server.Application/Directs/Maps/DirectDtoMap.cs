@@ -15,7 +15,7 @@ public sealed class DirectDtoMap : Profile
         CreateMap<Direct, DirectDto>();
 
         CreateMap<User, DirectDto>()
-            .ForMember(dest => dest.Id, opt => 
+            .ForMember(dest => dest.Id, opt =>
                 opt.Ignore())
             .ForMember(dest => dest.UserId, opt =>
                 opt.MapFrom(src => src.Id));
@@ -30,9 +30,9 @@ public sealed class DirectDtoMap : Profile
 
                     if (destMember.Count > 0)
                         avatars.AddRange(destMember);
-                    
+
                     if (src.Avatar == null) return avatars;
-                    
+
                     var avatar = context.Mapper.Map<PriorityAvatarDto>(src.Avatar);
                     avatar.Priority = AvatarPriority.Contact;
                     avatars.Add(avatar);

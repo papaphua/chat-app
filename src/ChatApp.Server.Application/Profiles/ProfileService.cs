@@ -51,7 +51,7 @@ public sealed class ProfileService(
     public async Task<Result<string>> UpdateUserNameAsync(Guid userId, string userName)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
-        
+
         var result = await userManager.SetUserNameAsync(user, userName);
 
         return result.Succeeded
@@ -83,15 +83,15 @@ public sealed class ProfileService(
         }
 
         await transaction.CommitAsync();
-        
+
         return Result<AvatarDto>.Success(mapper.Map<AvatarDto>(avatar));
     }
 
     public async Task<Result> RemoveAvatarAsync(Guid userId, Guid resourceId)
     {
         var avatar = await userAvatarRepository.GetByIdsAsync(userId, resourceId, true);
-        
-        if(avatar is null)
+
+        if (avatar is null)
             return Result.Failure(UserAvatarErrors.NotFound);
 
         try
@@ -101,7 +101,6 @@ public sealed class ProfileService(
         }
         catch (Exception)
         {
-
             return Result.Failure(UserAvatarErrors.RemoveError);
         }
 

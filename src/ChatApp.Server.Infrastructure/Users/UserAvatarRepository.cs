@@ -17,7 +17,7 @@ public sealed class UserAvatarRepository(ApplicationDbContext dbContext)
 
         if (includeResource)
             query = query.Include(avatar => avatar.Resource);
-        
+
         return await query.FirstOrDefaultAsync(avatar => avatar.UserId == userId && avatar.ResourceId == resourceId);
     }
 

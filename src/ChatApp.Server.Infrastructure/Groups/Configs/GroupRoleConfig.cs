@@ -8,8 +8,8 @@ public sealed class GroupRoleConfig : IEntityTypeConfiguration<GroupRole>
 {
     public void Configure(EntityTypeBuilder<GroupRole> builder)
     {
-        builder.HasOne(role => role.Chat)
+        builder.HasOne(role => role.Group)
             .WithMany()
-            .HasForeignKey(role => role.ChatId);
+            .HasForeignKey(role => role.GroupId);
     }
 }

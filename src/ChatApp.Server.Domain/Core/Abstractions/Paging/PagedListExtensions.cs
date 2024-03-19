@@ -6,7 +6,7 @@ public static class PagedListExtensions
 {
     public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source,
         PagedParameters parameters)
-        where T : IEntity
+        where T : class
     {
         var totalCount = source.Count();
         var items = await source
@@ -19,7 +19,7 @@ public static class PagedListExtensions
 
     public static PagedList<T> AsPagedList<T>(this List<T> source,
         PagedParameters parameters)
-        where T : IEntity
+        where T : class
     {
         return new PagedList<T>(source, source.Count, parameters.CurrentPage, parameters.PageSize);
     }
