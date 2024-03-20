@@ -22,6 +22,7 @@ public sealed class DirectService(
     IDirectAttachmentRepository directAttachmentRepository,
     IDirectMessageRepository directMessageRepository,
     IDirectDeletionRepository directDeletionRepository,
+    IDirectReactionRepository directReactionRepository,
     IContactRepository contactRepository,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
@@ -321,23 +322,86 @@ public sealed class DirectService(
         catch (Exception)
         {
             await transaction.RollbackAsync();
-            
+
             return Result.Failure(DirectMessageErrors.RemoveError);
         }
 
         await transaction.CommitAsync();
-        
+
         return Result.Success();
     }
 
     public async Task<Result<ReactionDto>> AddReactionAsync(Guid userId, Guid directId, Guid messageId,
         ReactionType type)
     {
-        throw new NotImplementedException();
+        var direct = await directRepository.GetByIdAsync(directId, true);
+
+        var userMembership = direct?.Memberships.FirstOrDefault(membership => membership.MemberId == userId);
+
+        if (direct is null
+            || userMembership is null
+            || userMembership.IsChatSelfDeleted)
+            return Result<ReactionDto>.Failure(DirectErrors.NotFound);
+
+        var message = await directMessageRepository.GetByIdAsync(messageId, true);
+
+        if (message is null
+            || message.Deletions.Any(deletion => deletion.UserId == userId))
+            return Result<ReactionDto>.Failure(DirectMessageErrors.NotFound);
+
+        var reaction = await directReactionRepository.GetByMessageIdAndUserIdAndTypeAsync(message.Id, userId, type);
+
+        if (reaction is not null) return Result<ReactionDto>.Failure(DirectReactionErrors.AlreadyExist);
+
+        reaction = new DirectReaction(message.Id, userId, type);
+
+        try
+        {
+            await directReactionRepository.AddAsync(reaction);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<ReactionDto>.Failure(DirectReactionErrors.AddError);
+        }
+
+        return Result<ReactionDto>.Success(mapper.Map<ReactionDto>(reaction));
     }
 
     public async Task<Result<Guid>> RemoveReactionAsync(Guid userId, Guid directId, Guid messageId, Guid reactionId)
     {
-        throw new NotImplementedException();
+        var direct = await directRepository.GetByIdAsync(directId, true);
+
+        var userMembership = direct?.Memberships.FirstOrDefault(membership => membership.MemberId == userId);
+
+        if (direct is null
+            || userMembership is null
+            || userMembership.IsChatSelfDeleted)
+            return Result<Guid>.Failure(DirectErrors.NotFound);
+
+        var message = await directMessageRepository.GetByIdAsync(messageId, true);
+
+        if (message is null
+            || message.Deletions.Any(deletion => deletion.UserId == userId))
+            return Result<Guid>.Failure(DirectMessageErrors.NotFound);
+
+        var reaction = await directReactionRepository.GetByIdAsync(reactionId);
+
+        if (reaction is null
+            || reaction.UserId != userId
+            || reaction.MessageId == message.Id)
+            return Result<Guid>.Failure(DirectReactionErrors.NotFound);
+
+        try
+        {
+            directReactionRepository.Remove(reaction);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<Guid>.Failure(DirectReactionErrors.RemoveError);
+        }
+
+        return Result<Guid>.Success(reaction.Id);
     }
 }
