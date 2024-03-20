@@ -2,7 +2,7 @@
 
 namespace ChatApp.Server.Application.Core.Attributes;
 
-public class RequiredIfNullAttribute(string nullPropertyName) : ValidationAttribute
+public sealed class RequiredIfNullAttribute(string nullPropertyName) : ValidationAttribute
 {
     protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
     {

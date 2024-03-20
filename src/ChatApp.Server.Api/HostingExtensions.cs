@@ -42,7 +42,10 @@ public static class HostingExtensions
             .WithScopedLifetime());
 
         builder.Services.AddAutoMapper(options =>
-            options.AddMaps(typeof(IUnitOfWork).Assembly));
+        {
+            options.AddMaps(typeof(IUnitOfWork).Assembly);
+            options.AddMaps(typeof(Program).Assembly);
+        });
 
         return builder.Build();
     }

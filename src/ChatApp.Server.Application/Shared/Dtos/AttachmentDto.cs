@@ -2,5 +2,5 @@
 
 public sealed class AttachmentDto
 {
-    public Guid FileId { get; set; }
+    public Guid ResourceId { get; set; }
 }

@@ -1,13 +1,18 @@
-﻿using ChatApp.Server.Api.Core.Abstractions;
+﻿using AutoMapper;
+using ChatApp.Server.Api.Core.Abstractions;
 using ChatApp.Server.Api.Core.Extensions;
+using ChatApp.Server.Api.Requests;
 using ChatApp.Server.Application.Directs;
+using ChatApp.Server.Application.Shared.Dtos;
+using ChatApp.Server.Domain.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.Server.Api.Controllers;
 
 [Route("api/direct")]
 public sealed class DirectController(
-    IDirectService directService)
+    IDirectService directService,
+    IMapper mapper)
     : ApiController
 {
     [HttpGet("{directId:guid}")]
@@ -47,6 +52,73 @@ public sealed class DirectController(
 
         return result.IsSuccess
             ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+
+    [HttpPost("{directId:guid}/message")]
+    public async Task<IResult> AddMessage(Guid directId, [FromForm] NewMessageRequest request)
+    {
+        var result = await directService.AddMessageAsync(
+            UserId,
+            directId,
+            mapper.Map<NewMessageDto>(request));
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{directId:guid}/message/{messageId:guid}")]
+    public async Task<IResult> RemoveMessage(Guid directId, Guid messageId)
+    {
+        var result = await directService.RemoveMessageAsync(
+            UserId,
+            directId,
+            messageId);
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{directId:guid}/message/self/{messageId:guid}")]
+    public async Task<IResult> RemoveMessageForSelf(Guid directId, Guid messageId)
+    {
+        var result = await directService.RemoveMessageForSelfAsync(
+            UserId,
+            directId,
+            messageId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+
+    [HttpPost("{directId:guid}/message/{messageId:guid}/reaction")]
+    public async Task<IResult> AddReaction(Guid directId, Guid messageId, ReactionType type)
+    {
+        var result = await directService.AddReactionAsync(
+            UserId,
+            directId,
+            messageId,
+            type);
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{directId:guid}/message/{messageId:guid}/reaction/{reactionId:guid}")]
+    public async Task<IResult> RemoveReaction(Guid directId, Guid messageId, Guid reactionId)
+    {
+        var result = await directService.RemoveReactionAsync(
+            UserId,
+            directId,
+            messageId,
+            reactionId);
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
 }

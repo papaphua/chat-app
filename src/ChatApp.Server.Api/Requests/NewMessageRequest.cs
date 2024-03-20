@@ -6,5 +6,5 @@ public sealed class NewMessageRequest
 {
     public string? Content { get; set; }
 
-    [RequiredIfNull(nameof(Content))] public List<IFormFile> Files { get; set; } = default!;
+    [RequiredIfNull(nameof(Content))] public List<IFormFile>? Files { get; set; }
 }

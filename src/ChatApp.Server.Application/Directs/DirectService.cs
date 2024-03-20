@@ -253,7 +253,7 @@ public sealed class DirectService(
 
         var message = await directMessageRepository.GetByIdAsync(messageId);
 
-        var attachments = await directAttachmentRepository.GetByMessageIdAsync(messageId);
+        var attachments = await directAttachmentRepository.GetByMessageIdAsync(messageId, true);
         var resources = attachments.Select(attachment => attachment.Resource).ToList();
 
         if (message is null
@@ -264,11 +264,11 @@ public sealed class DirectService(
 
         try
         {
-            directMessageRepository.Remove(message);
-
             if (resources.Count > 0)
                 resourceRepository.RemoveRange(resources);
 
+            directMessageRepository.Remove(message);
+            
             await unitOfWork.SaveChangesAsync();
         }
         catch (Exception)
@@ -297,7 +297,8 @@ public sealed class DirectService(
         var message = await directMessageRepository.GetByIdAsync(messageId, true);
 
         if (message is null
-            || message.DirectId != direct.Id)
+            || message.DirectId != direct.Id
+            || message.Deletions.Any(deletion => deletion.UserId == userId))
             return Result.Failure(DirectMessageErrors.NotFound);
 
         var transaction = await unitOfWork.BeginTransactionAsync();
@@ -306,11 +307,11 @@ public sealed class DirectService(
         {
             if (message.Deletions.Count >= 1)
             {
-                var attachments = await directAttachmentRepository.GetByMessageIdAsync(message.Id);
+                var attachments = await directAttachmentRepository.GetByMessageIdAsync(message.Id, true);
                 var resources = attachments.Select(attachment => attachment.Resource);
 
-                directMessageRepository.Remove(message);
                 resourceRepository.RemoveRange(resources);
+                directMessageRepository.Remove(message);
             }
             else
             {
@@ -389,7 +390,7 @@ public sealed class DirectService(
 
         if (reaction is null
             || reaction.UserId != userId
-            || reaction.MessageId == message.Id)
+            || reaction.MessageId != message.Id)
             return Result<Guid>.Failure(DirectReactionErrors.NotFound);
 
         try

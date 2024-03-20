@@ -7,8 +7,7 @@ public sealed class Result<TValue> : Result
     private Result(bool isSuccess, Error error, TValue? value = default)
         : base(isSuccess, error)
     {
-        if ((isSuccess && value == null) ||
-            (!isSuccess && value != null))
+        if (isSuccess && value == null)
             throw new ArgumentException(InvalidException, nameof(error));
 
         Value = value;
