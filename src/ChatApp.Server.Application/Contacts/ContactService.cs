@@ -45,7 +45,7 @@ public sealed class ContactService(
         return Result<ContactDto>.Success(dto);
     }
 
-    public async Task<Result<Guid>> AddContactAsync(Guid userId, Guid partnerId, NameDto dto)
+    public async Task<Result<Guid>> AddContactAsync(Guid userId, Guid partnerId, ContactNameDto dto)
     {
         var partner = await userRepository.GetByIdAsync(partnerId);
 
@@ -93,12 +93,12 @@ public sealed class ContactService(
         return Result.Success();
     }
 
-    public async Task<Result<NameDto>> UpdateNameAsync(Guid userId, Guid contactId, NameDto dto)
+    public async Task<Result<ContactNameDto>> UpdateNameAsync(Guid userId, Guid contactId, ContactNameDto dto)
     {
         var contact = await contactRepository.GetByIdAsync(contactId);
 
         if (contact is null || contact.OwnerId != userId)
-            return Result<NameDto>.Failure(ContactErrors.NotFound);
+            return Result<ContactNameDto>.Failure(ContactErrors.NotFound);
 
         mapper.Map(dto, contact);
 
@@ -109,10 +109,10 @@ public sealed class ContactService(
         }
         catch (Exception)
         {
-            return Result<NameDto>.Failure(ContactErrors.UpdateError);
+            return Result<ContactNameDto>.Failure(ContactErrors.UpdateError);
         }
 
-        return Result<NameDto>.Success(mapper.Map<NameDto>(contact));
+        return Result<ContactNameDto>.Success(mapper.Map<ContactNameDto>(contact));
     }
 
     public async Task<Result<PriorityAvatarDto>> SetAvatarAsync(Guid userId, Guid contactId, NewResourceDto dto)

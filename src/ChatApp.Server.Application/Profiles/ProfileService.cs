@@ -29,7 +29,7 @@ public sealed class ProfileService(
         return Result<ProfileDto>.Success(mapper.Map<ProfileDto>(user));
     }
 
-    public async Task<Result<DetailsDto>> UpdateDetailsAsync(Guid userId, DetailsDto dto)
+    public async Task<Result<ProfileDetailsDto>> UpdateDetailsAsync(Guid userId, ProfileDetailsDto dto)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
@@ -42,10 +42,10 @@ public sealed class ProfileService(
         }
         catch (Exception)
         {
-            return Result<DetailsDto>.Failure(UserErrors.UpdateError);
+            return Result<ProfileDetailsDto>.Failure(UserErrors.UpdateError);
         }
 
-        return Result<DetailsDto>.Success(mapper.Map<DetailsDto>(user));
+        return Result<ProfileDetailsDto>.Success(mapper.Map<ProfileDetailsDto>(user));
     }
 
     public async Task<Result<string>> UpdateUserNameAsync(Guid userId, string userName)

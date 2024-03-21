@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using ChatApp.Server.Application.Profiles.Dtos;
+using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Users;
 
-namespace ChatApp.Server.Application.Profiles.Maps;
+namespace ChatApp.Server.Application.Shared.Map;
 
 public sealed class AvatarDtoMap : Profile
 {

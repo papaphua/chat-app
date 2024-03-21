@@ -8,7 +8,7 @@ public interface IProfileService
 {
     Task<Result<ProfileDto>> GetProfileAsync(Guid userId);
 
-    Task<Result<DetailsDto>> UpdateDetailsAsync(Guid userId, DetailsDto dto);
+    Task<Result<ProfileDetailsDto>> UpdateDetailsAsync(Guid userId, ProfileDetailsDto dto);
 
     Task<Result<string>> UpdateUserNameAsync(Guid userId, string userName);
 

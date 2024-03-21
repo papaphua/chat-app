@@ -1,4 +1,6 @@
-﻿namespace ChatApp.Server.Application.Profiles.Dtos;
+﻿using ChatApp.Server.Application.Shared.Dtos;
+
+namespace ChatApp.Server.Application.Profiles.Dtos;
 
 public sealed class ProfileDto
 {

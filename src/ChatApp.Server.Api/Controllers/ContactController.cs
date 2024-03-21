@@ -22,7 +22,7 @@ public sealed class ContactController(
     }
 
     [HttpPost("{partnerId:guid}")]
-    public async Task<IResult> AddContact(Guid partnerId, NameDto dto)
+    public async Task<IResult> AddContact(Guid partnerId, ContactNameDto dto)
     {
         var result = await contactService.AddContactAsync(UserId, partnerId, dto);
 
@@ -42,7 +42,7 @@ public sealed class ContactController(
     }
 
     [HttpPut("{contactId:guid}/name")]
-    public async Task<IResult> UpdateName(Guid contactId, NameDto dto)
+    public async Task<IResult> UpdateName(Guid contactId, ContactNameDto dto)
     {
         var result = await contactService.UpdateNameAsync(UserId, contactId, dto);
 

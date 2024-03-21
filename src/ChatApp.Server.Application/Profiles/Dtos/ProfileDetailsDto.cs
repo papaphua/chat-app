@@ -1,6 +1,6 @@
 ﻿namespace ChatApp.Server.Application.Profiles.Dtos;
 
-public sealed class DetailsDto
+public sealed class ProfileDetailsDto
 {
     public string? FirstName { get; set; }
 

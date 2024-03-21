@@ -8,11 +8,11 @@ public interface IContactService
 {
     Task<Result<ContactDto>> GetContactAsync(Guid userId, Guid contactId);
 
-    Task<Result<Guid>> AddContactAsync(Guid userId, Guid partnerId, NameDto dto);
+    Task<Result<Guid>> AddContactAsync(Guid userId, Guid partnerId, ContactNameDto dto);
 
     Task<Result> RemoveContactAsync(Guid userId, Guid contactId);
 
-    Task<Result<NameDto>> UpdateNameAsync(Guid userId, Guid contactId, NameDto dto);
+    Task<Result<ContactNameDto>> UpdateNameAsync(Guid userId, Guid contactId, ContactNameDto dto);
 
     Task<Result<PriorityAvatarDto>> SetAvatarAsync(Guid userId, Guid contactId, NewResourceDto dto);
 

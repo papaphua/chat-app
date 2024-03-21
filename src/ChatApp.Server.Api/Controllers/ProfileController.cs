@@ -22,7 +22,7 @@ public sealed class ProfileController(
     }
 
     [HttpPut("details")]
-    public async Task<IResult> UpdateDetails(DetailsDto dto)
+    public async Task<IResult> UpdateDetails(ProfileDetailsDto dto)
     {
         var result = await profileService.UpdateDetailsAsync(UserId, dto);
 
