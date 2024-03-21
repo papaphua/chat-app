@@ -13,17 +13,19 @@ public sealed class GroupRole(Guid groupId, string name) : IGroupRights
 
     public Group Group { get; set; } = default!;
 
-    public bool AllowChangeGroupInfo { get; set; } = false;
+    public bool AllowChangeGroupInfo { get; set; }
     
-    public bool AllowDeleteMessage { get; set; } = false;
+    public bool AllowDeleteMessage { get; set; }
     
-    public bool AllowBanMembers { get; set; } = false;
+    public bool AllowBanMembers { get; set; }
 
-    public bool AllowInviteUsersViaLink { get; set; } = false;
+    public bool AllowInviteUsersViaLink { get; set; }
 
-    public bool AllowManagePermissions { get; set; } = false;
+    public bool AllowManagePermissions { get; set; }
     
-    public bool AllowManagePrivacy { get; set; } = false;
+    public bool AllowManagePrivacy { get; set; }
     
-    public bool AllowManageRoles { get; set; } = false;
+    public bool AllowManageRoles { get; set; }
+    
+    public bool IsOwner { get; set; }
 }
