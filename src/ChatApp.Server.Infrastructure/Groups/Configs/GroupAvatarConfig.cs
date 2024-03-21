@@ -8,7 +8,7 @@ public sealed class GroupAvatarConfig : IEntityTypeConfiguration<GroupAvatar>
 {
     public void Configure(EntityTypeBuilder<GroupAvatar> builder)
     {
-        builder.HasKey(avatar => new { ChatId = avatar.GroupId, avatar.ResourceId });
+        builder.HasKey(avatar => new { avatar.GroupId, avatar.ResourceId });
 
         builder.HasOne(avatar => avatar.Resource)
             .WithOne()
