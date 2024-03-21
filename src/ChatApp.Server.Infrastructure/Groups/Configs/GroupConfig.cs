@@ -23,5 +23,13 @@ public sealed class GroupConfig : IEntityTypeConfiguration<Group>
         builder.HasMany(group => group.Roles)
             .WithOne(role => role.Group)
             .HasForeignKey(role => role.GroupId);
+        
+        builder.HasMany(group => group.Bans)
+            .WithOne(ban => ban.Group)
+            .HasForeignKey(ban => ban.GroupId);
+        
+        builder.HasMany(group => group.Requests)
+            .WithOne(request => request.Group)
+            .HasForeignKey(request => request.GroupId);
     }
 }

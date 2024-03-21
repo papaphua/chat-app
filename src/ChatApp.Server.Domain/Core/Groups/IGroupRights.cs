@@ -8,6 +8,8 @@ public interface IGroupRights
     
     bool AllowBanMembers { get; set; }
     
+    bool AllowInviteUsersViaLink { get; set; }
+    
     bool AllowManagePermissions { get; set; }
     
     bool AllowManagePrivacy { get; set; }

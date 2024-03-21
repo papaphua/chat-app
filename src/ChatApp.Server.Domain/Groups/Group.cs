@@ -19,6 +19,10 @@ public sealed class Group : IGroupPermissions, IGroupPrivacy
 
     public ICollection<GroupRole> Roles { get; set; } = default!;
 
+    public ICollection<GroupBan> Bans { get; set; } = default!;
+
+    public ICollection<GroupRequest> Requests { get; set; } = default!;
+
     public bool AllowSendTextMessages { get; set; } = true;
 
     public bool AllowSendFiles { get; set; } = true;

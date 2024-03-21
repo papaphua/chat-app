@@ -18,7 +18,9 @@ public sealed class GroupRole(Guid groupId, string name) : IGroupRights
     public bool AllowDeleteMessage { get; set; } = false;
     
     public bool AllowBanMembers { get; set; } = false;
-    
+
+    public bool AllowInviteUsersViaLink { get; set; } = false;
+
     public bool AllowManagePermissions { get; set; } = false;
     
     public bool AllowManagePrivacy { get; set; } = false;

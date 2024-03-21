@@ -10,5 +10,5 @@ public sealed class ReactionDto
     
     public Guid MessageId { get; set; }
 
-    private ReactionType Type { get; set; }
+    public ReactionType Type { get; set; }
 }
