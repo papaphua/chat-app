@@ -3,11 +3,11 @@ using ChatApp.Server.Domain.Core.Groups;
 
 namespace ChatApp.Server.Domain.Groups;
 
-public sealed class Group : IGroupPermissions, IGroupPrivacy
+public sealed class Group(string name) : IGroupPermissions, IGroupPrivacy
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    [MaxLength(32)] public string Name { get; set; } = default!;
+    [MaxLength(32)] public string Name { get; set; } = name;
 
     [MaxLength(128)] public string? Info { get; set; }
 
@@ -33,5 +33,5 @@ public sealed class Group : IGroupPermissions, IGroupPrivacy
 
     public bool IsPublic { get; set; } = true;
 
-    public bool IsHidden { get; set; } = false;
+    public bool IsHidden { get; set; }
 }

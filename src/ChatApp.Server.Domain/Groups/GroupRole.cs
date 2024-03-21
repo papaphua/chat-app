@@ -14,18 +14,30 @@ public sealed class GroupRole(Guid groupId, string name) : IGroupRights
     public Group Group { get; set; } = default!;
 
     public bool AllowChangeGroupInfo { get; set; }
-    
+
     public bool AllowDeleteMessage { get; set; }
-    
+
     public bool AllowBanMembers { get; set; }
 
     public bool AllowInviteUsersViaLink { get; set; }
 
     public bool AllowManagePermissions { get; set; }
-    
+
     public bool AllowManagePrivacy { get; set; }
-    
+
     public bool AllowManageRoles { get; set; }
-    
+
     public bool IsOwner { get; set; }
+
+    public static GroupRole CreateOwner(Guid groupId) => new GroupRole(groupId, "Owner")
+    {
+        AllowChangeGroupInfo = true,
+        AllowDeleteMessage = true,
+        AllowBanMembers = true,
+        AllowInviteUsersViaLink = true,
+        AllowManagePermissions = true,
+        AllowManagePrivacy = true,
+        AllowManageRoles = true,
+        IsOwner = true
+    };
 }

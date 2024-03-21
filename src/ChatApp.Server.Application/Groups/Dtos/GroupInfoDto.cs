@@ -1,8 +1,10 @@
-﻿namespace ChatApp.Server.Application.Groups.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ChatApp.Server.Application.Groups.Dtos;
 
 public sealed class GroupInfoDto 
 {
-    public string Name { get; set; } = default!;
+    [Required] public string Name { get; set; } = default!;
 
     public string? Info { get; set; }
 }
