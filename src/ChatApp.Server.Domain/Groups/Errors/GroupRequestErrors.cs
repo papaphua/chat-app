@@ -15,6 +15,10 @@ public static class GroupRequestErrors
     public static readonly Error ApproveError = Error.Internal(
         $"{nameof(GroupRequest)}.{nameof(ApproveError)}",
         "Could not approve request, try again later.");
+    
+    public static readonly Error DeclineError = Error.Internal(
+        $"{nameof(GroupRequest)}.{nameof(DeclineError)}",
+        "Could not decline request, try again later.");
 
     public static readonly Error AlreadyExist = Error.Conflict(
         $"{nameof(GroupRequest)}.{nameof(AlreadyExist)}",

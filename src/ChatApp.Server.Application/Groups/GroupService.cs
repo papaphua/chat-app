@@ -352,7 +352,35 @@ public sealed class GroupService(
 
     public async Task<Result> DeclineJoinRequestAsync(Guid userId, Guid groupId, Guid requestUserId)
     {
-        throw new NotImplementedException();
+        var group = await groupRepository.GetByIdAsync(groupId);
+
+        if (group is null)
+            return Result.Failure(GroupErrors.NotFound);
+
+        var request = await groupRequestRepository.GetByIdsAsync(group.Id, requestUserId);
+
+        if (request is null)
+            return Result.Failure(GroupRequestErrors.NotFound);
+
+        var membership = await groupMembershipRepository.GetByIdsAsync(group.Id, userId, true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null or { IsOwner: false, AllowApproveJoinRequests: false, AllowManageSecurity: false })
+            return Result.Failure(GroupRoleErrors.NotEnoughRights);
+
+        try
+        {
+            groupRequestRepository.Remove(request);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupRequestErrors.DeclineError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result> AddUserAsync(Guid userId, Guid groupId, Guid userToAddId)

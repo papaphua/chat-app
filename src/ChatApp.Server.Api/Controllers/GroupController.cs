@@ -105,4 +105,14 @@ public sealed class GroupController(
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+    
+    [HttpDelete("{groupId:guid}/request/{requestUserId:guid}")]
+    public async Task<IResult> DeclineJoinRequest(Guid groupId, Guid requestUserId)
+    {
+        var result = await groupService.DeclineJoinRequestAsync(UserId, groupId, requestUserId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }
