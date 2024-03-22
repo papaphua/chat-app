@@ -429,11 +429,6 @@ public sealed class GroupService(
         throw new NotImplementedException();
     }
 
-    public async Task<Result<List<GroupRoleDto>>> GetRolesAsync(Guid userId, Guid groupId)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Result<GroupRoleDto>> AddRoleAsync(Guid userId, Guid groupId)
     {
         throw new NotImplementedException();
@@ -455,11 +450,6 @@ public sealed class GroupService(
     }
 
     public async Task<Result> RemoveMemberFromRole(Guid userId, Guid groupId, Guid memberToRemoveId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result<GroupPermissionsDto>> GetPermissionsAsync(Guid userId, Guid groupId)
     {
         throw new NotImplementedException();
     }

@@ -53,9 +53,7 @@ public interface IGroupService
 
     Task<Result<Guid>> RemoveReactionAsync(Guid userId, Guid groupId, Guid messageId, Guid reactionId);
     
-    // Role Management
-
-    Task<Result<List<GroupRoleDto>>> GetRolesAsync(Guid userId, Guid groupId);
+    // Role Management  needs paged get meth
 
     Task<Result<GroupRoleDto>> AddRoleAsync(Guid userId, Guid groupId);
 
@@ -69,9 +67,7 @@ public interface IGroupService
 
     Task<Result> RemoveMemberFromRole(Guid userId, Guid groupId, Guid memberToRemoveId);
     
-    // Permissions Management
-    
-    Task<Result<GroupPermissionsDto>> GetPermissionsAsync(Guid userId, Guid groupId);
+    // Permissions Management needs paged get meth
     
     Task<Result<GroupPermissionsDto>> UpdatePermissionsAsync(Guid userId, Guid groupId, GroupPermissionsDto dto);
 }
