@@ -19,7 +19,9 @@ public sealed class GroupService(
     IGroupRoleRepository groupRoleRepository,
     IGroupAvatarRepository groupAvatarRepository,
     IResourceRepository resourceRepository,
+    IGroupBanRepository groupBanRepository,
     IMapper mapper,
+    IGroupRequestRepository groupRequestRepository,
     IUnitOfWork unitOfWork)
     : IGroupService
 {
@@ -229,10 +231,59 @@ public sealed class GroupService(
 
     public async Task<Result> JoinGroupAsync(Guid userId, Guid groupId)
     {
-        throw new NotImplementedException();
+        var group = await groupRepository.GetByIdAsync(groupId);
+
+        if (group is null)
+            return Result.Failure(GroupErrors.NotFound);
+
+        var membership = await groupMembershipRepository.GetByIdsAsync(group.Id, userId);
+
+        if (membership is not null)
+            return Result.Failure(GroupMembershipErrors.AlreadyMember);
+
+        var ban = await groupBanRepository.GetByIdsAsync(group.Id, userId);
+
+        if (ban is not null)
+            return Result.Failure(GroupBanErrors.Banned);
+
+        if (group.IsPublic)
+        {
+            membership = new GroupMembership(group.Id, userId);
+
+            try
+            {
+                await groupMembershipRepository.AddAsync(membership);
+                await unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result.Failure(GroupMembershipErrors.JoinError);
+            }
+
+            return Result.Success();
+        }
+
+        var request = await groupRequestRepository.GetByIdsAsync(group.Id, userId);
+
+        if (request is not null)
+            return Result.Failure(GroupRequestErrors.AlreadyExist);
+
+        request = new GroupRequest(group.Id, userId);
+
+        try
+        {
+            await groupRequestRepository.AddAsync(request);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupRequestErrors.AddError);
+        }
+
+        return Result.Success();
     }
 
-    public async Task<Result> RequestJoinGroupAsync(Guid userId, Guid groupId)
+    public async Task<Result> LeaveGroupAsync(Guid userId, Guid groupId)
     {
         throw new NotImplementedException();
     }
@@ -243,11 +294,6 @@ public sealed class GroupService(
     }
 
     public async Task<Result> DeclineJoinRequestAsync(Guid userId, Guid groupId, Guid requestUserId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> LeaveGroupAsync(Guid userId, Guid groupId)
     {
         throw new NotImplementedException();
     }

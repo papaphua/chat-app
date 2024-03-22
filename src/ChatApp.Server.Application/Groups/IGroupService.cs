@@ -24,14 +24,12 @@ public interface IGroupService
     // Membership Management
 
     Task<Result> JoinGroupAsync(Guid userId, Guid groupId);
-
-    Task<Result> RequestJoinGroupAsync(Guid userId, Guid groupId);
+    
+    Task<Result> LeaveGroupAsync(Guid userId, Guid groupId);
 
     Task<Result> ApproveJoinRequestAsync(Guid userId, Guid groupId, Guid requestUserId);
     
     Task<Result> DeclineJoinRequestAsync(Guid userId, Guid groupId, Guid requestUserId);
-    
-    Task<Result> LeaveGroupAsync(Guid userId, Guid groupId);
     
     // User Management within a Group
     

@@ -4,7 +4,6 @@ using ChatApp.Server.Api.Core.Extensions;
 using ChatApp.Server.Api.Requests;
 using ChatApp.Server.Application.Groups;
 using ChatApp.Server.Application.Groups.Dtos;
-using ChatApp.Server.Application.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.Server.Api.Controllers;
@@ -71,6 +70,16 @@ public sealed class GroupController(
     public async Task<IResult> AddAvatar(Guid groupId, Guid resourceId)
     {
         var result = await groupService.RemoveAvatarAsync(UserId, groupId, resourceId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+
+    [HttpPost("join/{groupId:guid}")]
+    public async Task<IResult> JoinGroup(Guid groupId)
+    {
+        var result = await groupService.JoinGroupAsync(UserId, groupId);
 
         return result.IsSuccess
             ? Results.Ok()

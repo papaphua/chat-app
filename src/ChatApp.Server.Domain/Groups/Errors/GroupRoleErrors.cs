@@ -8,7 +8,7 @@ public static class GroupRoleErrors
         $"{nameof(GroupRole)}.{nameof(NotFound)}",
         "Role not found.");
     
-    public static readonly Error NotEnoughRights = Error.NotFound(
+    public static readonly Error NotEnoughRights = Error.Validation(
         $"{nameof(GroupRole)}.{nameof(NotEnoughRights)}",
         "Not enough rights to do this.");
 }

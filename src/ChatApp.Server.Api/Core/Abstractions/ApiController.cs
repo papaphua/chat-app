@@ -10,5 +10,5 @@ public abstract class ApiController : ControllerBase
         // return Guid.TryParse(stringId, out var guid)
         //     ? guid
         //     : Guid.Empty;
-        Guid.Parse("4CD62940-6744-4BAD-83BB-B2B1830A2BB7");
+        Guid.Parse("4cd62940-6744-4bad-83bb-b2b1830a2bb7");
 }
