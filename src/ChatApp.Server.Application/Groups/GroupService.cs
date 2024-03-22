@@ -310,7 +310,44 @@ public sealed class GroupService(
 
     public async Task<Result> ApproveJoinRequestAsync(Guid userId, Guid groupId, Guid requestUserId)
     {
-        throw new NotImplementedException();
+        var group = await groupRepository.GetByIdAsync(groupId);
+
+        if (group is null)
+            return Result.Failure(GroupErrors.NotFound);
+
+        var request = await groupRequestRepository.GetByIdsAsync(group.Id, requestUserId);
+
+        if (request is null)
+            return Result.Failure(GroupRequestErrors.NotFound);
+
+        var membership = await groupMembershipRepository.GetByIdsAsync(group.Id, userId, true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null or { IsOwner: false, AllowApproveJoinRequests: false, AllowManageSecurity: false })
+            return Result.Failure(GroupRoleErrors.NotEnoughRights);
+
+        var membershipFromRequest = new GroupMembership(group.Id, requestUserId);
+
+        var transaction = await unitOfWork.BeginTransactionAsync();
+        
+        try
+        {
+            groupRequestRepository.Remove(request);
+            await groupMembershipRepository.AddAsync(membershipFromRequest);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            
+            return Result.Failure(GroupRequestErrors.ApproveError);
+        }
+
+        await transaction.CommitAsync();
+        
+        return Result.Success();
     }
 
     public async Task<Result> DeclineJoinRequestAsync(Guid userId, Guid groupId, Guid requestUserId)

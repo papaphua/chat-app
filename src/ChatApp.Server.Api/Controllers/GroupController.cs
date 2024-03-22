@@ -95,4 +95,14 @@ public sealed class GroupController(
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+    
+    [HttpPost("{groupId:guid}/request/{requestUserId:guid}")]
+    public async Task<IResult> ApproveJoinRequest(Guid groupId, Guid requestUserId)
+    {
+        var result = await groupService.ApproveJoinRequestAsync(UserId, groupId, requestUserId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }
