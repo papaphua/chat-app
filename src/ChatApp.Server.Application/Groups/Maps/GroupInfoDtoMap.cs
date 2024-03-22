@@ -10,6 +10,10 @@ public sealed class GroupInfoDtoMap : Profile
     {
         CreateMap<GroupInfoDto, Group>();
 
-        CreateMap<Group, GroupInfoDto>();
+        CreateMap<Group, GroupInfoDto>()
+            .ForMember(dest => dest.Info, opt =>
+                opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Info)
+                    ? null
+                    : src.Info));
     }
 }

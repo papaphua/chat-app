@@ -11,6 +11,6 @@ public class NewGroupRequestMap : Profile
     {
         CreateMap<NewGroupRequest, NewGroupDto>()
             .ForMember(dest => dest.Avatar, opt =>
-                opt.MapFrom(src => src.File.ToNewResourceDto()));
+                opt.MapFrom(src => src.File!.ToNewResourceDto()));
     }
 }

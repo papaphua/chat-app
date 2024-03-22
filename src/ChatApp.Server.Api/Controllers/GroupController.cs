@@ -4,6 +4,7 @@ using ChatApp.Server.Api.Core.Extensions;
 using ChatApp.Server.Api.Requests;
 using ChatApp.Server.Application.Groups;
 using ChatApp.Server.Application.Groups.Dtos;
+using ChatApp.Server.Application.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.Server.Api.Controllers;
@@ -53,6 +54,26 @@ public sealed class GroupController(
 
         return result.IsSuccess
             ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+
+    [HttpPost("{groupId:guid}/avatar")]
+    public async Task<IResult> AddAvatar(Guid groupId, IFormFile file)
+    {
+        var result = await groupService.AddAvatarAsync(UserId, groupId, file.ToNewResourceDto());
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{groupId:guid}/avatar/{resourceId:guid}")]
+    public async Task<IResult> AddAvatar(Guid groupId, Guid resourceId)
+    {
+        var result = await groupService.RemoveAvatarAsync(UserId, groupId, resourceId);
+
+        return result.IsSuccess
+            ? Results.Ok()
             : result.ToProblemDetails();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ChatApp.Server.Application.Core;
 using ChatApp.Server.Application.Core.Abstractions;
 using ChatApp.Server.Application.Groups.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
@@ -38,6 +39,9 @@ public sealed class GroupService(
 
     public async Task<Result<Guid>> CreateGroupAsync(Guid userId, NewGroupDto dto)
     {
+        if (dto.Avatar is not null && !AvatarValidator.IsValid(dto.Avatar.Extension))
+            return Result<Guid>.Failure(GroupAvatarErrors.Invalid);
+
         var group = new Group(dto.Name);
 
         var membership = new GroupMembership(group.Id, userId);
@@ -89,12 +93,7 @@ public sealed class GroupService(
         if (membership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
 
-        if (membership.Role is null)
-            return Result.Failure(GroupRoleErrors.NotEnoughRights);
-
-        var role = (await groupRoleRepository.GetByIdAsync(membership.RoleId!.Value))!;
-
-        if (!role.IsOwner)
+        if (membership.Role is null || !membership.Role.IsOwner)
             return Result.Failure(GroupRoleErrors.NotEnoughRights);
 
         var transaction = await unitOfWork.BeginTransactionAsync();
@@ -136,12 +135,7 @@ public sealed class GroupService(
         if (membership is null)
             return Result<GroupInfoDto>.Failure(GroupMembershipErrors.NotFound);
 
-        if (membership.Role is null)
-            return Result<GroupInfoDto>.Failure(GroupRoleErrors.NotEnoughRights);
-
-        var role = (await groupRoleRepository.GetByIdAsync(membership.RoleId!.Value))!;
-
-        if (role is { IsOwner: false, AllowChangeGroupInfo: false })
+        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageRoles: false })
             return Result<GroupInfoDto>.Failure(GroupRoleErrors.NotEnoughRights);
 
         mapper.Map(dto, group);
@@ -161,12 +155,76 @@ public sealed class GroupService(
 
     public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, Guid groupId, NewResourceDto dto)
     {
-        throw new NotImplementedException();
+        if (!AvatarValidator.IsValid(dto.Extension))
+            return Result<AvatarDto>.Failure(GroupAvatarErrors.Invalid);
+
+        var group = await groupRepository.GetByIdAsync(groupId);
+
+        if (group is null)
+            return Result<AvatarDto>.Failure(GroupErrors.NotFound);
+
+        var membership = await groupMembershipRepository.GetByIdsAsync(group.Id, userId, true);
+
+        if (membership is null)
+            return Result<AvatarDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageRoles: false })
+            return Result<AvatarDto>.Failure(GroupRoleErrors.NotEnoughRights);
+
+        var resource = mapper.Map<Resource>(dto);
+        var avatar = new GroupAvatar(group.Id, resource.Id);
+
+        var transaction = await unitOfWork.BeginTransactionAsync();
+
+        try
+        {
+            await resourceRepository.AddAsync(resource);
+            await groupAvatarRepository.AddAsync(avatar);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+
+            return Result<AvatarDto>.Failure(GroupAvatarErrors.AddError);
+        }
+
+        await transaction.CommitAsync();
+
+        return Result<AvatarDto>.Success(mapper.Map<AvatarDto>(avatar));
     }
 
     public async Task<Result> RemoveAvatarAsync(Guid userId, Guid groupId, Guid resourceId)
     {
-        throw new NotImplementedException();
+        var group = await groupRepository.GetByIdAsync(groupId);
+
+        if (group is null)
+            return Result.Failure(GroupErrors.NotFound);
+
+        var avatar = await groupAvatarRepository.GetByIdsAsync(group.Id, resourceId, true);
+
+        if (avatar is null)
+            return Result.Failure(GroupAvatarErrors.NotFound);
+
+        var membership = await groupMembershipRepository.GetByIdsAsync(group.Id, userId, true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageRoles: false })
+            return Result.Failure(GroupRoleErrors.NotEnoughRights);
+
+        try
+        {
+            resourceRepository.Remove(avatar.Resource);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupAvatarErrors.RemoveError);
+        }
+
+        return Result.Success();
     }
 
     public async Task<Result> JoinGroupAsync(Guid userId, Guid groupId)
