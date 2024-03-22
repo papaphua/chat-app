@@ -285,7 +285,27 @@ public sealed class GroupService(
 
     public async Task<Result> LeaveGroupAsync(Guid userId, Guid groupId)
     {
-        throw new NotImplementedException();
+        var group = await groupRepository.GetByIdAsync(groupId);
+
+        if (group is null)
+            return Result.Failure(GroupErrors.NotFound);
+
+        var membership = await groupMembershipRepository.GetByIdsAsync(group.Id, userId);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        try
+        {
+            groupMembershipRepository.Remove(membership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupMembershipErrors.LeaveError);
+        }
+
+        return Result.Success();
     }
 
     public async Task<Result> ApproveJoinRequestAsync(Guid userId, Guid groupId, Guid requestUserId)

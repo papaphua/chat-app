@@ -15,4 +15,8 @@ public static class GroupMembershipErrors
     public static readonly Error JoinError = Error.Internal(
         $"{nameof(GroupMembership)}.{nameof(JoinError)}",
         "Could not join group, try again later.");
+    
+    public static readonly Error LeaveError = Error.Internal(
+        $"{nameof(GroupMembership)}.{nameof(LeaveError)}",
+        "Could not leave group, try again later.");
 }

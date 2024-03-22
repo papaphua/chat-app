@@ -76,10 +76,20 @@ public sealed class GroupController(
             : result.ToProblemDetails();
     }
 
-    [HttpPost("join/{groupId:guid}")]
+    [HttpPost("{groupId:guid}/join")]
     public async Task<IResult> JoinGroup(Guid groupId)
     {
         var result = await groupService.JoinGroupAsync(UserId, groupId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{groupId:guid}/leave")]
+    public async Task<IResult> LeaveGroup(Guid groupId)
+    {
+        var result = await groupService.LeaveGroupAsync(UserId, groupId);
 
         return result.IsSuccess
             ? Results.Ok()
