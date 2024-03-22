@@ -137,7 +137,7 @@ public sealed class GroupService(
         if (membership is null)
             return Result<GroupInfoDto>.Failure(GroupMembershipErrors.NotFound);
 
-        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageRoles: false })
+        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageSecurity: false })
             return Result<GroupInfoDto>.Failure(GroupRoleErrors.NotEnoughRights);
 
         mapper.Map(dto, group);
@@ -170,7 +170,7 @@ public sealed class GroupService(
         if (membership is null)
             return Result<AvatarDto>.Failure(GroupMembershipErrors.NotFound);
 
-        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageRoles: false })
+        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageSecurity: false })
             return Result<AvatarDto>.Failure(GroupRoleErrors.NotEnoughRights);
 
         var resource = mapper.Map<Resource>(dto);
@@ -213,7 +213,7 @@ public sealed class GroupService(
         if (membership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
 
-        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageRoles: false })
+        if (membership.Role is null or { IsOwner: false, AllowChangeGroupInfo: false, AllowManageSecurity: false })
             return Result.Failure(GroupRoleErrors.NotEnoughRights);
 
         try
