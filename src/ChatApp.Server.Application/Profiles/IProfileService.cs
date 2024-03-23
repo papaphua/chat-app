@@ -9,9 +9,9 @@ public interface IProfileService
 {
     Task<Result<ProfileDto>> GetProfileAsync(Guid userId);
 
-    Task<Result<ProfileDetailsDto>> UpdateDetailsAsync(Guid userId, ProfileDetailsDto dto);
+    Task<Result> UpdateNameAsync(Guid userId, ProfileNameDto dto);
 
-    Task<Result<string>> UpdateUserNameAsync(Guid userId, string userName);
+    Task<Result> UpdateUserNameAsync(Guid userId, string userName);
 
     Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, IFormFile file);
 

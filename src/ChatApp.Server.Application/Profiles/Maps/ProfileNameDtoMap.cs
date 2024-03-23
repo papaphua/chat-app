@@ -4,11 +4,11 @@ using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Application.Profiles.Maps;
 
-public sealed class ProfileDetailsDtoMap : Profile
+public sealed class ProfileNameDtoMap : Profile
 {
-    public ProfileDetailsDtoMap()
+    public ProfileNameDtoMap()
     {
-        CreateMap<ProfileDetailsDto, User>()
+        CreateMap<ProfileNameDto, User>()
             .ForMember(dest => dest.FirstName, opt =>
                 opt.MapFrom(src => string.IsNullOrWhiteSpace(src.FirstName)
                     ? null
@@ -21,7 +21,5 @@ public sealed class ProfileDetailsDtoMap : Profile
                 opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Bio)
                     ? null
                     : src.Bio));
-
-        CreateMap<User, ProfileDetailsDto>();
     }
 }

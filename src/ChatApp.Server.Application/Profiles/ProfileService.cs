@@ -30,7 +30,7 @@ public sealed class ProfileService(
         return Result<ProfileDto>.Success(mapper.Map<ProfileDto>(user));
     }
 
-    public async Task<Result<ProfileDetailsDto>> UpdateDetailsAsync(Guid userId, ProfileDetailsDto dto)
+    public async Task<Result> UpdateNameAsync(Guid userId, ProfileNameDto dto)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
@@ -43,21 +43,21 @@ public sealed class ProfileService(
         }
         catch (Exception)
         {
-            return Result<ProfileDetailsDto>.Failure(UserErrors.UpdateError);
+            return Result.Failure(UserErrors.UpdateError);
         }
 
-        return Result<ProfileDetailsDto>.Success(mapper.Map<ProfileDetailsDto>(user));
+        return Result.Success();
     }
 
-    public async Task<Result<string>> UpdateUserNameAsync(Guid userId, string userName)
+    public async Task<Result> UpdateUserNameAsync(Guid userId, string userName)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
         var result = await userManager.SetUserNameAsync(user, userName);
 
         return result.Succeeded
-            ? Result<string>.Success(user.UserName!)
-            : Result<string>.Failure(UserErrors.IdentityError(result.Errors));
+            ? Result.Success()
+            : Result.Failure(UserErrors.IdentityError(result.Errors));
     }
 
     public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, IFormFile file)
@@ -81,7 +81,7 @@ public sealed class ProfileService(
         {
             await transaction.RollbackAsync();
 
-            return Result<AvatarDto>.Failure(UserAvatarErrors.AddError);
+            return Result<AvatarDto>.Failure(UserAvatarErrors.CreateError);
         }
 
         await transaction.CommitAsync();

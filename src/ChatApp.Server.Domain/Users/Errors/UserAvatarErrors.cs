@@ -12,8 +12,8 @@ public static class UserAvatarErrors
         $"{nameof(UserAvatar)}.{nameof(Invalid)}",
         "Invalid avatar file type.");
 
-    public static readonly Error AddError = Error.Internal(
-        $"{nameof(UserAvatar)}.{nameof(AddError)}",
+    public static readonly Error CreateError = Error.Internal(
+        $"{nameof(UserAvatar)}.{nameof(CreateError)}",
         "Could not add user avatar, try again later.");
 
     public static readonly Error RemoveError = Error.Internal(

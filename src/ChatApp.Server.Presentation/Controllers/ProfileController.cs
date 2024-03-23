@@ -22,13 +22,13 @@ public sealed class ProfileController(
             : result.ToProblemDetails();
     }
 
-    [HttpPut("details")]
-    public async Task<IResult> UpdateDetails(ProfileDetailsDto dto)
+    [HttpPut("name")]
+    public async Task<IResult> UpdateName(ProfileNameDto dto)
     {
-        var result = await profileService.UpdateDetailsAsync(UserId, dto);
+        var result = await profileService.UpdateNameAsync(UserId, dto);
 
         return result.IsSuccess
-            ? Results.Ok(result.Value)
+            ? Results.Ok()
             : result.ToProblemDetails();
     }
 
@@ -38,7 +38,7 @@ public sealed class ProfileController(
         var result = await profileService.UpdateUserNameAsync(UserId, username);
 
         return result.IsSuccess
-            ? Results.Ok(result.Value)
+            ? Results.Ok()
             : result.ToProblemDetails();
     }
 
