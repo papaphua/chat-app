@@ -117,7 +117,7 @@ public sealed class ContactService(
 
     public async Task<Result<PriorityAvatarDto>> SetAvatarAsync(Guid userId, Guid contactId, NewResourceDto dto)
     {
-        if (!AvatarValidator.IsValid(dto.Extension))
+        if (!ImageValidator.IsValid(dto.Extension))
             return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.Invalid);
 
         var contact = await contactRepository.GetByIdAsync(contactId, includeAvatarResource: true);

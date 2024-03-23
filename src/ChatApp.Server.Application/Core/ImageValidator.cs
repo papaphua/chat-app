@@ -3,10 +3,10 @@ using ChatApp.Server.Domain.Resources;
 
 namespace ChatApp.Server.Application.Core;
 
-public static class AvatarValidator
+public static class ImageValidator
 {
     public static bool IsValid(FileExtension extension)
     {
-        return AvatarFileExtensions.AvatarExtensionMapping.TryGetValue(extension.ToString().ToLower(), out _);
+        return ImageExtensions.AvatarExtensionMapping.TryGetValue(extension.ToString().ToLower(), out _);
     }
 }

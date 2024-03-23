@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ChatApp.Server.Api.Core.Abstractions;
+namespace ChatApp.Server.Presentation.Core.Abstractions;
 
 [ApiController]
 public abstract class ApiController : ControllerBase

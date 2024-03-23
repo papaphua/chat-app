@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
-using ChatApp.Server.Api.Core.Abstractions;
-using ChatApp.Server.Api.Core.Extensions;
-using ChatApp.Server.Api.Requests;
 using ChatApp.Server.Application.Directs;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core;
+using ChatApp.Server.Presentation.Core.Abstractions;
+using ChatApp.Server.Presentation.Core.Extensions;
+using ChatApp.Server.Presentation.Requests;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ChatApp.Server.Api.Controllers;
+namespace ChatApp.Server.Presentation.Controllers;
 
 [Route("api/direct")]
 public sealed class DirectController(

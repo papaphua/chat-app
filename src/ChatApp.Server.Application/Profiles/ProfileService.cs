@@ -61,7 +61,7 @@ public sealed class ProfileService(
 
     public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, NewResourceDto dto)
     {
-        if (!AvatarValidator.IsValid(dto.Extension))
+        if (!ImageValidator.IsValid(dto.Extension))
             return Result<AvatarDto>.Failure(UserAvatarErrors.Invalid);
 
         var resource = mapper.Map<Resource>(dto);

@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>ChatApp.Server.Api</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +21,7 @@
     <ItemGroup>
         <ProjectReference Include="..\ChatApp.Server.Application\ChatApp.Server.Application.csproj"/>
         <ProjectReference Include="..\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj"/>
+        <ProjectReference Include="..\ChatApp.Server.Presentation\ChatApp.Server.Presentation.csproj"/>
     </ItemGroup>
 
 </Project>

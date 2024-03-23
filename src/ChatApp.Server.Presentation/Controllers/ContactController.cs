@@ -1,10 +1,11 @@
-﻿using ChatApp.Server.Api.Core.Abstractions;
-using ChatApp.Server.Api.Core.Extensions;
-using ChatApp.Server.Application.Contacts;
+﻿using ChatApp.Server.Application.Contacts;
 using ChatApp.Server.Application.Contacts.Dtos;
+using ChatApp.Server.Presentation.Core.Abstractions;
+using ChatApp.Server.Presentation.Core.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ChatApp.Server.Api.Controllers;
+namespace ChatApp.Server.Presentation.Controllers;
 
 [Route("api/contact")]
 public sealed class ContactController(

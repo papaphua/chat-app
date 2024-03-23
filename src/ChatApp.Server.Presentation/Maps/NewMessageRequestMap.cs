@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using ChatApp.Server.Api.Core.Extensions;
-using ChatApp.Server.Api.Requests;
 using ChatApp.Server.Application.Shared.Dtos;
+using ChatApp.Server.Presentation.Core.Extensions;
+using ChatApp.Server.Presentation.Requests;
 
-namespace ChatApp.Server.Api.Maps;
+namespace ChatApp.Server.Presentation.Maps;
 
 public sealed class NewMessageRequestMap : Profile
 {

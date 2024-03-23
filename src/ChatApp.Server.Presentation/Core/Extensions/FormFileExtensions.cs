@@ -1,7 +1,8 @@
 ﻿using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Resources;
+using Microsoft.AspNetCore.Http;
 
-namespace ChatApp.Server.Api.Core.Extensions;
+namespace ChatApp.Server.Presentation.Core.Extensions;
 
 public static class FormFileExtensions
 {

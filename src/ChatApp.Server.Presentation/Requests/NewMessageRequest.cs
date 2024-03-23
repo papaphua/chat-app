@@ -1,6 +1,7 @@
 ﻿using ChatApp.Server.Application.Core.Attributes;
+using Microsoft.AspNetCore.Http;
 
-namespace ChatApp.Server.Api.Requests;
+namespace ChatApp.Server.Presentation.Requests;
 
 public sealed class NewMessageRequest
 {

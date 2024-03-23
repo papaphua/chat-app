@@ -26,15 +26,4 @@ public sealed class GroupRole(Guid groupId, string name) : IGroupRights
     public bool AllowManageSecurity { get; set; }
 
     public bool IsOwner { get; set; }
-
-    public static GroupRole CreateOwner(Guid groupId) => new GroupRole(groupId, "Owner")
-    {
-        AllowChangeGroupInfo = true,
-        AllowDeleteMessage = true,
-        AllowApproveJoinRequests = true,
-        AllowBanMembers = true,
-        AllowInviteUsersViaLink = true,
-        AllowManageSecurity = true,
-        IsOwner = true
-    };
 }

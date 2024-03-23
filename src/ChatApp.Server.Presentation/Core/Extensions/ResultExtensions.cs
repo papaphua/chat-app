@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using ChatApp.Server.Domain.Core.Abstractions.Errors;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
+using Microsoft.AspNetCore.Http;
 
-namespace ChatApp.Server.Api.Core.Extensions;
+namespace ChatApp.Server.Presentation.Core.Extensions;
 
 public static class ResultExtensions
 {
