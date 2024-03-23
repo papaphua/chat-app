@@ -29,7 +29,7 @@ public sealed class Group(string name) : IGroupPermissions, IGroupPrivacy
 
     public bool AllowReactions { get; set; } = true;
 
-    public bool AllowAddUsers { get; set; } = true;
+    public bool AllowAddMembers { get; set; } = true;
 
     public bool IsPublic { get; set; } = true;
 

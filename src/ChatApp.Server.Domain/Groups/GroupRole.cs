@@ -12,18 +12,20 @@ public sealed class GroupRole(Guid groupId, string name) : IGroupRights
     public Guid GroupId { get; set; } = groupId;
 
     public Group Group { get; set; } = default!;
-
-    public bool AllowChangeGroupInfo { get; set; }
-
+    
+    public bool AllowChangeGroupName { get; set; }
+    
     public bool AllowDeleteMessage { get; set; }
     
-    public bool AllowApproveJoinRequests { get; set; }
-
+    public bool AllowApproveRequests { get; set; }
+    
     public bool AllowBanMembers { get; set; }
-
+    
     public bool AllowInviteUsersViaLink { get; set; }
     
-    public bool AllowManageSecurity { get; set; }
-
-    public bool IsOwner { get; set; }
+    public bool AllowManagePermissions { get; set; }
+    
+    public bool AllowManageRoles { get; set; }
+    
+    public bool AllowManagePrivacy { get; set; }
 }

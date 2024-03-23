@@ -8,5 +8,5 @@ public interface IGroupPermissions
     
     bool AllowReactions { get; set; }
     
-    bool AllowAddUsers { get; set; }
+    bool AllowAddMembers { get; set; }
 }
