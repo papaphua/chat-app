@@ -232,7 +232,7 @@ public sealed class DirectService(
         {
             await transaction.RollbackAsync();
 
-            return Result<MessageDto>.Failure(DirectMessageErrors.AddError);
+            return Result<MessageDto>.Failure(DirectMessageErrors.CreateError);
         }
 
         await transaction.CommitAsync();
@@ -363,7 +363,7 @@ public sealed class DirectService(
         }
         catch (Exception)
         {
-            return Result<ReactionDto>.Failure(DirectReactionErrors.AddError);
+            return Result<ReactionDto>.Failure(DirectReactionErrors.CreateError);
         }
 
         return Result<ReactionDto>.Success(mapper.Map<ReactionDto>(reaction));

@@ -6,17 +6,17 @@ public static class DirectReactionErrors
 {
     public static readonly Error NotFound = Error.NotFound(
         $"{nameof(DirectReaction)}.{nameof(NotFound)}",
-        "Reaction not found");
+        "Direct reaction not found.");
 
     public static readonly Error AlreadyExist = Error.Conflict(
         $"{nameof(DirectReaction)}.{nameof(AlreadyExist)}",
-        "Reaction already exist");
+        "Direct reaction already exist.");
 
-    public static readonly Error AddError = Error.Internal(
-        $"{nameof(DirectReaction)}.{nameof(AddError)}",
-        "Could not add reaction, try again later");
+    public static readonly Error CreateError = Error.Internal(
+        $"{nameof(DirectReaction)}.{nameof(CreateError)}",
+        "Could not create direct reaction, try again later.");
     
     public static readonly Error RemoveError = Error.Internal(
         $"{nameof(DirectReaction)}.{nameof(RemoveError)}",
-        "Could not remove reaction, try again later");
+        "Could not remove direct reaction, try again later.");
 }

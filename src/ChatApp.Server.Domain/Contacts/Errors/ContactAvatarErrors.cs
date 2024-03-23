@@ -10,13 +10,13 @@ public static class ContactAvatarErrors
 
     public static readonly Error Invalid = Error.Validation(
         $"{nameof(ContactAvatar)}.{nameof(Invalid)}",
-        "Invalid avatar file type.");
+        "Invalid contact avatar file type.");
 
-    public static readonly Error CreateError = Error.NotFound(
+    public static readonly Error CreateError = Error.Internal(
         $"{nameof(ContactAvatar)}.{nameof(CreateError)}",
-        "Could not create avatar, try again later.");
+        "Could not create contact avatar, try again later.");
 
-    public static readonly Error RemoveError = Error.NotFound(
+    public static readonly Error RemoveError = Error.Internal(
         $"{nameof(ContactAvatar)}.{nameof(RemoveError)}",
-        "Could not remove avatar, try again later.");
+        "Could not remove contact avatar, try again later.");
 }
