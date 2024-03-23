@@ -2,7 +2,4 @@
 
 namespace ChatApp.Server.Domain.Groups.Repositories;
 
-public interface IGroupRequestRepository : IRepository<GroupRequest>
-{
-    Task<GroupRequest?> GetByIdsAsync(Guid groupId, Guid userId);
-}
+public interface IGroupRequestRepository : IRepository<GroupRequest>;

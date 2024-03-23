@@ -2,7 +2,4 @@
 
 namespace ChatApp.Server.Domain.Groups.Repositories;
 
-public interface IGroupRepository : IRepository<Group>
-{
-    Task<Group?> GetByIdAsync(Guid id, bool includeAvatars = false, bool includeAvatarResource = false);
-}
+public interface IGroupRepository : IRepository<Group>;
