@@ -75,7 +75,7 @@ public sealed class DirectController(
             messageId);
 
         return result.IsSuccess
-            ? Results.Ok(result.Value)
+            ? Results.Ok()
             : result.ToProblemDetails();
     }
     
@@ -116,7 +116,7 @@ public sealed class DirectController(
             reactionId);
         
         return result.IsSuccess
-            ? Results.Ok(result.Value)
+            ? Results.Ok()
             : result.ToProblemDetails();
     }
 }

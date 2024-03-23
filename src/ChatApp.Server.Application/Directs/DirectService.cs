@@ -240,7 +240,7 @@ public sealed class DirectService(
         return Result<MessageDto>.Success(mapper.Map<MessageDto>(message));
     }
 
-    public async Task<Result<Guid>> RemoveMessageAsync(Guid userId, Guid directId, Guid messageId)
+    public async Task<Result> RemoveMessageAsync(Guid userId, Guid directId, Guid messageId)
     {
         var direct = await directRepository.GetByIdAsync(directId, true);
 
@@ -249,7 +249,7 @@ public sealed class DirectService(
         if (direct is null
             || userMembership is null
             || userMembership.IsChatSelfDeleted)
-            return Result<Guid>.Failure(DirectErrors.NotFound);
+            return Result.Failure(DirectErrors.NotFound);
 
         var message = await directMessageRepository.GetByIdAsync(messageId);
 
@@ -258,7 +258,7 @@ public sealed class DirectService(
 
         if (message is null
             || message.DirectId != direct.Id)
-            return Result<Guid>.Failure(DirectMessageErrors.NotFound);
+            return Result.Failure(DirectMessageErrors.NotFound);
 
         var transaction = await unitOfWork.BeginTransactionAsync();
 
@@ -275,12 +275,12 @@ public sealed class DirectService(
         {
             await transaction.RollbackAsync();
 
-            return Result<Guid>.Failure(DirectMessageErrors.RemoveError);
+            return Result.Failure(DirectMessageErrors.RemoveError);
         }
 
         await transaction.CommitAsync();
 
-        return Result<Guid>.Success(message.Id);
+        return Result.Success();
     }
 
     public async Task<Result> RemoveMessageForSelfAsync(Guid userId, Guid directId, Guid messageId)
@@ -369,7 +369,7 @@ public sealed class DirectService(
         return Result<ReactionDto>.Success(mapper.Map<ReactionDto>(reaction));
     }
 
-    public async Task<Result<Guid>> RemoveReactionAsync(Guid userId, Guid directId, Guid messageId, Guid reactionId)
+    public async Task<Result> RemoveReactionAsync(Guid userId, Guid directId, Guid messageId, Guid reactionId)
     {
         var direct = await directRepository.GetByIdAsync(directId, true);
 
@@ -378,20 +378,20 @@ public sealed class DirectService(
         if (direct is null
             || userMembership is null
             || userMembership.IsChatSelfDeleted)
-            return Result<Guid>.Failure(DirectErrors.NotFound);
+            return Result.Failure(DirectErrors.NotFound);
 
         var message = await directMessageRepository.GetByIdAsync(messageId, true);
 
         if (message is null
             || message.Deletions.Any(deletion => deletion.UserId == userId))
-            return Result<Guid>.Failure(DirectMessageErrors.NotFound);
+            return Result.Failure(DirectMessageErrors.NotFound);
 
         var reaction = await directReactionRepository.GetByIdAsync(reactionId);
 
         if (reaction is null
             || reaction.UserId != userId
             || reaction.MessageId != message.Id)
-            return Result<Guid>.Failure(DirectReactionErrors.NotFound);
+            return Result.Failure(DirectReactionErrors.NotFound);
 
         try
         {
@@ -400,9 +400,9 @@ public sealed class DirectService(
         }
         catch (Exception)
         {
-            return Result<Guid>.Failure(DirectReactionErrors.RemoveError);
+            return Result.Failure(DirectReactionErrors.RemoveError);
         }
 
-        return Result<Guid>.Success(reaction.Id);
+        return Result.Success();
     }
 }
