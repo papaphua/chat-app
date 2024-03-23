@@ -13,9 +13,9 @@ public interface IContactService
 
     Task<Result> RemoveContactAsync(Guid userId, Guid contactId);
 
-    Task<Result<ContactNameDto>> UpdateNameAsync(Guid userId, Guid contactId, ContactNameDto dto);
+    Task<Result> UpdateNameAsync(Guid userId, Guid contactId, ContactNameDto dto);
 
-    Task<Result<PriorityAvatarDto>> SetAvatarAsync(Guid userId, Guid contactId, IFormFile file);
+    Task<Result<PriorityAvatarDto>> AddAvatarAsync(Guid userId, Guid contactId, IFormFile file);
 
     Task<Result> RemoveAvatarAsync(Guid userId, Guid contactId);
 }

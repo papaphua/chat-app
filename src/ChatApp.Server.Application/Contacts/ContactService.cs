@@ -34,14 +34,13 @@ public sealed class ContactService(
 
         var dto = mapper.Map<ContactDto>(contact);
 
-        if (contact.Avatar is null)
-        {
-            var latestUserAvatar = await userAvatarRepository.GetLatestByUserIdAsync(contact.PartnerId);
+        if (contact.Avatar is not null) return Result<ContactDto>.Success(dto);
+        
+        var latestPartnerAvatar = await userAvatarRepository.GetLatestByUserIdAsync(contact.PartnerId);
 
-            if (latestUserAvatar is null) return Result<ContactDto>.Success(dto);
+        if (latestPartnerAvatar is null) return Result<ContactDto>.Success(dto);
 
-            dto.Avatar = mapper.Map<PriorityAvatarDto>(latestUserAvatar);
-        }
+        dto.Avatar = mapper.Map<PriorityAvatarDto>(latestPartnerAvatar);
 
         return Result<ContactDto>.Success(dto);
     }
@@ -68,7 +67,7 @@ public sealed class ContactService(
         }
         catch (Exception)
         {
-            return Result<Guid>.Failure(ContactErrors.AddError);
+            return Result<Guid>.Failure(ContactErrors.CreateError);
         }
 
         return Result<Guid>.Success(contact.Id);
@@ -94,12 +93,12 @@ public sealed class ContactService(
         return Result.Success();
     }
 
-    public async Task<Result<ContactNameDto>> UpdateNameAsync(Guid userId, Guid contactId, ContactNameDto dto)
+    public async Task<Result> UpdateNameAsync(Guid userId, Guid contactId, ContactNameDto dto)
     {
         var contact = await contactRepository.GetByIdAsync(contactId);
 
         if (contact is null || contact.OwnerId != userId)
-            return Result<ContactNameDto>.Failure(ContactErrors.NotFound);
+            return Result.Failure(ContactErrors.NotFound);
 
         mapper.Map(dto, contact);
 
@@ -110,13 +109,13 @@ public sealed class ContactService(
         }
         catch (Exception)
         {
-            return Result<ContactNameDto>.Failure(ContactErrors.UpdateError);
+            return Result.Failure(ContactErrors.UpdateError);
         }
 
-        return Result<ContactNameDto>.Success(mapper.Map<ContactNameDto>(contact));
+        return Result.Success();
     }
 
-    public async Task<Result<PriorityAvatarDto>> SetAvatarAsync(Guid userId, Guid contactId, IFormFile file)
+    public async Task<Result<PriorityAvatarDto>> AddAvatarAsync(Guid userId, Guid contactId, IFormFile file)
     {
         var resource = file.ToResource();
 
@@ -132,7 +131,7 @@ public sealed class ContactService(
 
         try
         {
-            if (contact.Avatar != null)
+            if (contact.Avatar is not null)
                 resourceRepository.Remove(contact.Avatar.Resource);
 
             await resourceRepository.AddAsync(resource);
@@ -144,14 +143,12 @@ public sealed class ContactService(
         {
             await transaction.RollbackAsync();
 
-            return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.SetError);
+            return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.CreateError);
         }
 
         await transaction.CommitAsync();
 
-        var response = mapper.Map<PriorityAvatarDto>(contact.Avatar);
-
-        return Result<PriorityAvatarDto>.Success(response);
+        return Result<PriorityAvatarDto>.Success(mapper.Map<PriorityAvatarDto>(contact.Avatar));
     }
 
     public async Task<Result> RemoveAvatarAsync(Guid userId, Guid contactId)

@@ -12,15 +12,15 @@ public static class ContactErrors
         $"{nameof(Contact)}.{nameof(AlreadyExist)}",
         "Contact already exist.");
 
-    public static readonly Error AddError = Error.Conflict(
-        $"{nameof(Contact)}.{nameof(AddError)}",
-        "Could not add contact, try again later.");
+    public static readonly Error CreateError = Error.Internal(
+        $"{nameof(Contact)}.{nameof(CreateError)}",
+        "Could not create contact, try again later.");
 
-    public static readonly Error UpdateError = Error.Conflict(
+    public static readonly Error UpdateError = Error.Internal(
         $"{nameof(Contact)}.{nameof(UpdateError)}",
         "Could not update contact, try again later.");
 
-    public static readonly Error RemoveError = Error.Conflict(
+    public static readonly Error RemoveError = Error.Internal(
         $"{nameof(Contact)}.{nameof(RemoveError)}",
         "Could not remove contact, try again later.");
 }

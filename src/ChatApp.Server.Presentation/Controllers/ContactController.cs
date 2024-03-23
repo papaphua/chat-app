@@ -48,14 +48,14 @@ public sealed class ContactController(
         var result = await contactService.UpdateNameAsync(UserId, contactId, dto);
 
         return result.IsSuccess
-            ? Results.Ok(result.Value)
+            ? Results.Ok()
             : result.ToProblemDetails();
     }
 
     [HttpPut("{contactId:guid}/avatar")]
-    public async Task<IResult> SetAvatar(Guid contactId, IFormFile file)
+    public async Task<IResult> AddAvatar(Guid contactId, IFormFile file)
     {
-        var result = await contactService.SetAvatarAsync(UserId, contactId, file);
+        var result = await contactService.AddAvatarAsync(UserId, contactId, file);
 
         return result.IsSuccess
             ? Results.Ok(result.Value)
