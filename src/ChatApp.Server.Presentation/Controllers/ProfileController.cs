@@ -45,7 +45,7 @@ public sealed class ProfileController(
     [HttpPost("avatar")]
     public async Task<IResult> AddAvatar(IFormFile file)
     {
-        var result = await profileService.AddAvatarAsync(UserId, file.ToNewResourceDto());
+        var result = await profileService.AddAvatarAsync(UserId, file);
 
         return result.IsSuccess
             ? Results.Ok(result.Value)

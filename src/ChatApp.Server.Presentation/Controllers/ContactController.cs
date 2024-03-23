@@ -55,7 +55,7 @@ public sealed class ContactController(
     [HttpPut("{contactId:guid}/avatar")]
     public async Task<IResult> SetAvatar(Guid contactId, IFormFile file)
     {
-        var result = await contactService.SetAvatarAsync(UserId, contactId, file.ToNewResourceDto());
+        var result = await contactService.SetAvatarAsync(UserId, contactId, file);
 
         return result.IsSuccess
             ? Results.Ok(result.Value)

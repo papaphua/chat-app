@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using ChatApp.Server.Application.Directs;
+﻿using ChatApp.Server.Application.Directs;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core;
 using ChatApp.Server.Presentation.Core.Abstractions;
 using ChatApp.Server.Presentation.Core.Extensions;
-using ChatApp.Server.Presentation.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,8 +10,7 @@ namespace ChatApp.Server.Presentation.Controllers;
 
 [Route("api/direct")]
 public sealed class DirectController(
-    IDirectService directService,
-    IMapper mapper)
+    IDirectService directService)
     : ApiController
 {
     [HttpGet("{directId:guid}")]
@@ -57,12 +54,12 @@ public sealed class DirectController(
     }
 
     [HttpPost("{directId:guid}/message")]
-    public async Task<IResult> AddMessage(Guid directId, [FromForm] NewMessageRequest request)
+    public async Task<IResult> AddMessage(Guid directId, [FromForm] NewMessageDto dto)
     {
         var result = await directService.AddMessageAsync(
             UserId,
             directId,
-            mapper.Map<NewMessageDto>(request));
+            dto);
 
         return result.IsSuccess
             ? Results.Ok(result.Value)

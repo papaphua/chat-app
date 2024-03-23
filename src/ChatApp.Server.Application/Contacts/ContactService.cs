@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ChatApp.Server.Application.Contacts.Dtos;
-using ChatApp.Server.Application.Core;
 using ChatApp.Server.Application.Core.Abstractions;
+using ChatApp.Server.Application.Core.Extensions;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Contacts;
 using ChatApp.Server.Domain.Contacts.Errors;
@@ -11,6 +11,7 @@ using ChatApp.Server.Domain.Resources;
 using ChatApp.Server.Domain.Resources.Repositories;
 using ChatApp.Server.Domain.Users.Errors;
 using ChatApp.Server.Domain.Users.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace ChatApp.Server.Application.Contacts;
 
@@ -115,9 +116,11 @@ public sealed class ContactService(
         return Result<ContactNameDto>.Success(mapper.Map<ContactNameDto>(contact));
     }
 
-    public async Task<Result<PriorityAvatarDto>> SetAvatarAsync(Guid userId, Guid contactId, NewResourceDto dto)
+    public async Task<Result<PriorityAvatarDto>> SetAvatarAsync(Guid userId, Guid contactId, IFormFile file)
     {
-        if (!ImageValidator.IsValid(dto.Extension))
+        var resource = file.ToResource();
+
+        if (!FileExtensionMapping.IsImage(resource))
             return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.Invalid);
 
         var contact = await contactRepository.GetByIdAsync(contactId, includeAvatarResource: true);
@@ -125,25 +128,15 @@ public sealed class ContactService(
         if (contact is null || contact.OwnerId != userId)
             return Result<PriorityAvatarDto>.Failure(ContactErrors.NotFound);
 
-        var resource = contact.Avatar is not null
-            ? contact.Avatar.Resource
-            : new Resource();
-
-        mapper.Map(dto, resource);
-
         var transaction = await unitOfWork.BeginTransactionAsync();
 
         try
         {
-            if (contact.Avatar is not null)
-            {
-                resourceRepository.Update(resource);
-            }
-            else
-            {
-                await resourceRepository.AddAsync(resource);
-                await contactAvatarRepository.AddAsync(new ContactAvatar(contact.Id, resource.Id));
-            }
+            if (contact.Avatar != null)
+                resourceRepository.Remove(contact.Avatar.Resource);
+
+            await resourceRepository.AddAsync(resource);
+            await contactAvatarRepository.AddAsync(new ContactAvatar(contact.Id, resource.Id));
 
             await unitOfWork.SaveChangesAsync();
         }
@@ -151,9 +144,7 @@ public sealed class ContactService(
         {
             await transaction.RollbackAsync();
 
-            return Result<PriorityAvatarDto>.Failure(contact.Avatar is not null
-                ? ContactAvatarErrors.UpdateError
-                : ContactAvatarErrors.AddError);
+            return Result<PriorityAvatarDto>.Failure(ContactAvatarErrors.SetError);
         }
 
         await transaction.CommitAsync();

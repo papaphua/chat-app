@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using ChatApp.Server.Application.Core;
 using ChatApp.Server.Application.Core.Abstractions;
+using ChatApp.Server.Application.Core.Extensions;
 using ChatApp.Server.Application.Profiles.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
@@ -9,6 +9,7 @@ using ChatApp.Server.Domain.Resources.Repositories;
 using ChatApp.Server.Domain.Users;
 using ChatApp.Server.Domain.Users.Errors;
 using ChatApp.Server.Domain.Users.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace ChatApp.Server.Application.Profiles;
@@ -59,12 +60,13 @@ public sealed class ProfileService(
             : Result<string>.Failure(UserErrors.IdentityError(result.Errors));
     }
 
-    public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, NewResourceDto dto)
+    public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, IFormFile file)
     {
-        if (!ImageValidator.IsValid(dto.Extension))
+        var resource = file.ToResource();
+
+        if (!FileExtensionMapping.IsImage(resource))
             return Result<AvatarDto>.Failure(UserAvatarErrors.Invalid);
 
-        var resource = mapper.Map<Resource>(dto);
         var avatar = new UserAvatar(userId, resource.Id);
 
         var transaction = await unitOfWork.BeginTransactionAsync();

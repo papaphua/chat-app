@@ -12,13 +12,9 @@ public static class ContactAvatarErrors
         $"{nameof(ContactAvatar)}.{nameof(Invalid)}",
         "Invalid avatar file type.");
 
-    public static readonly Error AddError = Error.NotFound(
-        $"{nameof(ContactAvatar)}.{nameof(AddError)}",
-        "Could not add avatar, try again later.");
-
-    public static readonly Error UpdateError = Error.NotFound(
-        $"{nameof(ContactAvatar)}.{nameof(UpdateError)}",
-        "Could not update avatar, try again later.");
+    public static readonly Error SetError = Error.NotFound(
+        $"{nameof(ContactAvatar)}.{nameof(SetError)}",
+        "Could not set avatar, try again later.");
 
     public static readonly Error RemoveError = Error.NotFound(
         $"{nameof(ContactAvatar)}.{nameof(RemoveError)}",

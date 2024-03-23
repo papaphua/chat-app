@@ -10,8 +10,4 @@
       <ProjectReference Include="..\ChatApp.Server.Application\ChatApp.Server.Application.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" />
-    </ItemGroup>
-
 </Project>
