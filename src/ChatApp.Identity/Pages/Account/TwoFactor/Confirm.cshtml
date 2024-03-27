@@ -1,0 +1,27 @@
+﻿@page
+@model ChatApp.Identity.Pages.Account.TwoFactor.Confirm
+
+<div class="login-page">
+    <div class="lead">
+        <h1>Enter confirmation code send to @Model.Input.Provider</h1>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-6">
+            <form asp-page="/Account/TwoFactor/Confirm">
+                <input type="hidden" asp-for="Input.ReturnUrl"/>
+                <input type="hidden" asp-for="Input.Provider"/>
+
+                <div class="form-group">
+                    <label asp-for="Input.Token"></label>
+                    <input type="text" class="form-control" placeholder="Confirmation code" asp-for="Input.Token" autocomplete="off">
+                </div>
+
+                <button class="btn btn-primary" name="Input.Button" value="confirm">Confirm</button>
+                <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
+            </form>
+        </div>
+
+    </div>
+</div>

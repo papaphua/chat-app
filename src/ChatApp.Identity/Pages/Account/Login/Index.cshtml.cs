@@ -99,6 +99,15 @@ public class Index : PageModel
                     Input.RememberLogin,
                     false);
 
+                if (signInResult.RequiresTwoFactor)
+                {
+                    return RedirectToPage("/Account/TwoFactor/Index", new
+                    {
+                        Input.RememberLogin,
+                        Input.ReturnUrl
+                    });
+                }
+                
                 if (signInResult.Succeeded)
                 {
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName,

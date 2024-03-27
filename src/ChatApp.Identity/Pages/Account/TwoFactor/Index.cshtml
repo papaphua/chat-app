@@ -1,0 +1,24 @@
+﻿@page
+@model ChatApp.Identity.Pages.Account.TwoFactor.Index
+
+<div class="login-page">
+    <div class="lead">
+        <h1>Choose confirmation method</h1>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-6">
+            <form asp-page="/Account/TwoFactor/Index">
+                <input type="hidden" asp-for="Input.ReturnUrl"/>
+
+                @foreach (var provider in Model.TwoFactorProviders)
+                {
+                    <button class="btn btn-primary" name="Input.Button" value="@provider">@provider</button>
+                }
+
+            </form>
+        </div>
+
+    </div>
+</div>
