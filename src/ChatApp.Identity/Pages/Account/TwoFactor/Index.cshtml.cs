@@ -41,6 +41,27 @@ public class Index : PageModel
 
         TwoFactorProviders = await _userManager.GetValidTwoFactorProvidersAsync(user);
 
+        if (TwoFactorProviders.Count == 1)
+        {
+            if (TwoFactorProviders[0] == TokenOptions.DefaultEmailProvider)
+            {
+                var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+                await _emailService.SendVerificationTokenAsync(user.Email!, token);
+            }
+            else if (TwoFactorProviders[0] == TokenOptions.DefaultPhoneProvider)
+            {
+                var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
+                await _smsService.SendVerificationTokenAsync(user.PhoneNumber!, token);
+            }
+
+            return RedirectToPage("/Account/TwoFactor/Confirm", new
+            {
+                Input.RememberLogin,
+                Input.ReturnUrl,
+                provider = TwoFactorProviders[0]
+            });
+        }
+
         return Page();
     }
 
