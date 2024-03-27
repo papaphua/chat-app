@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.App", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Presentation", "src\ChatApp.Server\ChatApp.Server.Presentation\ChatApp.Server.Presentation.csproj", "{1AE454AC-8CCE-460D-A416-3FC46B3B8824}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Client", "src\ChatApp.Client\ChatApp.Client.csproj", "{4EAB13F8-AC83-4DF8-83B2-967491836FBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,7 @@ Global
 		{534B9E23-6442-45C8-B42B-980C6EE36221} = {7A0423D2-DECD-4B60-81C7-7151F296208B}
 		{699C7F17-845E-4BDA-B7B6-21606FAAE510} = {7A0423D2-DECD-4B60-81C7-7151F296208B}
 		{1AE454AC-8CCE-460D-A416-3FC46B3B8824} = {7A0423D2-DECD-4B60-81C7-7151F296208B}
+		{4EAB13F8-AC83-4DF8-83B2-967491836FBB} = {7C3DC4A9-CAD4-4858-B90D-85EB086FDBC8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0C820C6A-4DE7-4FB5-9178-860E380D6C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,5 +51,9 @@ Global
 		{1AE454AC-8CCE-460D-A416-3FC46B3B8824}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AE454AC-8CCE-460D-A416-3FC46B3B8824}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AE454AC-8CCE-460D-A416-3FC46B3B8824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EAB13F8-AC83-4DF8-83B2-967491836FBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EAB13F8-AC83-4DF8-83B2-967491836FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EAB13F8-AC83-4DF8-83B2-967491836FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EAB13F8-AC83-4DF8-83B2-967491836FBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

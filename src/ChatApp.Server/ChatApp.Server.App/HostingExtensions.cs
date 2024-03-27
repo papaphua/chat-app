@@ -6,9 +6,11 @@ public static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddControllers()
+        builder.Services.AddControllersWithViews()
             .AddApplicationPart(Presentation.AssemblyReference.Assembly);
 
+        builder.Services.AddRazorPages();
+        
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddEfCore(builder.Configuration);
@@ -31,9 +33,26 @@ public static class HostingExtensions
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        else
+        {
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseBlazorFrameworkFiles();
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapControllers();
 
+        app.MapRazorPages();
+
+        app.MapFallbackToFile("index.html");
+            
         return app;
     }
 }
