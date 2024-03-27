@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="DotNetEnv" Version="3.0.0" />
+        <PackageReference Include="Duende.BFF" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
             <PrivateAssets>all</PrivateAssets>

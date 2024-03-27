@@ -1,4 +1,5 @@
 ﻿using ChatApp.Server.Api.Startup;
+using ChatApp.Server.Api.Swagger;
 
 namespace ChatApp.Server.Api;
 
@@ -10,8 +11,16 @@ public static class HostingExtensions
             .AddApplicationPart(Presentation.AssemblyReference.Assembly);
 
         builder.Services.AddRazorPages();
-        
-        builder.Services.AddSwaggerGen();
+
+        builder.Services.AddBff();
+
+        builder.Services.AddAuth();
+
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.OperationFilter<AntiforgeryOperationFilter>();
+            options.OperationFilter<CookieOperationFilter>();
+        });
 
         builder.Services.AddEfCore(builder.Configuration);
 
@@ -45,14 +54,19 @@ public static class HostingExtensions
         app.UseRouting();
 
         app.UseAuthentication();
+        app.UseBff();
         app.UseAuthorization();
 
-        app.MapControllers();
+        app.MapBffManagementEndpoints();
 
-        app.MapRazorPages();
+        app.MapControllers()
+            .RequireAuthorization();
+
+        app.MapRazorPages()
+            .RequireAuthorization();
 
         app.MapFallbackToFile("index.html");
-            
+
         return app;
     }
 }
