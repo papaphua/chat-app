@@ -1,12 +1,14 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using ChatApp.Identity.Models;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,20 +18,18 @@ namespace ChatApp.Identity.Pages.Create;
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly TestUserStore _users;
     private readonly IIdentityServerInteractionService _interaction;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
 
-    [BindProperty]
-    public InputModel Input { get; set; } = default!;
+    [BindProperty] public InputModel Input { get; set; } = default!;
 
     public Index(
-        IIdentityServerInteractionService interaction,
-        TestUserStore? users = null)
+        IIdentityServerInteractionService interaction, UserManager<User> userManager, SignInManager<User> signInManager, TestUserStore? users = null)
     {
-        // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-        _users = users ?? throw new InvalidOperationException("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
-            
         _interaction = interaction;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     public IActionResult OnGet(string? returnUrl)
@@ -37,7 +37,7 @@ public class Index : PageModel
         Input = new InputModel { ReturnUrl = returnUrl };
         return Page();
     }
-        
+
     public async Task<IActionResult> OnPost()
     {
         // check if we are in the context of an authorization request
@@ -70,22 +70,28 @@ public class Index : PageModel
             }
         }
 
-        if (_users.FindByUsername(Input.Username) != null)
+        if (await _userManager.FindByNameAsync(Input.Username!) != null)
         {
             ModelState.AddModelError("Input.Username", "Invalid username");
         }
 
         if (ModelState.IsValid)
         {
-            var user = _users.CreateUser(Input.Username, Input.Password, Input.Name, Input.Email);
-
-            // issue authentication cookie with subject ID and username
-            var isuser = new IdentityServerUser(user.SubjectId)
+            var createResult = await _userManager.CreateAsync(new User
             {
-                DisplayName = user.Username
+                UserName = Input.Username
+            }, Input.Password!);
+
+            var user = (await _userManager.FindByNameAsync(Input.Username!))!;
+            
+            // issue authentication cookie with subject ID and username
+            var issuer = new IdentityServerUser(user.Id.ToString())
+            {
+                DisplayName = user.UserName
             };
 
-            await HttpContext.SignInAsync(isuser);
+            // await HttpContext.SignInAsync(issuer);
+            await _signInManager.PasswordSignInAsync(user, Input.Password!, false, false);
 
             if (context != null)
             {
