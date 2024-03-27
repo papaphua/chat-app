@@ -1,4 +1,6 @@
 using ChatApp.Identity.Models;
+using ChatApp.Identity.Services.EmailService;
+using ChatApp.Identity.Services.SmsService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -24,6 +26,9 @@ internal static class HostingExtensions
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<User>();
 
+        builder.Services.AddScoped<IEmailService, EmailService>();
+        builder.Services.AddScoped<ISmsService, SmsService>();
+        
         return builder.Build();
     }
 
