@@ -2,6 +2,7 @@
 // See LICENSE in the project root for license information.
 
 using ChatApp.Identity.Models;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;
@@ -12,17 +13,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ChatApp.Identity.Pages.Logout;
+namespace ChatApp.Identity.Pages.Account.Logout;
 
 [SecurityHeaders]
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly IIdentityServerInteractionService _interaction;
     private readonly IEventService _events;
+    private readonly IIdentityServerInteractionService _interaction;
     private readonly SignInManager<User> _signInManager;
-
-    [BindProperty] public string? LogoutId { get; set; }
 
     public Index(IIdentityServerInteractionService interaction, IEventService events, SignInManager<User> signInManager)
     {
@@ -30,6 +29,8 @@ public class Index : PageModel
         _events = events;
         _signInManager = signInManager;
     }
+
+    [BindProperty] public string? LogoutId { get; set; }
 
     public async Task<IActionResult> OnGet(string? logoutId)
     {
@@ -46,18 +47,14 @@ public class Index : PageModel
         {
             var context = await _interaction.GetLogoutContextAsync(LogoutId);
             if (context?.ShowSignoutPrompt == false)
-            {
                 // it's safe to automatically sign-out
                 showLogoutPrompt = false;
-            }
         }
 
         if (showLogoutPrompt == false)
-        {
             // if the request for logout was properly authenticated from IdentityServer, then
             // we don't need to show the prompt and can just log the user out directly.
             return await OnPost();
-        }
 
         return Page();
     }
@@ -83,8 +80,7 @@ public class Index : PageModel
             Telemetry.Metrics.UserLogout(idp);
 
             // if it's a local login we can ignore this workflow
-            if (idp != null && idp != Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider)
-            {
+            if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
                 // we need to see if the provider supports external logout
                 if (await HttpContext.GetSchemeSupportsSignOutAsync(idp))
                 {
@@ -96,7 +92,6 @@ public class Index : PageModel
                     // this triggers a redirect to the external provider for sign-out
                     return SignOut(new AuthenticationProperties { RedirectUri = url }, idp);
                 }
-            }
         }
 
         return RedirectToPage("/Account/Logout/LoggedOut", new { logoutId = LogoutId });

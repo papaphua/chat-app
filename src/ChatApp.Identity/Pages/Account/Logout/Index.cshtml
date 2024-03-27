@@ -1,5 +1,5 @@
 @page
-@model ChatApp.Identity.Pages.Logout.Index
+@model ChatApp.Identity.Pages.Account.Logout.Index
 
 <div class="logout-page">
     <div class="lead">
@@ -8,8 +8,8 @@
     </div>
 
     <form asp-page="/Account/Logout/Index">
-        <input type="hidden" name="logoutId" value="@Model.LogoutId"  />
-        
+        <input type="hidden" name="logoutId" value="@Model.LogoutId"/>
+
         <div class="form-group">
             <button class="btn btn-primary">Yes</button>
         </div>

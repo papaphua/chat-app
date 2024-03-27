@@ -6,23 +6,20 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Test;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ChatApp.Identity.Pages.Create;
+namespace ChatApp.Identity.Pages.Account.Create;
 
 [SecurityHeaders]
 [AllowAnonymous]
 public class Index : PageModel
 {
     private readonly IIdentityServerInteractionService _interaction;
-    private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-
-    [BindProperty] public InputModel Input { get; set; } = default!;
+    private readonly UserManager<User> _userManager;
 
     public Index(
         IIdentityServerInteractionService interaction, UserManager<User> userManager, SignInManager<User> signInManager,
@@ -32,6 +29,8 @@ public class Index : PageModel
         _userManager = userManager;
         _signInManager = signInManager;
     }
+
+    [BindProperty] public InputModel Input { get; set; } = default!;
 
     public IActionResult OnGet(string? returnUrl)
     {
@@ -56,25 +55,19 @@ public class Index : PageModel
 
                 // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                 if (context.IsNativeClient())
-                {
                     // The client is native, so this change in how to
                     // return the response is for better UX for the end user.
                     return this.LoadingPage(Input.ReturnUrl);
-                }
 
                 return Redirect(Input.ReturnUrl ?? "~/");
             }
-            else
-            {
-                // since we don't have a valid context, then we just go back to the home page
-                return Redirect("~/");
-            }
+
+            // since we don't have a valid context, then we just go back to the home page
+            return Redirect("~/");
         }
 
         if (await _userManager.FindByNameAsync(Input.Username!) != null)
-        {
             ModelState.AddModelError("Input.Username", "Invalid username");
-        }
 
         if (ModelState.IsValid)
         {
@@ -99,11 +92,9 @@ public class Index : PageModel
                 if (context != null)
                 {
                     if (context.IsNativeClient())
-                    {
                         // The client is native, so this change in how to
                         // return the response is for better UX for the end user.
                         return this.LoadingPage(Input.ReturnUrl);
-                    }
 
                     // we can trust Input.ReturnUrl since GetAuthorizationContextAsync returned non-null
                     return Redirect(Input.ReturnUrl ?? "~/");
@@ -111,18 +102,11 @@ public class Index : PageModel
 
                 // request for a local page
                 if (Url.IsLocalUrl(Input.ReturnUrl))
-                {
                     return Redirect(Input.ReturnUrl);
-                }
-                else if (string.IsNullOrEmpty(Input.ReturnUrl))
-                {
+                if (string.IsNullOrEmpty(Input.ReturnUrl))
                     return Redirect("~/");
-                }
-                else
-                {
-                    // user might have clicked on a malicious link - should be logged
-                    throw new ArgumentException("invalid return URL");
-                }
+                // user might have clicked on a malicious link - should be logged
+                throw new ArgumentException("invalid return URL");
             }
         }
 

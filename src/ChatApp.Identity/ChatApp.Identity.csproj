@@ -7,22 +7,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotNetEnv" Version="3.0.0" />
-        <PackageReference Include="Duende.IdentityServer" Version="7.0.3" />
-        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
+        <PackageReference Include="DotNetEnv" Version="3.0.0"/>
+        <PackageReference Include="Duende.IdentityServer" Version="7.0.3"/>
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.3"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3"/>
 
-        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Pages\Account\TwoFactor\Index.cshtml.cs" />
-      <Compile Remove="Pages\Account\TwoFactor\Confirm.cshtml.cs" />
+        <Compile Remove="Pages\Account\TwoFactor\Index.cshtml.cs"/>
+        <Compile Remove="Pages\Account\TwoFactor\Confirm.cshtml.cs"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="Pages\Account\TwoFactor\Index.cshtml" />
+        <Content Remove="Pages\Account\TwoFactor\Index.cshtml"/>
     </ItemGroup>
 </Project>

@@ -13,13 +13,13 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ("api", "API")
+            new("api", "API")
         };
 
     public static IEnumerable<Client> Clients =>
         new Client[]
         {
-            new ()
+            new()
             {
                 ClientId = "client",
                 AllowedGrantTypes = GrantTypes.ClientCredentials,

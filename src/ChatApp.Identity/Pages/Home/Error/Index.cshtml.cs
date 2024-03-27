@@ -5,23 +5,23 @@ using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ChatApp.Identity.Pages.Error;
+namespace ChatApp.Identity.Pages.Home.Error;
 
 [AllowAnonymous]
 [SecurityHeaders]
 public class Index : PageModel
 {
-    private readonly IIdentityServerInteractionService _interaction;
     private readonly IWebHostEnvironment _environment;
-        
-    public ViewModel View { get; set; } = new();
-        
+    private readonly IIdentityServerInteractionService _interaction;
+
     public Index(IIdentityServerInteractionService interaction, IWebHostEnvironment environment)
     {
         _interaction = interaction;
         _environment = environment;
     }
-        
+
+    public ViewModel View { get; set; } = new();
+
     public async Task OnGet(string? errorId)
     {
         // retrieve error details from identityserver
@@ -31,10 +31,8 @@ public class Index : PageModel
             View.Error = message;
 
             if (!_environment.IsDevelopment())
-            {
                 // only show in development
                 message.ErrorDescription = null;
-            }
         }
     }
 }

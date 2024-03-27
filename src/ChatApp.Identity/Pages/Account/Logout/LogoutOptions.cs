@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace ChatApp.Identity.Pages.Logout;
+namespace ChatApp.Identity.Pages.Account.Logout;
 
 public static class LogoutOptions
 {

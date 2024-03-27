@@ -31,10 +31,7 @@ internal static class HostingExtensions
     {
         app.UseSerilogRequestLogging();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
+        if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
 
         app.UseStaticFiles();
         app.UseRouting();

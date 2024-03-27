@@ -1,7 +1,7 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-namespace ChatApp.Identity.Pages.Login;
+namespace ChatApp.Identity.Pages.Account.Login;
 
 public static class LoginOptions
 {

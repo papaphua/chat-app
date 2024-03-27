@@ -3,15 +3,13 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace ChatApp.Identity.Pages.Create;
+namespace ChatApp.Identity.Pages.Account.Create;
 
 public class InputModel
 {
-    [Required]
-    public string? Username { get; set; }
+    [Required] public string? Username { get; set; }
 
-    [Required]
-    public string? Password { get; set; }
+    [Required] public string? Password { get; set; }
 
     public string? ReturnUrl { get; set; }
 

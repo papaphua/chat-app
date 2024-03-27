@@ -15,10 +15,10 @@ namespace ChatApp.Identity.Pages.Grants;
 [Authorize]
 public class Index : PageModel
 {
-    private readonly IIdentityServerInteractionService _interaction;
     private readonly IClientStore _clients;
-    private readonly IResourceStore _resources;
     private readonly IEventService _events;
+    private readonly IIdentityServerInteractionService _interaction;
+    private readonly IResourceStore _resources;
 
     public Index(IIdentityServerInteractionService interaction,
         IClientStore clients,
@@ -32,7 +32,9 @@ public class Index : PageModel
     }
 
     public ViewModel View { get; set; } = default!;
-        
+
+    [BindProperty] public string? ClientId { get; set; }
+
     public async Task OnGet()
     {
         var grants = await _interaction.GetAllUserGrantsAsync();
@@ -45,14 +47,14 @@ public class Index : PageModel
             {
                 var resources = await _resources.FindResourcesByScopeAsync(grant.Scopes);
 
-                var item = new GrantViewModel()
+                var item = new GrantViewModel
                 {
                     ClientId = client.ClientId,
                     ClientName = client.ClientName ?? client.ClientId,
                     ClientLogoUrl = client.LogoUri,
                     ClientUrl = client.ClientUri,
                     Description = grant.Description,
-                    Created = grant.CreationTime, 
+                    Created = grant.CreationTime,
                     Expires = grant.Expiration,
                     IdentityGrantNames = resources.IdentityResources.Select(x => x.DisplayName ?? x.Name).ToArray(),
                     ApiGrantNames = resources.ApiScopes.Select(x => x.DisplayName ?? x.Name).ToArray()
@@ -67,9 +69,6 @@ public class Index : PageModel
             Grants = list
         };
     }
-
-    [BindProperty]
-    public string? ClientId { get; set; }
 
     public async Task<IActionResult> OnPost()
     {

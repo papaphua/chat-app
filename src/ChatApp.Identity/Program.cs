@@ -20,7 +20,7 @@ try
         .ReadFrom.Configuration(ctx.Configuration));
 
     Env.Load();
-    
+
     var app = builder
         .ConfigureServices()
         .ConfigurePipeline();

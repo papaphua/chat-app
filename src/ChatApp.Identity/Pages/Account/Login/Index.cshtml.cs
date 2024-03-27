@@ -7,29 +7,24 @@ using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ChatApp.Identity.Pages.Login;
+namespace ChatApp.Identity.Pages.Account.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IIdentityServerInteractionService _interaction;
     private readonly IEventService _events;
-    private readonly IAuthenticationSchemeProvider _schemeProvider;
     private readonly IIdentityProviderStore _identityProviderStore;
-
-    public ViewModel View { get; set; } = default!;
-
-    [BindProperty] public InputModel Input { get; set; } = default!;
+    private readonly IIdentityServerInteractionService _interaction;
+    private readonly IAuthenticationSchemeProvider _schemeProvider;
+    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<User> _userManager;
 
     public Index(
         IIdentityServerInteractionService interaction,
@@ -45,15 +40,17 @@ public class Index : PageModel
         _signInManager = signInManager;
     }
 
+    public ViewModel View { get; set; } = default!;
+
+    [BindProperty] public InputModel Input { get; set; } = default!;
+
     public async Task<IActionResult> OnGet(string? returnUrl)
     {
         await BuildModelAsync(returnUrl);
 
         if (View.IsExternalLoginOnly)
-        {
             // we only have one option for logging in and it's an external provider
             return RedirectToPage("/ExternalLogin/Challenge", new { scheme = View.ExternalLoginScheme, returnUrl });
-        }
 
         return Page();
     }
@@ -78,19 +75,15 @@ public class Index : PageModel
 
                 // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                 if (context.IsNativeClient())
-                {
                     // The client is native, so this change in how to
                     // return the response is for better UX for the end user.
                     return this.LoadingPage(Input.ReturnUrl);
-                }
 
                 return Redirect(Input.ReturnUrl ?? "~/");
             }
-            else
-            {
-                // since we don't have a valid context, then we just go back to the home page
-                return Redirect("~/");
-            }
+
+            // since we don't have a valid context, then we just go back to the home page
+            return Redirect("~/");
         }
 
         if (ModelState.IsValid)
@@ -136,11 +129,9 @@ public class Index : PageModel
                         ArgumentNullException.ThrowIfNull(Input.ReturnUrl, nameof(Input.ReturnUrl));
 
                         if (context.IsNativeClient())
-                        {
                             // The client is native, so this change in how to
                             // return the response is for better UX for the end user.
                             return this.LoadingPage(Input.ReturnUrl);
-                        }
 
                         // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                         return Redirect(Input.ReturnUrl ?? "~/");
@@ -148,18 +139,11 @@ public class Index : PageModel
 
                     // request for a local page
                     if (Url.IsLocalUrl(Input.ReturnUrl))
-                    {
                         return Redirect(Input.ReturnUrl);
-                    }
-                    else if (string.IsNullOrEmpty(Input.ReturnUrl))
-                    {
+                    if (string.IsNullOrEmpty(Input.ReturnUrl))
                         return Redirect("~/");
-                    }
-                    else
-                    {
-                        // user might have clicked on a malicious link - should be logged
-                        throw new ArgumentException("invalid return URL");
-                    }
+                    // user might have clicked on a malicious link - should be logged
+                    throw new ArgumentException("invalid return URL");
                 }
             }
 
@@ -186,20 +170,17 @@ public class Index : PageModel
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
         {
-            var local = context.IdP == Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider;
+            var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
             // this is meant to short circuit the UI and only trigger the one external IdP
             View = new ViewModel
             {
-                EnableLocalLogin = local,
+                EnableLocalLogin = local
             };
 
             Input.Username = context.LoginHint;
 
-            if (!local)
-            {
-                View.ExternalProviders = new[] { new ViewModel.ExternalProvider(authenticationScheme: context.IdP) };
-            }
+            if (!local) View.ExternalProviders = new[] { new ViewModel.ExternalProvider(context.IdP) };
 
             return;
         }
@@ -210,16 +191,16 @@ public class Index : PageModel
             .Where(x => x.DisplayName != null)
             .Select(x => new ViewModel.ExternalProvider
             (
-                authenticationScheme: x.Name,
-                displayName: x.DisplayName ?? x.Name
+                x.Name,
+                x.DisplayName ?? x.Name
             )).ToList();
 
         var dynamicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
             .Where(x => x.Enabled)
             .Select(x => new ViewModel.ExternalProvider
             (
-                authenticationScheme: x.Scheme,
-                displayName: x.DisplayName ?? x.Scheme
+                x.Scheme,
+                x.DisplayName ?? x.Scheme
             ));
         providers.AddRange(dynamicSchemes);
 
@@ -230,10 +211,8 @@ public class Index : PageModel
         {
             allowLocal = client.EnableLocalLogin;
             if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Count != 0)
-            {
                 providers = providers.Where(provider =>
                     client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
-            }
         }
 
         View = new ViewModel
