@@ -1,4 +1,5 @@
 ﻿using ChatApp.Identity;
+using DotNetEnv;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -18,6 +19,8 @@ try
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(ctx.Configuration));
 
+    Env.Load();
+    
     var app = builder
         .ConfigureServices()
         .ConfigurePipeline();
