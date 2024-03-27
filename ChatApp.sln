@@ -4,15 +4,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7C3DC4A9-CAD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChatpApp.Server", "ChatpApp.Server", "{7A0423D2-DECD-4B60-81C7-7151F296208B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Domain", "src\ChatApp.Server.Domain\ChatApp.Server.Domain.csproj", "{0C820C6A-4DE7-4FB5-9178-860E380D6C72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Domain", "src\ChatApp.Server\ChatApp.Server.Domain\ChatApp.Server.Domain.csproj", "{0C820C6A-4DE7-4FB5-9178-860E380D6C72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Application", "src\ChatApp.Server.Application\ChatApp.Server.Application.csproj", "{D6548002-57BD-4763-A91E-E5C335206159}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Application", "src\ChatApp.Server\ChatApp.Server.Application\ChatApp.Server.Application.csproj", "{D6548002-57BD-4763-A91E-E5C335206159}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Infrastructure", "src\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj", "{534B9E23-6442-45C8-B42B-980C6EE36221}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Infrastructure", "src\ChatApp.Server\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj", "{534B9E23-6442-45C8-B42B-980C6EE36221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.App", "src\ChatApp.Server.App\ChatApp.Server.App.csproj", "{699C7F17-845E-4BDA-B7B6-21606FAAE510}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.App", "src\ChatApp.Server\ChatApp.Server.App\ChatApp.Server.App.csproj", "{699C7F17-845E-4BDA-B7B6-21606FAAE510}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Presentation", "src\ChatApp.Server.Presentation\ChatApp.Server.Presentation.csproj", "{1AE454AC-8CCE-460D-A416-3FC46B3B8824}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Presentation", "src\ChatApp.Server\ChatApp.Server.Presentation\ChatApp.Server.Presentation.csproj", "{1AE454AC-8CCE-460D-A416-3FC46B3B8824}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
