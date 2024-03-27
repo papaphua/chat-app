@@ -25,7 +25,8 @@ public class Index : PageModel
     [BindProperty] public InputModel Input { get; set; } = default!;
 
     public Index(
-        IIdentityServerInteractionService interaction, UserManager<User> userManager, SignInManager<User> signInManager, TestUserStore? users = null)
+        IIdentityServerInteractionService interaction, UserManager<User> userManager, SignInManager<User> signInManager,
+        TestUserStore? users = null)
     {
         _interaction = interaction;
         _userManager = userManager;
@@ -82,43 +83,46 @@ public class Index : PageModel
                 UserName = Input.Username
             }, Input.Password!);
 
-            var user = (await _userManager.FindByNameAsync(Input.Username!))!;
-            
-            // issue authentication cookie with subject ID and username
-            var issuer = new IdentityServerUser(user.Id.ToString())
+            if (createResult.Succeeded)
             {
-                DisplayName = user.UserName
-            };
+                var user = (await _userManager.FindByNameAsync(Input.Username!))!;
 
-            // await HttpContext.SignInAsync(issuer);
-            await _signInManager.PasswordSignInAsync(user, Input.Password!, false, false);
-
-            if (context != null)
-            {
-                if (context.IsNativeClient())
+                // issue authentication cookie with subject ID and username
+                var issuer = new IdentityServerUser(user.Id.ToString())
                 {
-                    // The client is native, so this change in how to
-                    // return the response is for better UX for the end user.
-                    return this.LoadingPage(Input.ReturnUrl);
+                    DisplayName = user.UserName
+                };
+
+                await _signInManager.PasswordSignInAsync(user, Input.Password!, false, false);
+                await HttpContext.SignInAsync(issuer);
+
+                if (context != null)
+                {
+                    if (context.IsNativeClient())
+                    {
+                        // The client is native, so this change in how to
+                        // return the response is for better UX for the end user.
+                        return this.LoadingPage(Input.ReturnUrl);
+                    }
+
+                    // we can trust Input.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                    return Redirect(Input.ReturnUrl ?? "~/");
                 }
 
-                // we can trust Input.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                return Redirect(Input.ReturnUrl ?? "~/");
-            }
-
-            // request for a local page
-            if (Url.IsLocalUrl(Input.ReturnUrl))
-            {
-                return Redirect(Input.ReturnUrl);
-            }
-            else if (string.IsNullOrEmpty(Input.ReturnUrl))
-            {
-                return Redirect("~/");
-            }
-            else
-            {
-                // user might have clicked on a malicious link - should be logged
-                throw new ArgumentException("invalid return URL");
+                // request for a local page
+                if (Url.IsLocalUrl(Input.ReturnUrl))
+                {
+                    return Redirect(Input.ReturnUrl);
+                }
+                else if (string.IsNullOrEmpty(Input.ReturnUrl))
+                {
+                    return Redirect("~/");
+                }
+                else
+                {
+                    // user might have clicked on a malicious link - should be logged
+                    throw new ArgumentException("invalid return URL");
+                }
             }
         }
 

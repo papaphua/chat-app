@@ -16,4 +16,13 @@
 
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Pages\Account\TwoFactor\Index.cshtml.cs" />
+      <Compile Remove="Pages\Account\TwoFactor\Confirm.cshtml.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Pages\Account\TwoFactor\Index.cshtml" />
+    </ItemGroup>
 </Project>
