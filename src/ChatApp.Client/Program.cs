@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using ChatApp.Client.App;
 using ChatApp.Client.App.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -18,5 +19,7 @@ builder.Services.AddHttpClient("server", client =>
     .AddHttpMessageHandler<AntiforgeryHandler>();
 
 builder.Services.AddTransient(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("server"));
+
+builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();
