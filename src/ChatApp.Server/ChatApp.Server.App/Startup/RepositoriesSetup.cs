@@ -1,7 +1,7 @@
 ﻿using ChatApp.Server.Domain;
 using ChatApp.Server.Infrastructure.Core.Abstractions;
 
-namespace ChatApp.Server.Api.Startup;
+namespace ChatApp.Server.App.Startup;
 
 public static class RepositoriesSetup
 {

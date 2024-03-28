@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using ChatApp.Client.App;
-using ChatApp.Client.App.Auth;
+using ChatApp.Client;
+using ChatApp.Client.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 

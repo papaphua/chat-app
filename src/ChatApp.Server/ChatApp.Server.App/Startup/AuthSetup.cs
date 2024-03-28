@@ -1,6 +1,6 @@
 ﻿using DotNetEnv;
 
-namespace ChatApp.Server.Api.Startup;
+namespace ChatApp.Server.App.Startup;
 
 public static class AuthSetup
 {

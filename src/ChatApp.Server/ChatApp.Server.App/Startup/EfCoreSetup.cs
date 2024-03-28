@@ -4,7 +4,7 @@ using ChatApp.Server.Domain.Users;
 using ChatApp.Server.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChatApp.Server.Api.Startup;
+namespace ChatApp.Server.App.Startup;
 
 public static class EfCoreSetup
 {

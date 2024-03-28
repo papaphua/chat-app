@@ -1,7 +1,7 @@
-﻿using ChatApp.Server.Api.Startup;
-using ChatApp.Server.Api.Swagger;
+﻿using ChatApp.Server.App.Startup;
+using ChatApp.Server.App.Swagger;
 
-namespace ChatApp.Server.Api;
+namespace ChatApp.Server.App;
 
 public static class HostingExtensions
 {

@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace ChatApp.Server.Api.Swagger;
+namespace ChatApp.Server.App.Swagger;
 
 public sealed class AntiforgeryOperationFilter : IOperationFilter
 {

@@ -1,4 +1,4 @@
-using ChatApp.Server.Api;
+using ChatApp.Server.App;
 using DotNetEnv;
 using Serilog;
 
@@ -21,6 +21,8 @@ try
 
     Env.Load();
 
+    Log.Information(typeof(ChatApp.Client.App).Assembly.FullName);
+    
     var app = builder
         .ConfigureServices()
         .ConfigurePipeline();

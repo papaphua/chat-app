@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace ChatApp.Client.App.Pages;
+namespace ChatApp.Client.Pages;
 
 [AllowAnonymous]
 public sealed partial class Home

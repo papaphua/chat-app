@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ChatApp.Client.App.Auth;
+namespace ChatApp.Client.Auth;
 
 public sealed class AuthStateProvider(
     HttpClient client,
