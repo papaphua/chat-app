@@ -1,4 +1,6 @@
 using ChatApp.Identity.Models;
+using ChatApp.Identity.Options;
+using ChatApp.Identity.Options.Setups;
 using ChatApp.Identity.Services.EmailService;
 using ChatApp.Identity.Services.SmsService;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +28,9 @@ internal static class HostingExtensions
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<User>();
 
+        builder.Services.ConfigureOptions<SendGridOptionsSetup>();
+        builder.Services.ConfigureOptions<TwilioOptionsSetup>();
+        
         builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<ISmsService, SmsService>();
         
