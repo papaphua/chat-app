@@ -21,7 +21,7 @@ public static class AuthSetup
             {
                 options.Authority = "https://localhost:5001";
 
-                options.ClientId = "client";
+                options.ClientId = "WebApp";
                 options.ClientSecret = Env.GetString("CLIENT_SECRET");
                 options.ResponseType = "code";
                 options.ResponseMode = "query";

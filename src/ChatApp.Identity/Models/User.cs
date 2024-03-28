@@ -2,6 +2,4 @@
 
 namespace ChatApp.Identity.Models;
 
-public sealed class User : IdentityUser<Guid>
-{
-}
+public sealed class User : IdentityUser<Guid>;

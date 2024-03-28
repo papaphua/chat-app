@@ -1,4 +1,5 @@
-﻿using Duende.IdentityServer.Models;
+﻿using DotNetEnv;
+using Duende.IdentityServer.Models;
 
 namespace ChatApp.Identity;
 
@@ -7,7 +8,8 @@ public static class Config
     public static IEnumerable<IdentityResource> IdentityResources =>
         new IdentityResource[]
         {
-            new IdentityResources.OpenId()
+            new IdentityResources.OpenId(),
+            new IdentityResources.Profile()
         };
 
     public static IEnumerable<ApiScope> ApiScopes =>
@@ -21,12 +23,17 @@ public static class Config
         {
             new()
             {
-                ClientId = "client",
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                ClientId = "WebApp",
                 ClientSecrets =
                 {
-                    new Secret(Environment.GetEnvironmentVariable("CLIENT_SECRET").Sha256())
-                }
+                    new Secret(Env.GetString("CLIENT_SECRET").Sha256())
+                },
+                AllowedGrantTypes = GrantTypes.Code,
+                RedirectUris = { "https://localhost:6001/signin-oidc" },
+                FrontChannelLogoutUri = "https://localhost:6001/signout-oidc",
+                PostLogoutRedirectUris = { "https://localhost:6001/signout-callback-oidc" },
+                AllowOfflineAccess = true,
+                AllowedScopes = { "openid", "profile", "remote_api", "api" }
             }
         };
 }

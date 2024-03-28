@@ -1,8 +1,5 @@
 using ChatApp.Identity.Models;
-using ChatApp.Identity.Options;
-using ChatApp.Identity.Options.Setups;
-using ChatApp.Identity.Services.EmailService;
-using ChatApp.Identity.Services.SmsService;
+using ChatApp.Identity.Startup;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -22,17 +19,22 @@ internal static class HostingExtensions
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        builder.Services.AddIdentityServer(options => { options.EmitStaticAudienceClaim = true; })
+        builder.Services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                options.EmitStaticAudienceClaim = true;
+            })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<User>();
 
-        builder.Services.ConfigureOptions<SendGridOptionsSetup>();
-        builder.Services.ConfigureOptions<TwilioOptionsSetup>();
-        
-        builder.Services.AddScoped<IEmailService, EmailService>();
-        builder.Services.AddScoped<ISmsService, SmsService>();
+        builder.Services.SetupOptions();
+
+        builder.Services.AddServices();
         
         return builder.Build();
     }

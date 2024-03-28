@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ChatApp.Client.App.Auth;
 
-public class AuthStateProvider(
+public sealed class AuthStateProvider(
     HttpClient client,
     ILogger<AuthStateProvider> logger)
     : AuthenticationStateProvider

@@ -11,12 +11,10 @@ namespace ChatApp.Identity.Pages.Account.TwoFactor;
 public class Confirm : PageModel
 {
     private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
 
-    public Confirm(SignInManager<User> signInManager, UserManager<User> userManager)
+    public Confirm(SignInManager<User> signInManager)
     {
         _signInManager = signInManager;
-        _userManager = userManager;
     }
 
     [BindProperty] public InputModel Input { get; set; } = default!;

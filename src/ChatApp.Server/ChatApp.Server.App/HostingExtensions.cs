@@ -60,7 +60,8 @@ public static class HostingExtensions
         app.MapBffManagementEndpoints();
 
         app.MapControllers()
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .AsBffApiEndpoint();
 
         app.MapRazorPages()
             .RequireAuthorization();
