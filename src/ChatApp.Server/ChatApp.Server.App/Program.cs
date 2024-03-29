@@ -20,8 +20,6 @@ try
         .ReadFrom.Configuration(ctx.Configuration));
 
     Env.Load();
-
-    Log.Information(typeof(ChatApp.Client.App).Assembly.FullName);
     
     var app = builder
         .ConfigureServices()

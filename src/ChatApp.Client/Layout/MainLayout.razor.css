@@ -1,0 +1,15 @@
+﻿::deep .mud-nav-link {
+    padding: 0;
+}
+
+::deep .mud-nav-link > .mud-nav-link-text {
+    margin: 0;
+}
+
+::deep .last-message {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}

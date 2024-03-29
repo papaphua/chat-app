@@ -1,7 +1,68 @@
 @inherits LayoutComponentBase
 
-<MudThemeProvider/>
+<MudThemeProvider IsDarkMode="IsDarkModeEnabled"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
-@Body
+<MudLayout>
+    <MudDrawer Width="25%" Open="true" Style="padding: 5px; overflow-y: hidden;">
+        <MudStack Row="false" Spacing="0">
+            <div style="position: sticky; top: 0; z-index: 1; padding-bottom: 5px">
+                <MudStack Row="true">
+                    <div>
+                        <MudPopover Open="IsMenuOpen" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                            <MudPaper>
+                                <MudNavMenu>
+                                    <MudNavLink Href="/contacts" Icon="@Icons.Material.Filled.Contacts">Contacts</MudNavLink>
+                                    <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+                                    <MudNavLink OnClick="@ToggleDarkMode" Icon="@Icons.Material.Filled.DarkMode">
+                                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                                            <MudText Typo="Typo.inherit">Dark Mode</MudText>
+                                            <MudSwitch Style="margin-right: 0; padding-left: 10px;" @bind-Value="IsDarkModeEnabled" Color="Color.Primary" Size="Size.Small"/>
+                                        </MudStack>
+                                    </MudNavLink>
+                                </MudNavMenu>
+                            </MudPaper>
+                        </MudPopover>
+                        <MudIconButton OnClick="@ToggleMenu" Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit"/>
+                    </div>
+                    <MudTextField Placeholder="Search" Margin="Margin.Dense" @bind-Value="SearchValue" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Inherit"/>
+                </MudStack>
+                <MudTabs Rounded="true">
+                    <MudTabPanel Text="All"/>
+                    <MudTabPanel Text="Directs"/>
+                    <MudTabPanel Text="Groups"/>
+                </MudTabs>
+            </div>
+            <div style="overflow-y: auto; height: 600px; padding-right: 5px; padding-bottom: 10px">
+                <MudNavMenu>
+                    @for (int i = 0; i < 20; i++)
+                    {
+                        <MudNavLink OnClick="() => { }" Style="margin-bottom: 5px;">
+                            <MudCard>
+                                <MudCardHeader>
+                                    <CardHeaderAvatar>
+                                        <MudAvatar Color="Color.Secondary">I</MudAvatar>
+                                    </CardHeaderAvatar>
+                                    <CardHeaderContent>
+                                        <MudText Typo="Typo.body1">Istra Croatia</MudText>
+                                        <MudText Class="last-message" Typo="Typo.body2">Try this if you want to restrict the lines up to 3 and after three lines the dots will appear. If we want to increase the lines just change the -webkit-line-clamp value and give the width for div size.</MudText>
+                                    </CardHeaderContent>
+                                    <CardHeaderActions>
+                                        <MudStack Row="false" Justify="Justify.SpaceBetween">
+                                            <MudText Align="Align.End">Wed</MudText>
+                                            <MudBadge Content="100" Color="Color.Primary" Overlap="true" Class="mx-6 my-4"/>
+                                        </MudStack>
+                                    </CardHeaderActions>
+                                </MudCardHeader>
+                            </MudCard>
+                        </MudNavLink>
+                    }
+                </MudNavMenu>
+            </div>
+        </MudStack>
+    </MudDrawer>
+    <MudMainContent Style="padding-top: 0;">
+        @Body
+    </MudMainContent>
+</MudLayout>
