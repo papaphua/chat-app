@@ -5,16 +5,16 @@
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <MudDrawer Width="25%" Open="true" Style="padding: 5px; overflow-y: hidden;">
+    <MudDrawer Width="25%" Open="true" Style="padding: 10px; overflow-y: hidden;" Elevation="3">
         <MudStack Row="false" Spacing="0">
-            <div style="position: sticky; top: 0; z-index: 1; padding-bottom: 5px">
-                <MudStack Row="true">
+            <div style="position: sticky; top: 0; z-index: 1; padding-bottom: 10px">
+                <MudStack Row="true" Style="padding-bottom: 5px">
                     <div>
                         <MudPopover Open="IsMenuOpen" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-                            <MudPaper>
+                            <MudPaper Elevation="3">
                                 <MudNavMenu>
+                                    <MudNavLink Href="/profile" Icon="@Icons.Material.Filled.AccountCircle">Profile</MudNavLink>
                                     <MudNavLink Href="/contacts" Icon="@Icons.Material.Filled.Contacts">Contacts</MudNavLink>
-                                    <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
                                     <MudNavLink OnClick="@ToggleDarkMode" Icon="@Icons.Material.Filled.DarkMode">
                                         <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
                                             <MudText Typo="Typo.inherit">Dark Mode</MudText>
@@ -28,18 +28,18 @@
                     </div>
                     <MudTextField Placeholder="Search" Margin="Margin.Dense" @bind-Value="SearchValue" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Inherit"/>
                 </MudStack>
-                <MudTabs Rounded="true">
+                <MudTabs Rounded="true" Elevation="1">
                     <MudTabPanel Text="All"/>
                     <MudTabPanel Text="Directs"/>
                     <MudTabPanel Text="Groups"/>
                 </MudTabs>
             </div>
-            <div style="overflow-y: auto; height: 600px; padding-right: 5px; padding-bottom: 10px">
+            <div style="overflow-y: auto; height: 600px; padding-bottom: 20px; padding-right: 5px">
                 <MudNavMenu>
                     @for (int i = 0; i < 20; i++)
                     {
-                        <MudNavLink OnClick="() => { }" Style="margin-bottom: 5px;">
-                            <MudCard>
+                        <MudNavLink OnClick="() => { }" Style="margin-bottom: 10px;">
+                            <MudCard Elevation="0">
                                 <MudCardHeader>
                                     <CardHeaderAvatar>
                                         <MudAvatar Color="Color.Secondary">I</MudAvatar>
@@ -62,7 +62,7 @@
             </div>
         </MudStack>
     </MudDrawer>
-    <MudMainContent Style="padding-top: 0;">
+    <MudMainContent Style="padding: 10px">
         @Body
     </MudMainContent>
 </MudLayout>

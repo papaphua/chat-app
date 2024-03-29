@@ -1,0 +1,75 @@
+﻿@page "/profile"
+
+<MudStack Row="false">
+    <MudStack Row="true">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1">Avatar</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="false" TData="object">
+                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                    <div class="d-flex" style="height:100%">
+                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
+                    </div>
+                </MudCarouselItem>
+                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
+                    <div class="d-flex" style="height:100%">
+                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
+                    </div>
+                </MudCarouselItem>
+                <MudCarouselItem Transition="Transition.Slide">
+                    <div class="d-flex" style="height:100%">
+                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large"/>
+                    </div>
+                </MudCarouselItem>
+            </MudCarousel>
+            <MudCardActions Style="display: flex; justify-content: space-between; align-items: center">
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"/>
+                <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" Files="File">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                   for="@context.Id">
+                            Upload
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudCardActions>
+        </MudCard>
+        <MudCard Style="width: 100%">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1">Information</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Style="padding-top: 0; padding-bottom: 0">
+                <MudForm Style="width: 100%">
+                    <MudTextField Variant="Variant.Filled" T="string" Label="First name" InputType="InputType.Text"/>
+                    <MudTextField Variant="Variant.Filled" T="string" Label="Last name" InputType="InputType.Text"/>
+                    <MudTextField Variant="Variant.Filled" T="string" Label="Bio" InputType="InputType.Text" Lines="2"/>
+                </MudForm>
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary"/>
+            </MudCardActions>
+        </MudCard>
+    </MudStack>
+    <MudExpansionPanels>
+        <MudExpansionPanel Text="Panel One" MaxHeight="150">
+            Panel One Content
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Panel Two" MaxHeight="500">
+            Panel Two Content
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Panel Three" MaxHeight="1000">
+            Panel Three Content
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Panel Four">
+            Panel Four Content
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+</MudStack>
