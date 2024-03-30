@@ -1,10 +1,10 @@
 ﻿using ChatApp.Server.Domain.Core;
 using ChatApp.Server.Domain.Directs;
 using ChatApp.Server.Domain.Directs.Repositories;
-using ChatApp.Server.Infrastructure.Core.Abstractions;
+using ChatApp.Server.Persistence.Core.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChatApp.Server.Infrastructure.Directs;
+namespace ChatApp.Server.Persistence.Directs;
 
 public sealed class DirectReactionRepository(ApplicationDbContext dbContext)
     : Repository<DirectReaction>(dbContext), IDirectReactionRepository

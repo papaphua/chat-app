@@ -1,5 +1,4 @@
 using ChatApp.Server.App;
-using DotNetEnv;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -18,8 +17,6 @@ try
             "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(ctx.Configuration));
-
-    Env.Load();
     
     var app = builder
         .ConfigureServices()

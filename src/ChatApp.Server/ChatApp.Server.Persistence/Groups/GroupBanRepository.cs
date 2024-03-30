@@ -1,8 +1,8 @@
 ﻿using ChatApp.Server.Domain.Groups;
 using ChatApp.Server.Domain.Groups.Repositories;
-using ChatApp.Server.Infrastructure.Core.Abstractions;
+using ChatApp.Server.Persistence.Core.Abstractions;
 
-namespace ChatApp.Server.Infrastructure.Groups;
+namespace ChatApp.Server.Persistence.Groups;
 
 public sealed class GroupBanRepository(ApplicationDbContext dbContext)
     : Repository<GroupBan>(dbContext), IGroupBanRepository;

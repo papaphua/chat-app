@@ -1,5 +1,5 @@
 ﻿using ChatApp.Server.Domain;
-using ChatApp.Server.Infrastructure.Core.Abstractions;
+using ChatApp.Server.Persistence.Core.Abstractions;
 
 namespace ChatApp.Server.App.Startup;
 
@@ -10,7 +10,7 @@ public static class RepositoriesSetup
         services.Scan(scan => scan
             .FromAssemblies(
                 AssemblyReference.Assembly,
-                Infrastructure.AssemblyReference.Assembly)
+                Persistence.AssemblyReference.Assembly)
             .AddClasses(classes => classes
                 .AssignableToAny(typeof(Repository<>)))
             .AsMatchingInterface()

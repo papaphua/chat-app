@@ -1,8 +1,8 @@
 ﻿using ChatApp.Server.Domain.Contacts;
 using ChatApp.Server.Domain.Contacts.Repositories;
-using ChatApp.Server.Infrastructure.Core.Abstractions;
+using ChatApp.Server.Persistence.Core.Abstractions;
 
-namespace ChatApp.Server.Infrastructure.Contacts;
+namespace ChatApp.Server.Persistence.Contacts;
 
 public sealed class ContactAvatarRepository(ApplicationDbContext dbContext)
     : Repository<ContactAvatar>(dbContext), IContactAvatarRepository;

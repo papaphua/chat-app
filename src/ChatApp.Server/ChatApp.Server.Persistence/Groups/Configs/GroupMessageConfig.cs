@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ChatApp.Server.Infrastructure.Groups.Configs;
+namespace ChatApp.Server.Persistence.Groups.Configs;
 
 public sealed class GroupMessageConfig : IEntityTypeConfiguration<GroupMessage>
 {

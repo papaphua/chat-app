@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ChatApp.Server.Persistence;
+namespace ChatApp.Server.Infrastructure;
 
 public static class AssemblyReference
 {

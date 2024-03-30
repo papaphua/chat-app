@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Server.Infrastructure.Core.Abstractions;
+﻿namespace ChatApp.Server.Persistence.Core.Abstractions;
 
 public abstract class Repository<TEntity>(ApplicationDbContext dbContext)
     where TEntity : class

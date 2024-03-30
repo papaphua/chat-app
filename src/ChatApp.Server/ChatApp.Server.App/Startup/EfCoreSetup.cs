@@ -1,7 +1,7 @@
 ﻿using ChatApp.Server.Application.Core.Abstractions;
 using ChatApp.Server.Domain.Core.Identity;
 using ChatApp.Server.Domain.Users;
-using ChatApp.Server.Infrastructure;
+using ChatApp.Server.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Server.App.Startup;

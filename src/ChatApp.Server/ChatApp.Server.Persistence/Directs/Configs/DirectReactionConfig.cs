@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ChatApp.Server.Infrastructure.Directs.Configs;
+namespace ChatApp.Server.Persistence.Directs.Configs;
 
 public sealed class DirectReactionConfig : IEntityTypeConfiguration<DirectReaction>
 {

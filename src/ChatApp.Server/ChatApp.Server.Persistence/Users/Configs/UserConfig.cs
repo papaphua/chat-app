@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ChatApp.Server.Infrastructure.Users.Configs;
+namespace ChatApp.Server.Persistence.Users.Configs;
 
 public sealed class UserConfig : IEntityTypeConfiguration<User>
 {

@@ -1,5 +1,6 @@
 ﻿using ChatApp.Server.App.Startup;
 using ChatApp.Server.App.Swagger;
+using DotNetEnv;
 
 namespace ChatApp.Server.App;
 
@@ -7,6 +8,11 @@ public static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        Env.LoadMulti([
+            "../ChatApp.Server.Application/.env",
+            "../ChatApp.Server.Infrastructure/.env"
+        ]);
+
         builder.Services.AddControllersWithViews()
             .AddApplicationPart(Presentation.AssemblyReference.Assembly);
 

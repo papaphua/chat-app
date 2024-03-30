@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ChatApp.Server.Infrastructure.Contacts.Configs;
+namespace ChatApp.Server.Persistence.Contacts.Configs;
 
 public sealed class ContactAvatarConfig : IEntityTypeConfiguration<ContactAvatar>
 {
