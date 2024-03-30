@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Domain", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Application", "src\ChatApp.Server\ChatApp.Server.Application\ChatApp.Server.Application.csproj", "{D6548002-57BD-4763-A91E-E5C335206159}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Infrastructure", "src\ChatApp.Server\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj", "{534B9E23-6442-45C8-B42B-980C6EE36221}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Persistence", "src\ChatApp.Server\ChatApp.Server.Persistence\ChatApp.Server.Persistence.csproj", "{534B9E23-6442-45C8-B42B-980C6EE36221}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.App", "src\ChatApp.Server\ChatApp.Server.App\ChatApp.Server.App.csproj", "{699C7F17-845E-4BDA-B7B6-21606FAAE510}"
 EndProject
