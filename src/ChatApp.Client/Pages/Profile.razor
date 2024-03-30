@@ -58,18 +58,52 @@
             </MudCardActions>
         </MudCard>
     </MudStack>
-    <MudExpansionPanels>
-        <MudExpansionPanel Text="Panel One" MaxHeight="150">
-            Panel One Content
-        </MudExpansionPanel>
-        <MudExpansionPanel Text="Panel Two" MaxHeight="500">
-            Panel Two Content
-        </MudExpansionPanel>
-        <MudExpansionPanel Text="Panel Three" MaxHeight="1000">
-            Panel Three Content
-        </MudExpansionPanel>
-        <MudExpansionPanel Text="Panel Four">
-            Panel Four Content
-        </MudExpansionPanel>
-    </MudExpansionPanels>
+    <MudStack Row="true" Style="width: 100%">
+        <MudStack Row="false" Style="width: 50%">
+            <MudCard>
+                <MudCardContent>
+                    <MudStack Row="true">
+                        <MudForm Style="width: 100%">
+                            <MudTextField Variant="Variant.Filled" T="string" Label="Username" InputType="InputType.Text"/>
+                        </MudForm>
+                        <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary"/>
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
+            <MudCard>
+                <MudCardContent>
+                    <MudStack Row="true">
+                        <MudForm Style="width: 100%">
+                            <MudTextField Variant="Variant.Filled" T="string" Label="Email" InputType="InputType.Email"/>
+                        </MudForm>
+                        <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary"/>
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
+            <MudCard>
+                <MudCardContent>
+                    <MudStack Row="true">
+                        <MudForm Style="width: 100%">
+                            <MudTextField Variant="Variant.Filled" T="string" Label="Phone number" InputType="InputType.Telephone"/>
+                        </MudForm>
+                        <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary"/>
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
+        </MudStack>
+        <MudStack Style="width: 50%">
+            <MudCard>
+                <MudCardContent>
+                    <MudForm Style="width: 100%">
+                        <MudTextField Variant="Variant.Filled" T="string" Label="Current password" InputType="InputType.Password"/>
+                        <MudTextField Variant="Variant.Filled" T="string" Label="New password" InputType="InputType.Password"/>
+                        <MudTextField Variant="Variant.Filled" T="string" Label="Confirm new password" InputType="InputType.Password"/>
+                    </MudForm>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary"/>
+                </MudCardActions>
+            </MudCard>
+        </MudStack>
+    </MudStack>
 </MudStack>
