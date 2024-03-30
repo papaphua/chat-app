@@ -108,39 +108,4 @@ public sealed class ProfileService(
 
         return Result.Success();
     }
-
-    public async Task<Result> UpdateEmailAsync(Guid userId, string email)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> SendEmailConfirmationAsync(Guid userId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> ConfirmEmailAsync(Guid userId, string token)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> UpdatePhoneAsync(Guid userId, string email)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> SendPhoneConfirmationAsync(Guid userId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> ConfirmPhoneAsync(Guid userId, string token)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> ChangePasswordAsync(Guid userId, NewPasswordDto dto)
-    {
-        throw new NotImplementedException();
-    }
 }
