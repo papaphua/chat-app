@@ -16,4 +16,16 @@ public interface IProfileService
     Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, IFormFile file);
 
     Task<Result> RemoveAvatarAsync(Guid userId, Guid resourceId);
+
+    Task<Result> UpdateEmailAsync(Guid userId, string email);
+    Task<Result> SendEmailConfirmationAsync(Guid userId);
+
+    Task<Result> ConfirmEmailAsync(Guid userId, string token);
+    
+    Task<Result> UpdatePhoneAsync(Guid userId, string email);
+    Task<Result> SendPhoneConfirmationAsync(Guid userId);
+
+    Task<Result> ConfirmPhoneAsync(Guid userId, string token);
+
+    Task<Result> ChangePasswordAsync(Guid userId, NewPasswordDto dto);
 }
