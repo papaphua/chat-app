@@ -24,4 +24,6 @@ public interface IProfileService
     Task<Result> SendChangePhoneTokenAsync(Guid userId, string number);
     
     Task<Result> ChangePhoneAsync(Guid userId, string number, string token);
+
+    Task<Result> ChangePasswordAsync(Guid userId, NewPasswordDto dto);
 }

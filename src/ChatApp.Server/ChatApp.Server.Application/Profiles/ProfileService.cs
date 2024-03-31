@@ -159,4 +159,15 @@ public sealed class ProfileService(
             ? Result.Success()
             : Result.Failure(UserErrors.IdentityError(result.Errors));
     }
+
+    public async Task<Result> ChangePasswordAsync(Guid userId, NewPasswordDto dto)
+    {
+        var user = (await userRepository.GetByIdAsync(userId))!;
+
+        var result = await userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+        
+        return result.Succeeded
+            ? Result.Success()
+            : Result.Failure(UserErrors.IdentityError(result.Errors));
+    }
 }

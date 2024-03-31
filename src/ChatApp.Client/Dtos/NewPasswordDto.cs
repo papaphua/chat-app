@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Server.Application.Profiles.Dtos;
+﻿namespace ChatApp.Client.Dtos;
 
 public sealed class NewPasswordDto
 {
