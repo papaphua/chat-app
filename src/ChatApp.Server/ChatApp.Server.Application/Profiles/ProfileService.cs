@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ChatApp.Server.Application.Core;
 using ChatApp.Server.Application.Core.Abstractions;
 using ChatApp.Server.Application.Core.Extensions;
 using ChatApp.Server.Application.Profiles.Dtos;
@@ -19,6 +20,8 @@ public sealed class ProfileService(
     IUserAvatarRepository userAvatarRepository,
     IResourceRepository resourceRepository,
     UserManager<User> userManager,
+    IEmailService emailService,
+    ISmsService smsService,
     IUnitOfWork unitOfWork,
     IMapper mapper)
     : IProfileService
@@ -107,5 +110,53 @@ public sealed class ProfileService(
         }
 
         return Result.Success();
+    }
+
+    public async Task<Result> SendChangeEmailTokenAsync(Guid userId, string email)
+    {
+        var user = (await userRepository.GetByIdAsync(userId))!;
+
+        var token = await userManager.GenerateChangeEmailTokenAsync(user, email);
+
+        var message = MessageTemplate.Confirmation(email, token);
+
+        await emailService.SendMessageAsync(message);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> ChangeEmailAsync(Guid userId, string email, string token)
+    {
+        var user = (await userRepository.GetByIdAsync(userId))!;
+
+        var result = await userManager.ChangeEmailAsync(user, email, token);
+        
+        return result.Succeeded
+            ? Result.Success()
+            : Result.Failure(UserErrors.IdentityError(result.Errors));
+    }
+
+    public async Task<Result> SendChangePhoneTokenAsync(Guid userId, string number)
+    {
+        var user = (await userRepository.GetByIdAsync(userId))!;
+
+        var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, number);
+
+        var message = MessageTemplate.Confirmation(number, token);
+
+        await smsService.SendMessageAsync(message);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> ChangePhoneAsync(Guid userId, string number, string token)
+    {
+        var user = (await userRepository.GetByIdAsync(userId))!;
+
+        var result = await userManager.ChangePhoneNumberAsync(user, number, token);
+        
+        return result.Succeeded
+            ? Result.Success()
+            : Result.Failure(UserErrors.IdentityError(result.Errors));
     }
 }
