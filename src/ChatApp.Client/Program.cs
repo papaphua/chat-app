@@ -1,9 +1,9 @@
+using ChatApp.Client;
+using ChatApp.Client.Core.Auth;
+using ChatApp.Client.Core.Startup;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using ChatApp.Client;
-using ChatApp.Client.Auth;
-using ChatApp.Client.Startup;
-using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

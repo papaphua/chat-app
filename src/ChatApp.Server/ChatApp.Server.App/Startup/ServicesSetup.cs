@@ -1,4 +1,6 @@
-﻿namespace ChatApp.Server.App.Startup;
+﻿using ChatApp.Server.Application;
+
+namespace ChatApp.Server.App.Startup;
 
 public static class ServicesSetup
 {
@@ -6,7 +8,7 @@ public static class ServicesSetup
     {
         services.Scan(scan => scan
             .FromAssemblies(
-                Application.AssemblyReference.Assembly,
+                AssemblyReference.Assembly,
                 Infrastructure.AssemblyReference.Assembly)
             .AddClasses(classes => classes
                 .Where(type => type.IsClass && type.Name.EndsWith("Service")))

@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Client.Startup;
+﻿namespace ChatApp.Client.Core.Startup;
 
 public static class ServicesSetup
 {

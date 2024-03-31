@@ -10,7 +10,7 @@ public sealed class AvatarDtoMap : Profile
     public AvatarDtoMap()
     {
         CreateMap<UserAvatar, AvatarDto>();
-        
+
         CreateMap<GroupAvatar, AvatarDto>();
     }
 }

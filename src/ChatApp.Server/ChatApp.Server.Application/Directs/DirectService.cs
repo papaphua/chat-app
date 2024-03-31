@@ -268,7 +268,7 @@ public sealed class DirectService(
                 resourceRepository.RemoveRange(resources);
 
             directMessageRepository.Remove(message);
-            
+
             await unitOfWork.SaveChangesAsync();
         }
         catch (Exception)

@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Client.Auth;
+﻿namespace ChatApp.Client.Core.Auth;
 
 public sealed class AntiforgeryHandler : DelegatingHandler
 {

@@ -20,7 +20,7 @@ public static class OptionsSetup
             options.AuthToken = Env.GetString("TWILIO_AUTH_TOKEN");
             options.FromNumber = Env.GetString("TWILIO_FROM_NUMBER");
         });
-        
+
         return services;
     }
 }

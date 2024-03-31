@@ -12,10 +12,10 @@ namespace ChatApp.Identity.Pages.Account.TwoFactor;
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
     private readonly IEmailService _emailService;
+    private readonly SignInManager<User> _signInManager;
     private readonly ISmsService _smsService;
+    private readonly UserManager<User> _userManager;
 
     public Index(SignInManager<User> signInManager, UserManager<User> userManager, IEmailService emailService,
         ISmsService smsService)

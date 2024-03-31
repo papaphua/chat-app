@@ -18,7 +18,7 @@ public interface IDirectService
     Task<Result<MessageDto>> AddMessageAsync(Guid userId, Guid directId, NewMessageDto dto);
 
     Task<Result> RemoveMessageAsync(Guid userId, Guid directId, Guid messageId);
-    
+
     Task<Result> RemoveMessageForSelfAsync(Guid userId, Guid directId, Guid messageId);
 
     Task<Result<ReactionDto>> AddReactionAsync(Guid userId, Guid directId, Guid messageId, ReactionType type);

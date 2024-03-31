@@ -1,5 +1,6 @@
 ﻿using ChatApp.Server.App.Startup;
 using ChatApp.Server.App.Swagger;
+using ChatApp.Server.Presentation;
 using DotNetEnv;
 
 namespace ChatApp.Server.App;
@@ -8,13 +9,10 @@ public static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
-        Env.LoadMulti([
-            "../ChatApp.Server.Application/.env",
-            "../ChatApp.Server.Infrastructure/.env"
-        ]);
+        Env.Load();
 
         builder.Services.AddControllersWithViews()
-            .AddApplicationPart(Presentation.AssemblyReference.Assembly);
+            .AddApplicationPart(AssemblyReference.Assembly);
 
         builder.Services.AddRazorPages();
 
@@ -29,6 +27,8 @@ public static class HostingExtensions
         });
 
         builder.Services.AddEfCore(builder.Configuration);
+
+        builder.Services.SetupOptions();
 
         builder.Services.AddRepositories();
 

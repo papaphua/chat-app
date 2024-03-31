@@ -17,7 +17,7 @@ public sealed class DirectMessageRepository(ApplicationDbContext dbContext)
 
         if (includeDeletions)
             query = query.Include(message => message.Deletions);
-        
+
         return await query.FirstOrDefaultAsync(message => message.Id == id);
     }
 }

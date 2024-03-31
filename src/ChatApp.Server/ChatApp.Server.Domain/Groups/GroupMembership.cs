@@ -15,6 +15,6 @@ public sealed class GroupMembership(Guid groupId, Guid memberId)
     public Guid? RoleId { get; set; }
 
     public GroupRole? Role { get; set; }
-    
+
     public DateTime? RoleTimestamp { get; set; }
 }

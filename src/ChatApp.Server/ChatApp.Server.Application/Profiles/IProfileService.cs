@@ -18,11 +18,11 @@ public interface IProfileService
     Task<Result> RemoveAvatarAsync(Guid userId, Guid resourceId);
 
     Task<Result> SendChangeEmailTokenAsync(Guid userId, string email);
-    
+
     Task<Result> ChangeEmailAsync(Guid userId, string email, string token);
-    
+
     Task<Result> SendChangePhoneTokenAsync(Guid userId, string number);
-    
+
     Task<Result> ChangePhoneAsync(Guid userId, string number, string token);
 
     Task<Result> ChangePasswordAsync(Guid userId, NewPasswordDto dto);

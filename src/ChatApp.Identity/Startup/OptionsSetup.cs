@@ -8,7 +8,7 @@ public static class OptionsSetup
     {
         services.ConfigureOptions<SendGridOptionsSetup>();
         services.ConfigureOptions<TwilioOptionsSetup>();
-        
+
         return services;
     }
 }

@@ -35,7 +35,7 @@ public sealed class ContactService(
         var dto = mapper.Map<ContactDto>(contact);
 
         if (contact.Avatar is not null) return Result<ContactDto>.Success(dto);
-        
+
         var latestPartnerAvatar = await userAvatarRepository.GetLatestByUserIdAsync(contact.PartnerId);
 
         if (latestPartnerAvatar is null) return Result<ContactDto>.Success(dto);

@@ -12,9 +12,8 @@ public sealed class GroupInvitation(Guid groupId, Guid creatorId)
     public Guid CreatorId { get; set; } = creatorId;
 
     public User Creator { get; set; } = default!;
-    
-    [MaxLength(128)]
-    public string Link { get; set; } = default!;
-    
+
+    [MaxLength(128)] public string Link { get; set; } = default!;
+
     public DateTime Timestamp { get; set; } = DateTime.Now;
 }

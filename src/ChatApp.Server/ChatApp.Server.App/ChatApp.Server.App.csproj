@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotNetEnv" Version="3.0.0" />
-        <PackageReference Include="Duende.BFF" Version="2.2.0" />
+        <PackageReference Include="DotNetEnv" Version="3.0.0"/>
+        <PackageReference Include="Duende.BFF" Version="2.2.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
             <PrivateAssets>all</PrivateAssets>
@@ -20,10 +20,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\ChatApp.Client\ChatApp.Client.csproj" />
-        <ProjectReference Include="..\..\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\ChatApp.Client\ChatApp.Client.csproj"/>
+        <ProjectReference Include="..\..\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj"/>
         <ProjectReference Include="..\ChatApp.Server.Application\ChatApp.Server.Application.csproj"/>
-        <ProjectReference Include="..\ChatApp.Server.Persistence\ChatApp.Server.Persistence.csproj" />
+        <ProjectReference Include="..\ChatApp.Server.Persistence\ChatApp.Server.Persistence.csproj"/>
         <ProjectReference Include="..\ChatApp.Server.Presentation\ChatApp.Server.Presentation.csproj"/>
     </ItemGroup>
 

@@ -65,7 +65,7 @@ public sealed class DirectController(
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
-    
+
     [HttpDelete("{directId:guid}/message/{messageId:guid}")]
     public async Task<IResult> RemoveMessage(Guid directId, Guid messageId)
     {
@@ -78,7 +78,7 @@ public sealed class DirectController(
             ? Results.Ok()
             : result.ToProblemDetails();
     }
-    
+
     [HttpDelete("{directId:guid}/message/self/{messageId:guid}")]
     public async Task<IResult> RemoveMessageForSelf(Guid directId, Guid messageId)
     {
@@ -100,12 +100,12 @@ public sealed class DirectController(
             directId,
             messageId,
             type);
-        
+
         return result.IsSuccess
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
-    
+
     [HttpDelete("{directId:guid}/message/{messageId:guid}/reaction/{reactionId:guid}")]
     public async Task<IResult> RemoveReaction(Guid directId, Guid messageId, Guid reactionId)
     {
@@ -114,7 +114,7 @@ public sealed class DirectController(
             directId,
             messageId,
             reactionId);
-        
+
         return result.IsSuccess
             ? Results.Ok()
             : result.ToProblemDetails();

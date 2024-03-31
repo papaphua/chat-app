@@ -30,7 +30,7 @@ public static class AuthSetup
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
                 options.Scope.Add("api");
-                options.Scope.Add("offline_access");    
+                options.Scope.Add("offline_access");
 
                 options.MapInboundClaims = false;
                 options.GetClaimsFromUserInfoEndpoint = true;

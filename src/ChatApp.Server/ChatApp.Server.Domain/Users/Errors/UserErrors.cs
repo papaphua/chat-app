@@ -9,11 +9,11 @@ public static class UserErrors
     public static readonly Error EmailNotFound = Error.NotFound(
         $"{nameof(User)}.{nameof(EmailNotFound)}",
         "User has no email.");
-    
+
     public static readonly Error PhoneNotFound = Error.NotFound(
         $"{nameof(User)}.{nameof(PhoneNotFound)}",
         "User has no phone number.");
-    
+
     public static readonly Error NotFound = Error.NotFound(
         $"{nameof(User)}.{nameof(NotFound)}",
         "User not found.");

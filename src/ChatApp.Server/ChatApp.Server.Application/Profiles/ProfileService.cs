@@ -130,7 +130,7 @@ public sealed class ProfileService(
         var user = (await userRepository.GetByIdAsync(userId))!;
 
         var result = await userManager.ChangeEmailAsync(user, email, token);
-        
+
         return result.Succeeded
             ? Result.Success()
             : Result.Failure(UserErrors.IdentityError(result.Errors));
@@ -154,7 +154,7 @@ public sealed class ProfileService(
         var user = (await userRepository.GetByIdAsync(userId))!;
 
         var result = await userManager.ChangePhoneNumberAsync(user, number, token);
-        
+
         return result.Succeeded
             ? Result.Success()
             : Result.Failure(UserErrors.IdentityError(result.Errors));
@@ -165,7 +165,7 @@ public sealed class ProfileService(
         var user = (await userRepository.GetByIdAsync(userId))!;
 
         var result = await userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
-        
+
         return result.Succeeded
             ? Result.Success()
             : Result.Failure(UserErrors.IdentityError(result.Errors));

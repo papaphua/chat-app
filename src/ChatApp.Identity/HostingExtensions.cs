@@ -12,7 +12,7 @@ internal static class HostingExtensions
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
         Env.Load();
-        
+
         builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -38,7 +38,7 @@ internal static class HostingExtensions
         builder.Services.SetupOptions();
 
         builder.Services.AddServices();
-        
+
         return builder.Build();
     }
 

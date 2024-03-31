@@ -11,18 +11,16 @@
                 <MudStack Row="true" Style="padding-bottom: 5px">
                     <div>
                         <MudPopover Open="IsMenuOpen" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-                            <MudPaper Elevation="3">
-                                <MudNavMenu>
-                                    <MudNavLink Href="/profile" Icon="@Icons.Material.Filled.AccountCircle">Profile</MudNavLink>
-                                    <MudNavLink Href="/contacts" Icon="@Icons.Material.Filled.Contacts">Contacts</MudNavLink>
-                                    <MudNavLink OnClick="@ToggleDarkMode" Icon="@Icons.Material.Filled.DarkMode">
-                                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
-                                            <MudText Typo="Typo.inherit">Dark Mode</MudText>
-                                            <MudSwitch Style="margin-right: 0; padding-left: 10px;" @bind-Value="IsDarkModeEnabled" Color="Color.Primary" Size="Size.Small"/>
-                                        </MudStack>
-                                    </MudNavLink>
-                                </MudNavMenu>
-                            </MudPaper>
+                            <MudNavMenu>
+                                <MudNavLink Href="/profile" Icon="@Icons.Material.Filled.AccountCircle">Profile</MudNavLink>
+                                <MudNavLink Href="/contacts" Icon="@Icons.Material.Filled.Contacts">Contacts</MudNavLink>
+                                <MudNavLink OnClick="@ToggleDarkMode" Icon="@Icons.Material.Filled.DarkMode">
+                                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                                        <MudText Typo="Typo.inherit">Dark Mode</MudText>
+                                        <MudSwitch Style="margin-right: 0; padding-left: 10px;" @bind-Value="IsDarkModeEnabled" Color="Color.Primary" Size="Size.Small"/>
+                                    </MudStack>
+                                </MudNavLink>
+                            </MudNavMenu>
                         </MudPopover>
                         <MudIconButton OnClick="@ToggleMenu" Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit"/>
                     </div>
@@ -36,7 +34,7 @@
             </div>
             <div style="overflow-y: auto; height: 600px; padding-bottom: 20px; padding-right: 5px">
                 <MudNavMenu>
-                    @for (int i = 0; i < 20; i++)
+                    @for (var i = 0; i < 20; i++)
                     {
                         <MudNavLink OnClick="() => { }" Style="margin-bottom: 10px;">
                             <MudCard Elevation="0">

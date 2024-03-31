@@ -15,7 +15,7 @@ public static class DirectReactionErrors
     public static readonly Error CreateError = Error.Internal(
         $"{nameof(DirectReaction)}.{nameof(CreateError)}",
         "Could not create direct reaction, try again later.");
-    
+
     public static readonly Error RemoveError = Error.Internal(
         $"{nameof(DirectReaction)}.{nameof(RemoveError)}",
         "Could not remove direct reaction, try again later.");

@@ -8,8 +8,8 @@ namespace ChatApp.Server.Infrastructure.EmailService;
 
 public sealed class EmailService(IOptions<EmailOptions> options) : IEmailService
 {
+    private readonly SendGridClient _client = new(options.Value.ApiKey);
     private readonly EmailOptions _options = options.Value;
-    private readonly SendGridClient _client = new SendGridClient(options.Value.ApiKey);
 
     public async Task SendMessageAsync(MessageTemplate template)
     {
