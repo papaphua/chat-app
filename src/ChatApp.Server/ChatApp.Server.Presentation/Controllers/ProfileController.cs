@@ -61,4 +61,54 @@ public sealed class ProfileController(
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+
+    [HttpPost("email/token")]
+    public async Task<IResult> SendChangeEmailToken(string email)
+    {
+        var result = await profileService.SendChangeEmailTokenAsync(UserId, email);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+
+    [HttpPut("email")]
+    public async Task<IResult> ChangeEmail(string email, string token)
+    {
+        var result = await profileService.ChangeEmailAsync(UserId, email, token);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpPost("phone/token")]
+    public async Task<IResult> SendChangePhoneToken(string number)
+    {
+        var result = await profileService.SendChangePhoneTokenAsync(UserId, number);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+
+    [HttpPut("phone")]
+    public async Task<IResult> ChangePhone(string number, string token)
+    {
+        var result = await profileService.ChangePhoneAsync(UserId, number, token);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+
+    [HttpPut("password")]
+    public async Task<IResult> ChangePassword(NewPasswordDto dto)
+    {
+        var result = await profileService.ChangePasswordAsync(UserId, dto);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }
