@@ -1,13 +1,11 @@
-﻿namespace ChatApp.Server.App.Startup;
+﻿namespace ChatApp.Client.Startup;
 
 public static class ServicesSetup
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.Scan(scan => scan
-            .FromAssemblies(
-                Application.AssemblyReference.Assembly,
-                Infrastructure.AssemblyReference.Assembly)
+            .FromAssemblies(typeof(Program).Assembly)
             .AddClasses(classes => classes
                 .Where(type => type.IsClass && type.Name.EndsWith("Service")))
             .AsMatchingInterface()
