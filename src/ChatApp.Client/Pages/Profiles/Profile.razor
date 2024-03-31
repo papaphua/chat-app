@@ -1,0 +1,110 @@
+﻿@page "/profile"
+
+<MudStack Row="false">
+    <MudStack Row="true" Style="width: 100%">
+        <MudCard>
+            <MudCardHeader>
+                Avatar
+            </MudCardHeader>
+            <MudCardContent>
+                <MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="false" TData="object">
+                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
+                        </div>
+                    </MudCarouselItem>
+                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
+                        </div>
+                    </MudCarouselItem>
+                    <MudCarouselItem Transition="Transition.Slide">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large"/>
+                        </div>
+                    </MudCarouselItem>
+                </MudCarousel>
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete"></MudIconButton>
+            </MudCardActions>
+        </MudCard>
+        <MudCard Style="width: 100%">
+            <MudForm>
+                <MudCardHeader>
+                    Information
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTextField Variant="Variant.Filled" T="string" Label="First name" Required="false"/>
+                    <MudTextField Variant="Variant.Filled" T="string" Label="Last name" Required="false"/>
+                    <MudTextField Lines="3" Variant="Variant.Filled" T="string" Label="Bio" Required="false"/>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                </MudCardActions>
+            </MudForm>
+        </MudCard>
+    </MudStack>
+    <MudStack Row="true">
+        <MudStack Row="false" Style="width: 100%">
+            <MudCard Style="width: 100%">
+                <MudForm>
+                    <MudStack Row="true" AlignItems="AlignItems.Baseline">
+                        <MudCardContent Style="width: 100%">
+                            <MudForm>
+                                <MudTextField Variant="Variant.Filled" T="string" Label="Username" Required="true"/>
+                            </MudForm>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                        </MudCardActions>
+                    </MudStack>
+                </MudForm>
+            </MudCard>
+            <MudCard Style="width: 100%">
+                <MudForm>
+                    <MudStack Row="true" AlignItems="AlignItems.Baseline">
+                        <MudCardContent Style="width: 100%">
+                            <MudForm>
+                                <MudTextField Variant="Variant.Filled" T="string" Label="Email" Required="true"/>
+                            </MudForm>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                        </MudCardActions>
+                    </MudStack>
+                </MudForm>
+            </MudCard>
+            <MudCard Style="width: 100%">
+                <MudForm>
+                    <MudStack Row="true" AlignItems="AlignItems.Baseline">
+                        <MudCardContent Style="width: 100%">
+                            <MudForm>
+                                <MudTextField Variant="Variant.Filled" T="string" Label="Phone number" Required="true"/>
+                            </MudForm>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                        </MudCardActions>
+                    </MudStack>
+                </MudForm>
+            </MudCard>
+        </MudStack>
+        <MudCard Style="width: 100%">
+            <MudForm>
+                <MudStack Row="false">
+                    <MudCardContent Style="width: 100%">
+                        <MudForm>
+                            <MudTextField Variant="Variant.Filled" T="string" Label="Current password" Required="true"/>
+                            <MudTextField Variant="Variant.Filled" T="string" Label="New password" Required="true"/>
+                            <MudTextField Variant="Variant.Filled" T="string" Label="Confirm new password" Required="true"/>
+                        </MudForm>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                    </MudCardActions>
+                </MudStack>
+            </MudForm>
+        </MudCard>
+    </MudStack>
+</MudStack>
