@@ -52,11 +52,11 @@ public sealed class ProfileService(
         return Result.Success();
     }
 
-    public async Task<Result> UpdateUserNameAsync(Guid userId, string userName)
+    public async Task<Result> UpdateUserNameAsync(Guid userId, UserNameDto dto)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
-        var result = await userManager.SetUserNameAsync(user, userName);
+        var result = await userManager.SetUserNameAsync(user, dto.UserName);
 
         return result.Succeeded
             ? Result.Success()
@@ -112,48 +112,48 @@ public sealed class ProfileService(
         return Result.Success();
     }
 
-    public async Task<Result> SendChangeEmailTokenAsync(Guid userId, string email)
+    public async Task<Result> SendChangeEmailTokenAsync(Guid userId, EmailDto dto)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
-        var token = await userManager.GenerateChangeEmailTokenAsync(user, email);
+        var token = await userManager.GenerateChangeEmailTokenAsync(user, dto.Email);
 
-        var message = MessageTemplate.Confirmation(email, token);
+        var message = MessageTemplate.Confirmation(dto.Email, token);
 
         await emailService.SendMessageAsync(message);
 
         return Result.Success();
     }
 
-    public async Task<Result> ChangeEmailAsync(Guid userId, string email, string token)
+    public async Task<Result> ChangeEmailAsync(Guid userId, EmailChangeDto dto)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
-        var result = await userManager.ChangeEmailAsync(user, email, token);
+        var result = await userManager.ChangeEmailAsync(user, dto.Email, dto.Token);
 
         return result.Succeeded
             ? Result.Success()
             : Result.Failure(UserErrors.IdentityError(result.Errors));
     }
 
-    public async Task<Result> SendChangePhoneTokenAsync(Guid userId, string number)
+    public async Task<Result> SendChangePhoneTokenAsync(Guid userId, PhoneNumberDto dto)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
-        var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, number);
+        var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, dto.PhoneNumber);
 
-        var message = MessageTemplate.Confirmation(number, token);
+        var message = MessageTemplate.Confirmation(dto.PhoneNumber, token);
 
         await smsService.SendMessageAsync(message);
 
         return Result.Success();
     }
 
-    public async Task<Result> ChangePhoneAsync(Guid userId, string number, string token)
+    public async Task<Result> ChangePhoneAsync(Guid userId, PhoneNumberChangeDto dto)
     {
         var user = (await userRepository.GetByIdAsync(userId))!;
 
-        var result = await userManager.ChangePhoneNumberAsync(user, number, token);
+        var result = await userManager.ChangePhoneNumberAsync(user, dto.PhoneNumber, dto.Token);
 
         return result.Succeeded
             ? Result.Success()

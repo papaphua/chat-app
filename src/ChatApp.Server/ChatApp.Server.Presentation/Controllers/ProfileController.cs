@@ -33,9 +33,9 @@ public sealed class ProfileController(
     }
 
     [HttpPut("username")]
-    public async Task<IResult> UpdateUserName(string username)
+    public async Task<IResult> UpdateUserName(UserNameDto dto)
     {
-        var result = await profileService.UpdateUserNameAsync(UserId, username);
+        var result = await profileService.UpdateUserNameAsync(UserId, dto);
 
         return result.IsSuccess
             ? Results.Ok()
@@ -61,11 +61,11 @@ public sealed class ProfileController(
             ? Results.Ok()
             : result.ToProblemDetails();
     }
-
+    
     [HttpPost("email/token")]
-    public async Task<IResult> SendChangeEmailToken(string email)
+    public async Task<IResult> SendChangeEmailToken(EmailDto dto)
     {
-        var result = await profileService.SendChangeEmailTokenAsync(UserId, email);
+        var result = await profileService.SendChangeEmailTokenAsync(UserId, dto);
 
         return result.IsSuccess
             ? Results.Ok()
@@ -73,9 +73,9 @@ public sealed class ProfileController(
     }
 
     [HttpPut("email")]
-    public async Task<IResult> ChangeEmail(string email, string token)
+    public async Task<IResult> ChangeEmail(EmailChangeDto dto)
     {
-        var result = await profileService.ChangeEmailAsync(UserId, email, token);
+        var result = await profileService.ChangeEmailAsync(UserId, dto);
 
         return result.IsSuccess
             ? Results.Ok()
@@ -83,9 +83,9 @@ public sealed class ProfileController(
     }
     
     [HttpPost("phone/token")]
-    public async Task<IResult> SendChangePhoneToken(string number)
+    public async Task<IResult> SendChangePhoneToken(PhoneNumberDto dto)
     {
-        var result = await profileService.SendChangePhoneTokenAsync(UserId, number);
+        var result = await profileService.SendChangePhoneTokenAsync(UserId, dto);
 
         return result.IsSuccess
             ? Results.Ok()
@@ -93,9 +93,9 @@ public sealed class ProfileController(
     }
 
     [HttpPut("phone")]
-    public async Task<IResult> ChangePhone(string number, string token)
+    public async Task<IResult> ChangePhone(PhoneNumberChangeDto dto)
     {
-        var result = await profileService.ChangePhoneAsync(UserId, number, token);
+        var result = await profileService.ChangePhoneAsync(UserId, dto);
 
         return result.IsSuccess
             ? Results.Ok()
