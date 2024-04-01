@@ -2,6 +2,7 @@
 using ChatApp.Server.Domain.Core.Identity;
 using ChatApp.Server.Domain.Users;
 using ChatApp.Server.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Server.App.Startup;
@@ -20,7 +21,8 @@ public static class EfCoreSetup
 
         services.AddIdentityCore<User>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddUserValidator<CustomUserValidator>();
+            .AddUserValidator<CustomUserValidator>()
+            .AddDefaultTokenProviders();
 
         return services;
     }

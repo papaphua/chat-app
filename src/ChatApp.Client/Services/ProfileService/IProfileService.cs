@@ -10,11 +10,11 @@ public interface IProfileService
 
     Task UpdateUserName(UserNameDto dto);
 
-    Task SendChangeEmailTokenAsync(EmailDto dto);
+    Task<bool> SendChangeEmailTokenAsync(EmailDto dto);
 
     Task ChangeEmailAsync(EmailChangeDto dto);
 
-    Task SendChangePhoneTokenAsync(PhoneNumberDto dto);
+    Task<bool> SendChangePhoneTokenAsync(PhoneNumberDto dto);
 
     Task ChangePhoneAsync(PhoneNumberChangeDto dto);
 

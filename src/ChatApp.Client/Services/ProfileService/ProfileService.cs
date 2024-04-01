@@ -20,9 +20,10 @@ public sealed class ProfileService(HttpClient http) : IProfileService
         await http.PutAsJsonAsync("api/profile/username", dto);
     }
 
-    public async Task SendChangeEmailTokenAsync(EmailDto dto)
+    public async Task<bool> SendChangeEmailTokenAsync(EmailDto dto)
     {
-        await http.PostAsJsonAsync("api/profile/email/token", dto);
+        var response = await http.PostAsJsonAsync("api/profile/email/token", dto);
+        return response.IsSuccessStatusCode;
     }
 
     public async Task ChangeEmailAsync(EmailChangeDto dto)
@@ -30,9 +31,10 @@ public sealed class ProfileService(HttpClient http) : IProfileService
         await http.PutAsJsonAsync("api/profile/email", dto);
     }
 
-    public async Task SendChangePhoneTokenAsync(PhoneNumberDto dto)
+    public async Task<bool> SendChangePhoneTokenAsync(PhoneNumberDto dto)
     {
-        await http.PostAsJsonAsync("api/profile/phone/token", dto);
+        var response = await http.PostAsJsonAsync("api/profile/phone/token", dto);
+        return response.IsSuccessStatusCode;
     }
 
     public async Task ChangePhoneAsync(PhoneNumberChangeDto dto)
