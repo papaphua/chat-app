@@ -18,7 +18,7 @@ public static class EfCoreSetup
         services.AddScoped<IUnitOfWork>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
 
-        services.AddIdentityCore<User>(options => options.User.RequireUniqueEmail = true)
+        services.AddIdentityCore<User>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddUserValidator<CustomUserValidator>();
 

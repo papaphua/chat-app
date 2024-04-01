@@ -1,6 +1,8 @@
-﻿namespace ChatApp.Client.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ChatApp.Client.Dtos;
 
 public sealed class UserNameDto
 {
-    public string UserName { get; set; } = default!;
+    [Required] public string UserName { get; set; } = default!;
 }

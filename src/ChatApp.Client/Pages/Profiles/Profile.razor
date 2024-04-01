@@ -35,12 +35,12 @@
                     Information
                 </MudCardHeader>
                 <MudCardContent>
-                    <MudTextField Variant="Variant.Filled" T="string" Label="First name" Required="false"/>
-                    <MudTextField Variant="Variant.Filled" T="string" Label="Last name" Required="false"/>
-                    <MudTextField Lines="3" Variant="Variant.Filled" T="string" Label="Bio" Required="false"/>
+                    <MudTextField Variant="Variant.Filled" @bind-Value="Information.FirstName" T="string" Label="First name" Required="false"/>
+                    <MudTextField Variant="Variant.Filled" @bind-Value="Information.LastName" T="string" Label="Last name" Required="false"/>
+                    <MudTextField Lines="3" Variant="Variant.Filled" @bind-Value="Information.Bio" T="string" Label="Bio" Required="false"/>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                    <MudIconButton OnClick="@(async () => await ProfileService.UpdateNameAsync(Information))" Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
                 </MudCardActions>
             </MudForm>
         </MudCard>
@@ -52,11 +52,11 @@
                     <MudStack Row="true" AlignItems="AlignItems.Baseline">
                         <MudCardContent Style="width: 100%">
                             <MudForm>
-                                <MudTextField Variant="Variant.Filled" T="string" Label="Username" Required="true"/>
+                                <MudTextField Variant="Variant.Filled" @bind-Value="UserNameInput.UserName" T="string" Label="Username" Required="true"/>
                             </MudForm>
                         </MudCardContent>
                         <MudCardActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                            <MudIconButton OnClick="@(async () => await ProfileService.UpdateUserName(UserNameInput))" Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
                         </MudCardActions>
                     </MudStack>
                 </MudForm>
