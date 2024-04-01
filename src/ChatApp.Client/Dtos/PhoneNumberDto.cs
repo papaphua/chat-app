@@ -2,5 +2,5 @@
 
 public sealed class PhoneNumberDto
 {
-    public string PhoneNumber { get; set; } = default!;
+    public string? PhoneNumber { get; set; } = default!;
 }

@@ -61,7 +61,7 @@ public sealed class ProfileController(
             ? Results.Ok()
             : result.ToProblemDetails();
     }
-    
+
     [HttpPost("email/token")]
     public async Task<IResult> SendChangeEmailToken(EmailDto dto)
     {
@@ -81,7 +81,7 @@ public sealed class ProfileController(
             ? Results.Ok()
             : result.ToProblemDetails();
     }
-    
+
     [HttpPost("phone/token")]
     public async Task<IResult> SendChangePhoneToken(PhoneNumberDto dto)
     {

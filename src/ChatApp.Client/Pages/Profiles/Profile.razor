@@ -66,7 +66,7 @@
                     <MudStack Row="true" AlignItems="AlignItems.Baseline">
                         <MudCardContent Style="width: 100%">
                             <MudForm>
-                                <MudTextField Variant="Variant.Filled" T="string" Label="Email" Required="true"/>
+                                <MudTextField Variant="Variant.Filled" @bind-Value="EmailInput.Email" T="string" Label="Email" Required="true"/>
                             </MudForm>
                         </MudCardContent>
                         <MudCardActions>
@@ -80,7 +80,7 @@
                     <MudStack Row="true" AlignItems="AlignItems.Baseline">
                         <MudCardContent Style="width: 100%">
                             <MudForm>
-                                <MudTextField Variant="Variant.Filled" T="string" Label="Phone number" Required="true"/>
+                                <MudTextField Variant="Variant.Filled" @bind-Value="PhoneNumberInput.PhoneNumber" T="string" Label="Phone number" Required="true"/>
                             </MudForm>
                         </MudCardContent>
                         <MudCardActions>
@@ -95,13 +95,14 @@
                 <MudStack Row="false">
                     <MudCardContent Style="width: 100%">
                         <MudForm>
-                            <MudTextField Variant="Variant.Filled" T="string" Label="Current password" Required="true"/>
-                            <MudTextField Variant="Variant.Filled" T="string" Label="New password" Required="true"/>
-                            <MudTextField Variant="Variant.Filled" T="string" Label="Confirm new password" Required="true"/>
+                            <MudTextField InputType="InputType.Password" Variant="Variant.Filled" @bind-Value="PasswordInput.CurrentPassword" T="string" Label="Current password" Required="true"/>
+                            <MudTextField @ref="pwField1" InputType="InputType.Password" Variant="Variant.Filled" @bind-Value="PasswordInput.NewPassword" T="string" Label="New password" Required="true"/>
+                            <MudTextField InputType="InputType.Password" Variant="Variant.Filled" @bind-Value="PasswordInput.ConfirmNewPassword" T="string" Label="Confirm new password" Required="true"
+                                          Validation="@(new Func<string, string>(PasswordMatch))"/>
                         </MudForm>
                     </MudCardContent>
                     <MudCardActions>
-                        <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                        <MudIconButton OnClick="@(async () => await ProfileService.ChangePasswordAsync(PasswordInput))" Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
                     </MudCardActions>
                 </MudStack>
             </MudForm>
