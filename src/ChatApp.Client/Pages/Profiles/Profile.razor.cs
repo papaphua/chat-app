@@ -42,7 +42,7 @@ public sealed partial class Profile
             OpenEmailDialog();
         }
     }
-    
+
     private async Task SendPhoneConfirmationAsync()
     {
         var result = await ProfileService.SendChangePhoneTokenAsync(PhoneNumberInput);
@@ -54,11 +54,15 @@ public sealed partial class Profile
 
     private void OpenEmailDialog()
     {
-        DialogService.Show<EmailDialog>("Email confirmation", _dialogOptions);
+        var parameters = new DialogParameters { { "Email", EmailInput.Email } };
+
+        DialogService.Show<EmailDialog>("Email confirmation", parameters, _dialogOptions);
     }
 
     private void OpenPhoneDialog()
     {
-        DialogService.Show<PhoneDialog>("Phone confirmation", _dialogOptions);
+        var parameters = new DialogParameters { { "PhoneNumber", PhoneNumberInput.PhoneNumber } };
+        
+        DialogService.Show<PhoneDialog>("Phone confirmation", parameters, _dialogOptions);
     }
 }

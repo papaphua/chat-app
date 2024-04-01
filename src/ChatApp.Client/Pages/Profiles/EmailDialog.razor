@@ -1,6 +1,6 @@
 ﻿<MudDialog>
     <DialogContent>
-        Dialog Content
+        <MudTextField Variant="Variant.Filled" @bind-Value="Input.Token" T="string" Label="Confirmation code" Required="true"/>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
