@@ -1,5 +1,6 @@
 ﻿using ChatApp.Client.Dtos;
 using ChatApp.Client.Services.ProfileService;
+using ChatApp.Client.Services.ResourceService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -12,6 +13,7 @@ public sealed partial class Profile
 {
     private MudTextField<string> pwField1;
     [Inject] private IProfileService ProfileService { get; set; } = default!;
+    [Inject] private IResourceService ResourceService { get; set; } = default!;
     [Inject] private IDialogService DialogService { get; set; } = default!;
     private readonly DialogOptions _dialogOptions = new() { CloseOnEscapeKey = false };
 
@@ -22,6 +24,10 @@ public sealed partial class Profile
     private NewPasswordDto PasswordInput { get; } = new();
     private IBrowserFile? File { get; set; }
 
+    private Dictionary<int, string> AvatarImages { get; set; } = [];
+    private List<AvatarDto> AvatarDtos { get; set; } = [];
+    private int SelectedAvatar { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var profile = await ProfileService.GetProfileAsync();
@@ -31,6 +37,11 @@ public sealed partial class Profile
         UserNameInput.UserName = profile.UserName;
         EmailInput.Email = profile.Email;
         PhoneNumberInput.PhoneNumber = profile.PhoneNumber;
+        if (profile.Avatars.Count != 0)
+        {
+            AvatarDtos.AddRange(profile.Avatars);
+            await DownloadAvatarAsync(0);
+        }
     }
 
     private string? PasswordMatch(string arg)
@@ -73,5 +84,23 @@ public sealed partial class Profile
     private void SetFile(InputFileChangeEventArgs e)
     {
         File = e.File;
+    }
+
+    private async Task DownloadAvatarAsync(int newIndex)
+    {
+        SelectedAvatar = newIndex;
+        var id = AvatarDtos[SelectedAvatar].ResourceId;
+        if (!AvatarImages.ContainsKey(SelectedAvatar))
+        {
+            var resource = await ResourceService.GetResourceAsync(id);
+            AvatarImages.Add(SelectedAvatar, resource.Bytes);
+            StateHasChanged();
+        }
+    }
+
+    private string? GetImageValue()
+    {
+        AvatarImages.TryGetValue(SelectedAvatar, out var value);
+        return value;
     }
 }

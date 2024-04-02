@@ -7,22 +7,15 @@
                 Avatar
             </MudCardHeader>
             <MudCardContent>
-                <MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="false" TData="object">
-                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
-                        <div class="d-flex" style="height:100%">
-                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
-                        </div>
-                    </MudCarouselItem>
-                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
-                        <div class="d-flex" style="height:100%">
-                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
-                        </div>
-                    </MudCarouselItem>
-                    <MudCarouselItem Transition="Transition.Slide">
-                        <div class="d-flex" style="height:100%">
-                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large"/>
-                        </div>
-                    </MudCarouselItem>
+                <MudCarousel SelectedIndex="SelectedAvatar" bind-SelectedIndex="SelectedAvatar" SelectedIndexChanged="DownloadAvatarAsync" Class="mud-width-full" Style="height:200px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="false" TData="object">
+                    @foreach (var avatar in AvatarDtos)
+                    {
+                        <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                            <div class="d-flex" style="height:100%">
+                                <MudImage Src="@($"data:image/png;base64, {GetImageValue()}")" Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
+                            </div>
+                        </MudCarouselItem>
+                    }
                 </MudCarousel>
             </MudCardContent>
             <MudCardActions>
