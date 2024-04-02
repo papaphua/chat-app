@@ -1,4 +1,5 @@
 ﻿using ChatApp.Client.Dtos;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace ChatApp.Client.Services.ProfileService;
 
@@ -8,7 +9,9 @@ public interface IProfileService
 
     Task UpdateNameAsync(ProfileNameDto dto);
 
-    Task UpdateUserName(UserNameDto dto);
+    Task UpdateUserNameAsync(UserNameDto dto);
+
+    Task AddAvatarAsync(IBrowserFile file);
 
     Task<bool> SendChangeEmailTokenAsync(EmailDto dto);
 

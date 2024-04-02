@@ -27,6 +27,17 @@
             </MudCardContent>
             <MudCardActions>
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete"></MudIconButton>
+                <MudFileUpload T="IBrowserFile" OnFilesChanged="SetFile">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   for="@context.Id">
+                            Choose
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="@(async () => await ProfileService.AddAvatarAsync(File))"/>
             </MudCardActions>
         </MudCard>
         <MudCard Style="width: 100%">
@@ -56,7 +67,7 @@
                             </MudForm>
                         </MudCardContent>
                         <MudCardActions>
-                            <MudIconButton OnClick="@(async () => await ProfileService.UpdateUserName(UserNameInput))" Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                            <MudIconButton OnClick="@(async () => await ProfileService.UpdateUserNameAsync(UserNameInput))" Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
                         </MudCardActions>
                     </MudStack>
                 </MudForm>

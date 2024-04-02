@@ -1,10 +1,13 @@
 ﻿using ChatApp.Client.Dtos;
 using ChatApp.Client.Services.ProfileService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
 namespace ChatApp.Client.Pages.Profiles;
 
+[Authorize]
 public sealed partial class Profile
 {
     private MudTextField<string> pwField1;
@@ -17,6 +20,7 @@ public sealed partial class Profile
     private EmailDto EmailInput { get; } = new();
     private PhoneNumberDto PhoneNumberInput { get; } = new();
     private NewPasswordDto PasswordInput { get; } = new();
+    private IBrowserFile? File { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,7 +66,12 @@ public sealed partial class Profile
     private void OpenPhoneDialog()
     {
         var parameters = new DialogParameters { { "PhoneNumber", PhoneNumberInput.PhoneNumber } };
-        
+
         DialogService.Show<PhoneDialog>("Phone confirmation", parameters, _dialogOptions);
+    }
+
+    private void SetFile(InputFileChangeEventArgs e)
+    {
+        File = e.File;
     }
 }

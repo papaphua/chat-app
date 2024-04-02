@@ -43,7 +43,7 @@ public sealed class ProfileController(
     }
 
     [HttpPost("avatar")]
-    public async Task<IResult> AddAvatar(IFormFile file)
+    public async Task<IResult> AddAvatar([FromForm(Name = "files")] IFormFile file)
     {
         var result = await profileService.AddAvatarAsync(UserId, file);
 
