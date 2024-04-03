@@ -10,7 +10,7 @@ public sealed partial class EmailDialog
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
     [Inject] private IProfileService ProfileService { get; set; } = default!;
 
-    private EmailChangeDto Input { get; set; } = new();
+    private EmailChangeDto Input { get; } = new();
 
     [Parameter] public string Email { get; set; } = default!;
 
@@ -21,5 +21,8 @@ public sealed partial class EmailDialog
         MudDialog.Close(DialogResult.Ok(true));
     }
 
-    private void Cancel() => MudDialog.Cancel();
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
 }

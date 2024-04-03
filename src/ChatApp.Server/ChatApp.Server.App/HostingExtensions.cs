@@ -18,6 +18,12 @@ public static class HostingExtensions
 
         builder.Services.AddBff();
 
+        builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", opt => opt
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithExposedHeaders("X-PagedData")));
+
         builder.Services.AddAuth();
 
         builder.Services.AddSwaggerGen(options =>

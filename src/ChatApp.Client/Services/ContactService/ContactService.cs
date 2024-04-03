@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using ChatApp.Client.Core.Paging;
 using ChatApp.Client.Dtos;
 using Microsoft.AspNetCore.Components.Forms;
@@ -8,10 +9,16 @@ namespace ChatApp.Client.Services.ContactService;
 
 public sealed class ContactService(HttpClient http) : IContactService
 {
-    public async Task<PagedList<ContactDto>> GetAllContacts(PagedParameters parameters)
+    public async Task<PagedResponse<ContactDto>> GetAllContacts(PagedParameters parameters)
     {
-        return await http.GetFromJsonAsync<PagedList<ContactDto>>(
-            $"api/contact?PageSize={parameters.PageSize}&CurrentPage={parameters.CurrentPage}");
+        var response =
+            await http.GetAsync($"api/contact?PageSize={parameters.PageSize}&CurrentPage={parameters.CurrentPage}");
+
+        return new PagedResponse<ContactDto>
+        {
+            Items = await response.Content.ReadFromJsonAsync<List<ContactDto>>(),
+            PagedData = JsonSerializer.Deserialize<PagedData>(response.Headers.GetValues("X-PagedData").First())
+        };
     }
 
     public async Task<ContactDto> GetContactAsync(Guid contactId)
@@ -43,9 +50,9 @@ public sealed class ContactService(HttpClient http) : IContactService
             new MediaTypeHeaderValue(file.ContentType);
 
         content.Add(
-            content: fileContent,
-            name: "files",
-            fileName: file.Name);
+            fileContent,
+            "files",
+            file.Name);
 
         await http.PutAsync($"api/contact/{contactId}/avatar", content);
     }

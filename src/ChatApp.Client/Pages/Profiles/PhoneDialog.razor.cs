@@ -10,8 +10,8 @@ public sealed partial class PhoneDialog
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
 
     [Inject] private IProfileService ProfileService { get; set; } = default!;
-    
-    private PhoneNumberChangeDto Input { get; set; } = new();
+
+    private PhoneNumberChangeDto Input { get; } = new();
 
     [Parameter] public string PhoneNumber { get; set; } = default!;
 
@@ -22,5 +22,8 @@ public sealed partial class PhoneDialog
         MudDialog.Close(DialogResult.Ok(true));
     }
 
-    private void Cancel() => MudDialog.Cancel();
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
 }

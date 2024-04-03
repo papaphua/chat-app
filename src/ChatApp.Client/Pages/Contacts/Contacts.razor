@@ -1,1 +1,15 @@
 ﻿@page "/contacts"
+
+@foreach (var contact in ContactList)
+{
+    <MudCard Elevation="0" Class="mb-5">
+        <MudCardHeader>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudText>@contact.FirstName</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit"></MudIconButton>
+        </MudCardActions>
+    </MudCard>
+}

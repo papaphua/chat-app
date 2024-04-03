@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Client", "src\ChatA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Identity", "src\ChatApp.Identity\ChatApp.Identity.csproj", "{9B0FDA6A-EC43-44B1-B016-47D89EC0AA77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Infrastructure", "src\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj", "{BBD04EFA-FD19-4A00-AFF6-29F7CC67DB82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Server.Infrastructure", "src\ChatApp.Server\ChatApp.Server.Infrastructure\ChatApp.Server.Infrastructure.csproj", "{BBD04EFA-FD19-4A00-AFF6-29F7CC67DB82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
