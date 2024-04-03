@@ -43,9 +43,9 @@ public sealed class ContactService(HttpClient http) : IContactService
             new MediaTypeHeaderValue(file.ContentType);
 
         content.Add(
-            content: fileContent,
-            name: "files",
-            fileName: file.Name);
+            fileContent,
+            "files",
+            file.Name);
 
         await http.PutAsync($"api/contact/{contactId}/avatar", content);
     }

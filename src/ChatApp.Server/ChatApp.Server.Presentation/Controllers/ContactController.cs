@@ -5,6 +5,7 @@ using ChatApp.Server.Presentation.Core.Abstractions;
 using ChatApp.Server.Presentation.Core.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ChatApp.Server.Presentation.Controllers;
 
@@ -18,11 +19,14 @@ public sealed class ContactController(
     {
         var result = await contactService.GetAllContactsAsync(UserId, parameters);
 
-        return result.IsSuccess
-            ? Results.Ok(result.Value)
-            : result.ToProblemDetails();
+        if (!result.IsSuccess)
+            return result.ToProblemDetails();
+
+        Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
+
+        return Results.Ok(result.Value);
     }
-    
+
     [HttpGet("{contactId:guid}")]
     public async Task<IResult> GetContact(Guid contactId)
     {

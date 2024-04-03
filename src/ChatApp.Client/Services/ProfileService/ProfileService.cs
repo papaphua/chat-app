@@ -31,10 +31,10 @@ public sealed class ProfileService(HttpClient http) : IProfileService
             new MediaTypeHeaderValue(file.ContentType);
 
         content.Add(
-            content: fileContent,
-            name: "files",
-            fileName: file.Name);
-        
+            fileContent,
+            "files",
+            file.Name);
+
         await http.PostAsync("api/profile/avatar", content);
     }
 

@@ -7,7 +7,7 @@ namespace ChatApp.Client.Services.ContactService;
 public interface IContactService
 {
     Task<PagedList<ContactDto>> GetAllContacts(PagedParameters parameters);
-    
+
     Task<ContactDto> GetContactAsync(Guid contactId);
 
     Task AddContactAsync(Guid partnerId, ContactNameDto dto);

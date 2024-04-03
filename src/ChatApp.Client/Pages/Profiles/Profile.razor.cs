@@ -11,11 +11,11 @@ namespace ChatApp.Client.Pages.Profiles;
 [Authorize]
 public sealed partial class Profile
 {
+    private readonly DialogOptions _dialogOptions = new() { CloseOnEscapeKey = false };
     private MudTextField<string> pwField1;
     [Inject] private IProfileService ProfileService { get; set; } = default!;
     [Inject] private IResourceService ResourceService { get; set; } = default!;
     [Inject] private IDialogService DialogService { get; set; } = default!;
-    private readonly DialogOptions _dialogOptions = new() { CloseOnEscapeKey = false };
 
     private ProfileNameDto Information { get; } = new();
     private UserNameDto UserNameInput { get; } = new();
@@ -24,8 +24,8 @@ public sealed partial class Profile
     private NewPasswordDto PasswordInput { get; } = new();
     private IBrowserFile? File { get; set; }
 
-    private Dictionary<int, string> AvatarImages { get; set; } = [];
-    private List<AvatarDto> AvatarDtos { get; set; } = [];
+    private Dictionary<int, string> AvatarImages { get; } = [];
+    private List<AvatarDto> AvatarDtos { get; } = [];
     private int SelectedAvatar { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -52,19 +52,13 @@ public sealed partial class Profile
     private async Task SendEmailConfirmationAsync()
     {
         var result = await ProfileService.SendChangeEmailTokenAsync(EmailInput);
-        if (result)
-        {
-            OpenEmailDialog();
-        }
+        if (result) OpenEmailDialog();
     }
 
     private async Task SendPhoneConfirmationAsync()
     {
         var result = await ProfileService.SendChangePhoneTokenAsync(PhoneNumberInput);
-        if (result)
-        {
-            OpenPhoneDialog();
-        }
+        if (result) OpenPhoneDialog();
     }
 
     private void OpenEmailDialog()
