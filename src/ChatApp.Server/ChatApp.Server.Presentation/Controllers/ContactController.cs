@@ -1,5 +1,6 @@
 ﻿using ChatApp.Server.Application.Contacts;
 using ChatApp.Server.Application.Contacts.Dtos;
+using ChatApp.Server.Domain.Contacts;
 using ChatApp.Server.Presentation.Core.Abstractions;
 using ChatApp.Server.Presentation.Core.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,16 @@ public sealed class ContactController(
     IContactService contactService)
     : ApiController
 {
+    [HttpGet]
+    public async Task<IResult> GetAllContacts([FromQuery] ContactParameters parameters)
+    {
+        var result = await contactService.GetAllContactsAsync(UserId, parameters);
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
     [HttpGet("{contactId:guid}")]
     public async Task<IResult> GetContact(Guid contactId)
     {

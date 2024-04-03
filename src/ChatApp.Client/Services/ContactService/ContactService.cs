@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using ChatApp.Client.Core.Paging;
 using ChatApp.Client.Dtos;
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -7,6 +8,12 @@ namespace ChatApp.Client.Services.ContactService;
 
 public sealed class ContactService(HttpClient http) : IContactService
 {
+    public async Task<PagedList<ContactDto>> GetAllContacts(PagedParameters parameters)
+    {
+        return await http.GetFromJsonAsync<PagedList<ContactDto>>(
+            $"api/contact?PageSize={parameters.PageSize}&CurrentPage={parameters.CurrentPage}");
+    }
+
     public async Task<ContactDto> GetContactAsync(Guid contactId)
     {
         return await http.GetFromJsonAsync<ContactDto>($"api/contact/{contactId}");
@@ -39,7 +46,7 @@ public sealed class ContactService(HttpClient http) : IContactService
             content: fileContent,
             name: "files",
             fileName: file.Name);
-        
+
         await http.PutAsync($"api/contact/{contactId}/avatar", content);
     }
 

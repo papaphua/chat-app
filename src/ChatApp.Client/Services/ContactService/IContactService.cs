@@ -1,10 +1,13 @@
-﻿using ChatApp.Client.Dtos;
+﻿using ChatApp.Client.Core.Paging;
+using ChatApp.Client.Dtos;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace ChatApp.Client.Services.ContactService;
 
 public interface IContactService
 {
+    Task<PagedList<ContactDto>> GetAllContacts(PagedParameters parameters);
+    
     Task<ContactDto> GetContactAsync(Guid contactId);
 
     Task AddContactAsync(Guid partnerId, ContactNameDto dto);

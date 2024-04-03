@@ -26,8 +26,4 @@
         <_ContentIncludedByDefault Remove="Pages\Profile\Profile.razor"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Core\"/>
-    </ItemGroup>
-
 </Project>

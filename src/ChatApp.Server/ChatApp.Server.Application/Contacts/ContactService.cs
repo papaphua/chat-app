@@ -6,6 +6,7 @@ using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Contacts;
 using ChatApp.Server.Domain.Contacts.Errors;
 using ChatApp.Server.Domain.Contacts.Repositories;
+using ChatApp.Server.Domain.Core.Abstractions.Paging;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
 using ChatApp.Server.Domain.Resources;
 using ChatApp.Server.Domain.Resources.Repositories;
@@ -25,6 +26,14 @@ public sealed class ContactService(
     IUnitOfWork unitOfWork)
     : IContactService
 {
+    public async Task<Result<PagedList<ContactDto>>> GetAllContactsAsync(Guid userId, ContactParameters parameters)
+    {
+        var contacts = await contactRepository.GetPagedByOwnerId(userId, parameters, true);
+
+        return Result<PagedList<ContactDto>>.Success(
+            contacts.Select(mapper.Map<ContactDto>).AsPagedList(parameters));
+    }
+
     public async Task<Result<ContactDto>> GetContactAsync(Guid userId, Guid contactId)
     {
         var contact = await contactRepository.GetByIdAsync(contactId, true);
