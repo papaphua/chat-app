@@ -13,6 +13,8 @@ public interface IProfileService
 
     Task AddAvatarAsync(IBrowserFile file);
 
+    Task RemoveAvatarAsync(Guid resourceId);
+
     Task<bool> SendChangeEmailTokenAsync(EmailDto dto);
 
     Task ChangeEmailAsync(EmailChangeDto dto);

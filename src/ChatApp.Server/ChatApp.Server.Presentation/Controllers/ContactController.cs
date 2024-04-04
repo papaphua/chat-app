@@ -68,7 +68,7 @@ public sealed class ContactController(
     }
 
     [HttpPut("{contactId:guid}/avatar")]
-    public async Task<IResult> AddAvatar(Guid contactId, IFormFile file)
+    public async Task<IResult> AddAvatar(Guid contactId, [FromForm(Name = "files")] IFormFile file)
     {
         var result = await contactService.AddAvatarAsync(UserId, contactId, file);
 

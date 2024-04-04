@@ -1,1 +1,55 @@
-﻿@page "/contact/{contactId}"
+﻿@page "/contact/{contactId:guid}"
+
+<MudStack Row="false">
+    <MudStack Row="true" Style="width: 100%">
+        <MudCard>
+            <MudCardHeader>
+                Avatar
+            </MudCardHeader>
+            <MudCardContent>
+                <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    @if (ContactDto.Avatar is not null)
+                    {
+                        <MudAvatar Color="Color.Primary" Size="Size.Large" Style="width: 15vh; height: 15vh">
+                            <MudImage Src="@($"data:image/png;base64, {Image}")"></MudImage>
+                        </MudAvatar>
+                    }
+                    @if (ContactDto.Avatar is null)
+                    {
+                        <MudAvatar Color="Color.Primary" Size="Size.Large" Style="width: 15vh; height: 15vh">
+                            @(ContactDto.FirstName?[0])
+                        </MudAvatar>
+                    }
+                </MudStack>
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@( async () => await ContactService.RemoveAvatarAsync(ContactDto.Id))" Color="Color.Error" aria-label="delete"></MudIconButton>
+                <MudFileUpload T="IBrowserFile" OnFilesChanged="SetFile">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   for="@context.Id">
+                            Choose
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="@(async () => await ContactService.AddAvatarAsync(ContactDto.Id, File))"/>
+            </MudCardActions>
+        </MudCard>
+        <MudCard Style="width: 100%">
+            <MudForm>
+                <MudCardHeader>
+                    Information
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTextField Variant="Variant.Filled" @bind-Value="Input.FirstName" T="string" Label="First name" Required="true"/>
+                    <MudTextField Variant="Variant.Filled" @bind-Value="Input.LastName" T="string" Label="Last name" Required="false"/>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudIconButton OnClick="@(async () => await ContactService.UpdateNameAsync(ContactDto.Id, Input))" Icon="@Icons.Material.Filled.Save" Color="Color.Primary" Class="ml-auto"/>
+                </MudCardActions>
+            </MudForm>
+        </MudCard>
+    </MudStack>
+</MudStack>

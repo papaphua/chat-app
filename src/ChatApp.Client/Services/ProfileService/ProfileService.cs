@@ -38,6 +38,11 @@ public sealed class ProfileService(HttpClient http) : IProfileService
         await http.PostAsync("api/profile/avatar", content);
     }
 
+    public async Task RemoveAvatarAsync(Guid resourceId)
+    {
+        await http.DeleteAsync($"api/profile/avatar/{resourceId}");
+    }
+    
     public async Task<bool> SendChangeEmailTokenAsync(EmailDto dto)
     {
         var response = await http.PostAsJsonAsync("api/profile/email/token", dto);
