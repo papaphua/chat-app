@@ -2,14 +2,23 @@
 
 @foreach (var contact in ContactList)
 {
-    <MudCard Elevation="0" Class="mb-5">
-        <MudCardHeader>
-        </MudCardHeader>
-        <MudCardContent>
-            <MudText>@contact.FirstName</MudText>
-        </MudCardContent>
-        <MudCardActions>
-            <MudIconButton Icon="@Icons.Material.Filled.Edit"></MudIconButton>
-        </MudCardActions>
-    </MudCard>
+    <MudPaper Class="mb-4" Height="15vh">
+        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Baseline" Style="padding: 20px">
+            @if (contact.Avatar is not null)
+            {
+                <MudAvatar Size="Size.Large">
+                    <MudImage Src="@($"data:image/png;base64, {GetImageValue(contact.Id)}")"></MudImage>
+                </MudAvatar>
+            }
+            @if (contact.Avatar is null)
+            {
+                <MudAvatar Size="Size.Large">@contact.FirstName[0]</MudAvatar>
+            }
+            <MudStack Row="true">
+                <MudText Typo="Typo.h4">@contact.FirstName</MudText>
+                <MudText Typo="Typo.h4">@contact.LastName</MudText>
+            </MudStack>
+            <MudIconButton Size="Size.Large" Href="@($"contact/{contact.Id}")" Icon="@Icons.Material.Filled.Edit"/>
+        </MudStack>
+    </MudPaper>
 }

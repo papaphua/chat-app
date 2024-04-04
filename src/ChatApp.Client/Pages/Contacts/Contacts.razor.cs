@@ -22,8 +22,21 @@ public sealed partial class Contacts
         var response = await ContactService.GetAllContacts(_parameters);
         ContactList = response.Items;
         PagedData = response.PagedData;
+        await LoadAvatars();
     }
 
+    private async Task LoadAvatars()
+    {
+        foreach (var contact in ContactList)
+        {
+            if (contact.Avatar is null) continue;
+
+            var resource = await ResourceService.GetResourceAsync(contact.Avatar.ResourceId);
+            
+            Avatars.Add(contact.Id, resource.Bytes);
+        }
+    }
+    
     private string? GetImageValue(Guid contactId)
     {
         Avatars.TryGetValue(contactId, out var value);
