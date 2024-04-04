@@ -17,11 +17,23 @@ public static class PagedListExtensions
         return new PagedList<T>(items, totalCount, parameters.CurrentPage, parameters.PageSize);
     }
 
-    public static PagedList<T> AsPagedList<T>(this IEnumerable<T> source,
-        PagedParameters parameters)
-        where T : class
+    public static PagedList<TItem> ToPagedList<TItem, TFrom>(this IEnumerable<TItem> items, PagedList<TFrom> fromList)
+        where TItem : class
+        where TFrom : class
     {
-        var enumerable = source.ToList();
-        return new PagedList<T>(enumerable, enumerable.Count, parameters.CurrentPage, parameters.PageSize);
+        var list = new PagedList<TItem>
+        {
+            PagedData = new PagedData
+            {
+                TotalCount = fromList.PagedData.TotalCount,
+                PageSize = fromList.PagedData.PageSize,
+                CurrentPage = fromList.PagedData.CurrentPage,
+                TotalPages = fromList.PagedData.TotalPages
+            }
+        };
+
+        list.AddRange(items);
+
+        return list;
     }
 }

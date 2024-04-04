@@ -16,5 +16,10 @@ public sealed class PagedList<T> : List<T>
         AddRange(items);
     }
 
-    public PagedData PagedData { get; set; }
+    public PagedList()
+    {
+        
+    }
+
+    public PagedData PagedData { get; set; } = new();
 }

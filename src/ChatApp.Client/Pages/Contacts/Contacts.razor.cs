@@ -19,17 +19,14 @@ public sealed partial class Contacts
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await ContactService.GetAllContacts(_parameters);
-        ContactList = response.Items;
-        PagedData = response.PagedData;
-        await LoadAvatars();
+        await SetPage(1);
     }
 
     private async Task LoadAvatars()
     {
         foreach (var contact in ContactList)
         {
-            if (contact.Avatar is null) continue;
+            if (contact.Avatar is null || Avatars.TryGetValue(contact.Id, out _)) continue;
 
             var resource = await ResourceService.GetResourceAsync(contact.Avatar.ResourceId);
             
@@ -41,5 +38,18 @@ public sealed partial class Contacts
     {
         Avatars.TryGetValue(contactId, out var value);
         return value;
+    }
+
+    private async Task SetPage(int newPage)
+    {
+        _parameters.CurrentPage = newPage;
+        var response = await ContactService.GetAllContacts(_parameters);
+        ContactList = response.Items;
+        PagedData = response.PagedData;
+        await LoadAvatars();
+        foreach (var c in ContactList)
+        {
+            Console.WriteLine(newPage + " " + c.FirstName);
+        }
     }
 }

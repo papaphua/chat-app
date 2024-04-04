@@ -22,3 +22,4 @@
         </MudStack>
     </MudPaper>
 }
+<MudPagination bind-Selected="@_parameters.CurrentPage" Color="Color.Primary" Count="PagedData.TotalPages" SelectedChanged="@(async (int p) => await SetPage(p))"/>

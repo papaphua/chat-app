@@ -31,7 +31,7 @@ public sealed class ContactService(
         var contacts = await contactRepository.GetPagedByOwnerId(userId, parameters, true);
 
         return Result<PagedList<ContactDto>>.Success(
-            contacts.Select(mapper.Map<ContactDto>).AsPagedList(parameters));
+            contacts.Select(mapper.Map<ContactDto>).ToPagedList(contacts));
     }
 
     public async Task<Result<ContactDto>> GetContactAsync(Guid userId, Guid contactId)
