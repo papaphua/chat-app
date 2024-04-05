@@ -1,2 +1,35 @@
-﻿@page "/direct/{id:guid}"
+﻿@page "/direct"
 
+<MudStack Justify="Justify.SpaceBetween" Row="false" Style="height: 100%">
+    <MudPaper Style="padding: 20px; position: sticky">
+        <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Row="true">
+            <MudStack Row="true" Spacing="5" AlignItems="AlignItems.Center">
+                <MudAvatar Color="Color.Primary">
+                    A
+                </MudAvatar>
+                <MudText>
+                    Andrew
+                </MudText>
+            </MudStack>
+            <MudStack>
+                <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Info"/>
+            </MudStack>
+        </MudStack>
+    </MudPaper>
+    <MudStack Reverse="true" Row="false" style="height: 80%; overflow-y: auto">
+        @for (int i = 0; i < 10; i++)
+        {
+            var i1 = i;
+            <MudPaper Style="padding: 20px;" Class="mb-4">
+                @i1
+            </MudPaper>
+        }
+    </MudStack>
+    <MudPaper Style="padding: 20px; position: sticky;">
+        <MudStack AlignItems="AlignItems.Center" Row="true">
+            <MudTextField T="string" Variant="Variant.Filled" Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." Lines="3"/>
+            <MudIconButton Size="Size.Large" Icon="@Icons.Material.Filled.Attachment" Style="rotate: 90deg"/>
+            <MudIconButton Color="Color.Primary" Size="Size.Large" Icon="@Icons.Material.Filled.Send"/>
+        </MudStack>
+    </MudPaper>
+</MudStack>
