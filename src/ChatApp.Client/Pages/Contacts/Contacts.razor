@@ -3,7 +3,7 @@
 @foreach (var contact in ContactList)
 {
     <MudPaper Class="mb-4" Height="15vh">
-        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Baseline" Style="padding: 20px">
+        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Style="padding: 20px">
             @if (contact.Avatar is not null)
             {
                 <MudAvatar Size="Size.Large">
@@ -14,11 +14,14 @@
             {
                 <MudAvatar Size="Size.Large">@contact.FirstName[0]</MudAvatar>
             }
-            <MudStack Row="true">
+            <MudStack Row="true" AlignItems="AlignItems.Baseline">
                 <MudText Typo="Typo.h4">@contact.FirstName</MudText>
                 <MudText Typo="Typo.h4">@contact.LastName</MudText>
             </MudStack>
-            <MudIconButton Size="Size.Large" Href="@($"contact/{contact.Id}")" Icon="@Icons.Material.Filled.Edit"/>
+            <div>
+                <MudIconButton Size="Size.Large" Href="@($"contact/{contact.Id}")" Icon="@Icons.Material.Filled.Edit"/>
+                <MudIconButton Size="Size.Large" OnClick="@(async () => await ContactService.RemoveContactAsync(contact.Id))" Icon="@Icons.Material.Filled.Delete"/>
+            </div>
         </MudStack>
     </MudPaper>
 }
