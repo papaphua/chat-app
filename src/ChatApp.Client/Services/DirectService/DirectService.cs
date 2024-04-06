@@ -1,8 +1,10 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using ChatApp.Client.Core;
 using ChatApp.Client.Core.Paging;
 using ChatApp.Client.Dtos;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace ChatApp.Client.Services.DirectService;
 
@@ -43,9 +45,28 @@ public sealed class DirectService(HttpClient http)
         await http.DeleteAsync($"api/direct/self/{directId}");
     }
 
-    public async Task<MessageDto> AddMessageAsync(Guid directId, NewMessageDto dto)
+    public async Task<MessageDto> AddMessageAsync(Guid directId, string? text, List<IBrowserFile>? files = null)
     {
-        var response = await http.PostAsJsonAsync($"api/direct/{directId}/message", dto);
+        var multipartContent = new MultipartFormDataContent();
+        if(!string.IsNullOrEmpty(text))
+            multipartContent.Add(new StringContent(text), "text");
+
+        if (files != null && files.Count > 0)
+        {
+            foreach (var file in files)
+            {
+                var fileContent = new StreamContent(file.OpenReadStream(file.Size));
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "\"files\"",
+                    FileName = $"\"{file.Name}\""
+                };
+                multipartContent.Add(fileContent);
+            }
+        }
+        
+        
+        var response = await http.PostAsync($"api/direct/{directId}/message", multipartContent);
         return await response.Content.ReadFromJsonAsync<MessageDto>();
     }
 

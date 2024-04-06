@@ -1,6 +1,7 @@
 ﻿using ChatApp.Client.Core;
 using ChatApp.Client.Core.Paging;
 using ChatApp.Client.Dtos;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace ChatApp.Client.Services.DirectService;
 
@@ -16,7 +17,7 @@ public interface IDirectService
 
     Task RemoveDirectForSelfAsync(Guid directId);
 
-    Task<MessageDto> AddMessageAsync(Guid directId, NewMessageDto dto);
+    Task<MessageDto> AddMessageAsync(Guid directId, string? text, List<IBrowserFile>? files = null);
 
     Task RemoveMessageAsync(Guid directId, Guid messageId);
 

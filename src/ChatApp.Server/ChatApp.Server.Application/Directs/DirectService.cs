@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ChatApp.Server.Application.Core.Abstractions;
+using ChatApp.Server.Application.Core.Extensions;
 using ChatApp.Server.Application.Directs.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Contacts.Repositories;
@@ -213,7 +214,7 @@ public sealed class DirectService(
 
         if (hasAttachments)
         {
-            resources = dto.Attachments.Select(mapper.Map<Resource>).ToList();
+            resources = dto.Attachments.ToResources();
             attachments = resources.Select(resource => new DirectAttachment(message.Id, resource.Id)).ToList();
         }
 

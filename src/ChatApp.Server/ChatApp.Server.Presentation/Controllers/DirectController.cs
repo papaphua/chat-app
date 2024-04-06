@@ -54,7 +54,7 @@ public sealed class DirectController(
     }
 
     [HttpPost("{directId:guid}/message")]
-    public async Task<IResult> AddMessage(Guid directId, [FromForm] NewMessageDto dto)
+    public async Task<IResult> AddMessage(Guid directId, NewMessageDto dto)
     {
         var result = await directService.AddMessageAsync(
             UserId,

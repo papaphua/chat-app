@@ -1,14 +1,23 @@
-﻿@page "/direct"
+﻿@page "/direct/{directId:guid}"
 
 <MudStack Justify="Justify.SpaceBetween" Row="false" Style="height: 100%">
     <MudPaper Style="padding: 20px; position: sticky">
         <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Row="true">
             <MudStack Row="true" Spacing="5" AlignItems="AlignItems.Center">
-                <MudAvatar Color="Color.Primary">
-                    A
-                </MudAvatar>
+                @if (DirectDto.Avatars != null && DirectDto.Avatars.Count > 0)
+                {
+                    <MudAvatar Color="Color.Primary">
+                        <MudImage Src="@($"data:image/png;base64, {Image}")"/>
+                    </MudAvatar>
+                }
+                @if (DirectDto.Avatars == null || DirectDto.Avatars.Count == 0)
+                {
+                    <MudAvatar Color="Color.Primary">
+                        @DirectDto.FirstName?[0]
+                    </MudAvatar>
+                }
                 <MudText>
-                    Andrew
+                    @DirectDto.FirstName @DirectDto.LastName
                 </MudText>
             </MudStack>
             <MudStack>
@@ -27,9 +36,19 @@
     </MudStack>
     <MudPaper Style="padding: 20px; position: sticky;">
         <MudStack AlignItems="AlignItems.Center" Row="true">
-            <MudTextField T="string" Variant="Variant.Filled" Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." Lines="3"/>
-            <MudIconButton Size="Size.Large" Icon="@Icons.Material.Filled.Attachment" Style="rotate: 90deg"/>
-            <MudIconButton Color="Color.Primary" Size="Size.Large" Icon="@Icons.Material.Filled.Send"/>
+            <MudTextField T="string" Variant="Variant.Filled" @bind-Text="Input" Lines="3"/>
+            <MudFileUpload T="IBrowserFile" OnFilesChanged="SetFiles" multiple>
+                <ButtonTemplate>
+                    <MudIconButton HtmlTag="label"
+                                   Size="Size.Large"
+                                   Icon="@Icons.Material.Filled.Attachment"
+                                   Style="rotate: 90deg"
+                                   for="@context.Id"/>
+                </ButtonTemplate>
+            </MudFileUpload>
+            <MudIconButton Color="Color.Primary" 
+                           OnClick="@(async () => await DirectService.AddMessageAsync(DirectId, Input, Files))" 
+                           Size="Size.Large" Icon="@Icons.Material.Filled.Send"/>
         </MudStack>
     </MudPaper>
 </MudStack>

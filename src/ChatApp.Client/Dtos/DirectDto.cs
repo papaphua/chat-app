@@ -14,5 +14,5 @@ public sealed class DirectDto
 
     public string? Bio { get; set; }
 
-    public List<PriorityAvatarDto> Avatars { get; set; } = default!;
+    public List<PriorityAvatarDto>? Avatars { get; set; }
 }
