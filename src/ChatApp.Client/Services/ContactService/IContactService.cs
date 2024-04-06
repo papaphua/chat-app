@@ -6,7 +6,7 @@ namespace ChatApp.Client.Services.ContactService;
 
 public interface IContactService
 {
-    Task<PagedResponse<ContactDto>> GetAllContacts(PagedParameters parameters);
+    Task<PagedResponse<ContactDto>> GetAllContacts(ContactParameters parameters);
 
     Task<ContactDto> GetContactAsync(Guid contactId);
 

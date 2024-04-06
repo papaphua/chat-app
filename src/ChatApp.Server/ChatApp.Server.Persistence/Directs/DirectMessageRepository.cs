@@ -1,5 +1,7 @@
-﻿using ChatApp.Server.Domain.Directs;
+﻿using ChatApp.Server.Domain.Core.Abstractions.Paging;
+using ChatApp.Server.Domain.Directs;
 using ChatApp.Server.Domain.Directs.Repositories;
+using ChatApp.Server.Domain.Shared;
 using ChatApp.Server.Persistence.Core.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,18 @@ public sealed class DirectMessageRepository(ApplicationDbContext dbContext)
     : Repository<DirectMessage>(dbContext), IDirectMessageRepository
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
+
+    public async Task<PagedList<DirectMessage>> GetPagedByDirectIdAndUserIdAsync(Guid directId, Guid userId,
+        MessageParameters parameters)
+    {
+        return await _dbContext.Set<DirectMessage>()
+            .Include(message => message.Attachments)
+            .Include(message => message.Reactions)
+            .Where(message => message.DirectId == directId
+                              && message.Deletions.All(deletion => deletion.UserId != userId))
+            .OrderByDescending(message => message.Timestamp)
+            .ToPagedListAsync(parameters);
+    }
 
     public async Task<DirectMessage?> GetByIdAsync(Guid id, bool includeDeletions = false)
     {

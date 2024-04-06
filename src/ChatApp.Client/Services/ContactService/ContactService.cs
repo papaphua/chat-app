@@ -9,7 +9,7 @@ namespace ChatApp.Client.Services.ContactService;
 
 public sealed class ContactService(HttpClient http) : IContactService
 {
-    public async Task<PagedResponse<ContactDto>> GetAllContacts(PagedParameters parameters)
+    public async Task<PagedResponse<ContactDto>> GetAllContacts(ContactParameters parameters)
     {
         var response =
             await http.GetAsync($"api/contact?PageSize={parameters.PageSize}&CurrentPage={parameters.CurrentPage}");

@@ -4,12 +4,14 @@ using ChatApp.Server.Application.Directs.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Contacts.Repositories;
 using ChatApp.Server.Domain.Core;
+using ChatApp.Server.Domain.Core.Abstractions.Paging;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
 using ChatApp.Server.Domain.Directs;
 using ChatApp.Server.Domain.Directs.Errors;
 using ChatApp.Server.Domain.Directs.Repositories;
 using ChatApp.Server.Domain.Resources;
 using ChatApp.Server.Domain.Resources.Repositories;
+using ChatApp.Server.Domain.Shared;
 using ChatApp.Server.Domain.Users.Errors;
 using ChatApp.Server.Domain.Users.Repositories;
 
@@ -29,6 +31,15 @@ public sealed class DirectService(
     IMapper mapper)
     : IDirectService
 {
+    public async Task<Result<PagedList<MessageDto>>> GetAllMessagesAsync(Guid userId, Guid directId,
+        MessageParameters parameters)
+    {
+        var messages = await directMessageRepository.GetPagedByDirectIdAndUserIdAsync(directId, userId, parameters);
+
+        return Result<PagedList<MessageDto>>.Success(
+            messages.Select(mapper.Map<MessageDto>).ToPagedList(messages));
+    }
+
     public async Task<Result<DirectDto>> GetDirectAsync(Guid userId, Guid directId)
     {
         var direct = await directRepository.GetByIdAsync(directId, true, true);

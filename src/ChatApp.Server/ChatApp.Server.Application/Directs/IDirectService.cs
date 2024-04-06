@@ -1,12 +1,16 @@
 ﻿using ChatApp.Server.Application.Directs.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core;
+using ChatApp.Server.Domain.Core.Abstractions.Paging;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
+using ChatApp.Server.Domain.Shared;
 
 namespace ChatApp.Server.Application.Directs;
 
 public interface IDirectService
 {
+    Task<Result<PagedList<MessageDto>>> GetAllMessagesAsync(Guid userId, Guid directId, MessageParameters parameters);
+    
     Task<Result<DirectDto>> GetDirectAsync(Guid userId, Guid directId);
 
     Task<Result<Guid>> CreateDirectAsync(Guid userId, Guid partnerId);

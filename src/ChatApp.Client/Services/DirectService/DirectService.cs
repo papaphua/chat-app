@@ -1,10 +1,16 @@
 ﻿using ChatApp.Client.Core;
+using ChatApp.Client.Core.Paging;
 using ChatApp.Client.Dtos;
 
 namespace ChatApp.Client.Services.DirectService;
 
 public sealed class DirectService : IDirectService
 {
+    public async Task<PagedResponse<MessageDto>> GetAllMessagesAsync(Guid directId, MessageParameters parameters)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<DirectDto> GetDirectAsync(Guid directId)
     {
         throw new NotImplementedException();
