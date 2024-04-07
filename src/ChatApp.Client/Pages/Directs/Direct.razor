@@ -26,13 +26,29 @@
         </MudStack>
     </MudPaper>
     <MudStack Reverse="true" Row="false" style="height: 80%; overflow-y: auto">
-        @for (int i = 0; i < 10; i++)
+        <MudPagination bind-Selected="@_parameters.CurrentPage" Color="Color.Primary" Count="PagedData.TotalPages" SelectedChanged="@(async (int p) => await SetPage(p))"/>
+        @foreach (var message in Messages)
         {
-            var i1 = i;
-            <MudPaper Style="padding: 20px;" Class="mb-4">
-                @i1
-            </MudPaper>
+            <MudStack Row="false"  AlignItems="@(message.SenderId == DirectDto.UserId ? AlignItems.Start : AlignItems.End)">
+                <MudPaper Style="padding: 20px" Class="mb-4">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween">
+                        <div>
+                            <MudText>
+                                @message.Content
+                            </MudText>
+                            @foreach (var attachment in message.Attachments)
+                            {
+                                <MudImage Src="@($"data:image/png;base64, {GetImageValue(attachment.ResourceId)}")"/>
+                            }
+                        </div>
+                        <MudText>
+                            @message.Timestamp
+                        </MudText>
+                    </MudStack>
+                </MudPaper>
+            </MudStack>
         }
+        <MudPagination bind-Selected="@_parameters.CurrentPage" Color="Color.Primary" Count="PagedData.TotalPages" SelectedChanged="@(async (int p) => await SetPage(p))"/>
     </MudStack>
     <MudPaper Style="padding: 20px; position: sticky;">
         <MudStack AlignItems="AlignItems.Center" Row="true">
@@ -46,8 +62,8 @@
                                    for="@context.Id"/>
                 </ButtonTemplate>
             </MudFileUpload>
-            <MudIconButton Color="Color.Primary" 
-                           OnClick="@(async () => await DirectService.AddMessageAsync(DirectId, Input, Files))" 
+            <MudIconButton Color="Color.Primary"
+                           OnClick="@(async () => await DirectService.AddMessageAsync(DirectId, Input, Files))"
                            Size="Size.Large" Icon="@Icons.Material.Filled.Send"/>
         </MudStack>
     </MudPaper>

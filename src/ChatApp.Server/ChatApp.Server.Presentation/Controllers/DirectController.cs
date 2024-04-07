@@ -1,10 +1,12 @@
 ﻿using ChatApp.Server.Application.Directs;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core;
+using ChatApp.Server.Domain.Shared;
 using ChatApp.Server.Presentation.Core.Abstractions;
 using ChatApp.Server.Presentation.Core.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ChatApp.Server.Presentation.Controllers;
 
@@ -13,6 +15,19 @@ public sealed class DirectController(
     IDirectService directService)
     : ApiController
 {
+    [HttpGet("{directId:guid}/messages")]
+    public async Task<IResult> GetAllMessages(Guid directId, [FromQuery] MessageParameters parameters)
+    {
+        var result = await directService.GetAllMessagesAsync(UserId, directId, parameters);
+
+        if (!result.IsSuccess)
+            return result.ToProblemDetails();
+
+        Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
+
+        return Results.Ok(result.Value);
+    }
+    
     [HttpGet("{directId:guid}")]
     public async Task<IResult> GetDirect(Guid directId)
     {

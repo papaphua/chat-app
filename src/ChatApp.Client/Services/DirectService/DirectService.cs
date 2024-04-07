@@ -15,7 +15,7 @@ public sealed class DirectService(HttpClient http)
     {
         var response =
             await http.GetAsync(
-                $"api/direct/{directId}?PageSize={parameters.PageSize}&CurrentPage={parameters.CurrentPage}");
+                $"api/direct/{directId}/messages?PageSize={parameters.PageSize}&CurrentPage={parameters.CurrentPage}");
 
         return new PagedResponse<MessageDto>
         {

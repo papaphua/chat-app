@@ -47,9 +47,5 @@ public sealed partial class Contacts
         ContactList = response.Items;
         PagedData = response.PagedData;
         await LoadAvatars();
-        foreach (var c in ContactList)
-        {
-            Console.WriteLine(newPage + " " + c.FirstName);
-        }
     }
 }
