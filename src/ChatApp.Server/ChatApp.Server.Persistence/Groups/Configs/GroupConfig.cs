@@ -28,8 +28,8 @@ public sealed class GroupConfig : IEntityTypeConfiguration<Group>
             .WithOne(ban => ban.Group)
             .HasForeignKey(ban => ban.GroupId);
 
-        builder.HasMany(group => group.Requests)
-            .WithOne(request => request.Group)
-            .HasForeignKey(request => request.GroupId);
+        builder.HasOne(group => group.Owner)
+            .WithMany()
+            .HasForeignKey(group => group.OwnerId);
     }
 }

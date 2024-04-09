@@ -12,6 +12,7 @@ public sealed class GroupInvitationConfig : IEntityTypeConfiguration<GroupInvita
 
         builder.HasOne(invitation => invitation.Creator)
             .WithMany()
-            .HasForeignKey(invitation => invitation.CreatorId);
+            .HasForeignKey(invitation => invitation.CreatorId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

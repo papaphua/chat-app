@@ -10,8 +10,4 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Groups\Errors\"/>
-    </ItemGroup>
-
 </Project>

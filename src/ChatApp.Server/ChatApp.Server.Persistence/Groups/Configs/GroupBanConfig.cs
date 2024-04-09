@@ -12,6 +12,7 @@ public sealed class GroupBanConfig : IEntityTypeConfiguration<GroupBan>
 
         builder.HasOne(ban => ban.User)
             .WithMany()
-            .HasForeignKey(ban => ban.UserId);
+            .HasForeignKey(ban => ban.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

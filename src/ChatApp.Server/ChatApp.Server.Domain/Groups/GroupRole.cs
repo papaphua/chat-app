@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ChatApp.Server.Domain.Core.Groups;
+using ChatApp.Server.Domain.Core;
 
 namespace ChatApp.Server.Domain.Groups;
 
-public sealed class GroupRole(Guid groupId, string name) : IGroupRights
+public sealed class GroupRole(Guid groupId, string name) : IRoleRights
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -13,19 +13,11 @@ public sealed class GroupRole(Guid groupId, string name) : IGroupRights
 
     public Group Group { get; set; } = default!;
 
-    public bool AllowChangeGroupName { get; set; }
+    public bool AllowChangeGroupInfo { get; set; }
 
     public bool AllowDeleteMessage { get; set; }
-
-    public bool AllowApproveRequests { get; set; }
 
     public bool AllowBanMembers { get; set; }
 
     public bool AllowInviteUsersViaLink { get; set; }
-
-    public bool AllowManagePermissions { get; set; }
-
-    public bool AllowManageRoles { get; set; }
-
-    public bool AllowManagePrivacy { get; set; }
 }
