@@ -1,18 +1,40 @@
-﻿using ChatApp.Server.Application.Groups.Dtos;
+﻿using ChatApp.Server.Application.Core.Abstractions;
+using ChatApp.Server.Application.Groups.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core;
 using ChatApp.Server.Domain.Core.Abstractions.Paging;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
+using ChatApp.Server.Domain.Groups;
+using ChatApp.Server.Domain.Groups.Errors;
+using ChatApp.Server.Domain.Groups.Repositories;
 using ChatApp.Server.Domain.Shared;
 using Microsoft.AspNetCore.Http;
+using Group = ChatApp.Server.Domain.Groups.Group;
 
 namespace ChatApp.Server.Application.Groups;
 
-public sealed class GroupService : IGroupService
+public sealed class GroupService(
+    IGroupRepository groupRepository, 
+    IGroupMembershipRepository groupMembershipRepository,
+    IUnitOfWork unitOfWork)
+    : IGroupService
 {
     public async Task<Result<Guid>> CreateGroupAsync(Guid userId, NewGroupDto dto)
     {
-        throw new NotImplementedException();
+        var group = new Group(dto.Name, userId);
+        var membership = new GroupMembership(group.Id, userId);
+        
+        try
+        {
+            await groupRepository.AddAsync(group);
+            await groupMembershipRepository.AddAsync(membership);
+        }
+        catch (Exception)
+        {
+            return Result<Guid>.Failure(GroupErrors.CreateError);
+        }
+
+        return Result<Guid>.Success(group.Id);
     }
 
     public async Task<Result> UpdateGroupInfoAsync(Guid userId, Guid groupId, GroupInfoDto dto)
