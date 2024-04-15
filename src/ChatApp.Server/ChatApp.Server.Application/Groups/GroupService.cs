@@ -40,6 +40,11 @@ public sealed class GroupService : IGroupService
         throw new NotImplementedException();
     }
 
+    public Task<Result> UpdatePermissionsAsync(Guid userId, Guid groupId, PermissionsDto dto)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result> LeaveGroupAsync(Guid userId, Guid groupId)
     {
         throw new NotImplementedException();

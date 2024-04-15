@@ -24,6 +24,8 @@ public interface IGroupService
 
     Task<Result> RemoveGroupAsync(Guid userId, Guid groupId);
 
+    Task<Result> UpdatePermissionsAsync(Guid userId, Guid groupId, PermissionsDto dto);
+
     //Group join actions
 
     Task<Result> LeaveGroupAsync(Guid userId, Guid groupId);

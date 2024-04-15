@@ -2,5 +2,5 @@
 
 public sealed class NewGroupDto
 {
-    
+    public string Name { get; set; }
 }
