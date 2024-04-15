@@ -35,6 +35,7 @@ public sealed class GroupService(
         {
             await groupRepository.AddAsync(group);
             await groupMembershipRepository.AddAsync(membership);
+            await unitOfWork.SaveChangesAsync();
         }
         catch (Exception)
         {
@@ -47,13 +48,13 @@ public sealed class GroupService(
     public async Task<Result> UpdateGroupInfoAsync(Guid userId, Guid groupId, GroupInfoDto dto)
     {
         var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
-            true,true);
-        
-        if(membership is null)
+            true, includeRole: true);
+
+        if (membership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
-        
-        if(membership.Group.OwnerId != userId 
-           || !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
+
+        if (membership.Group.OwnerId != userId
+            && !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
             return Result.Failure(GroupRoleErrors.NotAllowed);
 
         mapper.Map(dto, membership.Group);
@@ -67,7 +68,7 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupErrors.UpdateError);
         }
-        
+
         return Result.Success();
     }
 
@@ -77,15 +78,15 @@ public sealed class GroupService(
 
         if (!FileExtensionMapping.IsImage(resource))
             return Result<AvatarDto>.Failure(GroupAvatarErrors.Invalid);
-        
+
         var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
-            true,true);
-        
-        if(membership is null)
+            true, includeRole: true);
+
+        if (membership is null)
             return Result<AvatarDto>.Failure(GroupMembershipErrors.NotFound);
-        
-        if(membership.Group.OwnerId != userId 
-           || !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
+
+        if (membership.Group.OwnerId != userId
+            && !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
             return Result<AvatarDto>.Failure(GroupRoleErrors.NotAllowed);
 
         var avatar = new GroupAvatar(groupId, resource.Id);
@@ -106,20 +107,20 @@ public sealed class GroupService(
         }
 
         await transaction.CommitAsync();
-        
+
         return Result<AvatarDto>.Success(mapper.Map<AvatarDto>(avatar));
     }
 
     public async Task<Result> RemoveAvatarAsync(Guid userId, Guid groupId, Guid resourceId)
     {
         var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
-            true,true);
-        
-        if(membership is null)
+            true, includeRole: true);
+
+        if (membership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
-        
-        if(membership.Group.OwnerId != userId 
-           || !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
+
+        if (membership.Group.OwnerId != userId
+            && !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
             return Result<AvatarDto>.Failure(GroupRoleErrors.NotAllowed);
 
         var resource = await resourceRepository.GetByIdAsync(resourceId);
@@ -136,18 +137,42 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupAvatarErrors.RemoveError);
         }
-        
+
         return Result.Success();
     }
 
     public async Task<Result<GroupDto>> GetGroupAsync(Guid userId, Guid groupId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroupWithAvatars: true);
+
+        return membership is null
+            ? Result<GroupDto>.Failure(GroupMembershipErrors.NotFound)
+            : Result<GroupDto>.Success(mapper.Map<GroupDto>(membership.Group));
     }
 
     public async Task<Result> RemoveGroupAsync(Guid userId, Guid groupId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Group.OwnerId != userId)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        try
+        {
+            groupRepository.Remove(membership.Group);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupErrors.RemoveError);
+        }
+        
+        return Result.Success();
     }
 
     public Task<Result> UpdatePermissionsAsync(Guid userId, Guid groupId, PermissionsDto dto)

@@ -10,7 +10,8 @@ public sealed class GroupMessageConfig : IEntityTypeConfiguration<GroupMessage>
     {
         builder.HasOne(message => message.Sender)
             .WithMany()
-            .HasForeignKey(message => message.SenderId);
+            .HasForeignKey(message => message.SenderId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(message => message.Attachments)
             .WithOne(attachment => attachment.Message)

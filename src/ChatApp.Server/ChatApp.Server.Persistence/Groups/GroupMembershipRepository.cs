@@ -11,7 +11,7 @@ public sealed class GroupMembershipRepository(ApplicationDbContext dbContext)
     private readonly ApplicationDbContext _dbContext = dbContext;
 
     public async Task<GroupMembership?> GetByGroupIdAndMemberIdAsync(Guid groupId, Guid memberId,
-        bool includeGroup = false, bool includeRole = false)
+        bool includeGroup = false, bool includeGroupWithAvatars = false, bool includeRole = false)
     {
         var query = _dbContext.Set<GroupMembership>()
             .AsQueryable();
@@ -19,6 +19,10 @@ public sealed class GroupMembershipRepository(ApplicationDbContext dbContext)
         if (includeGroup)
             query = query.Include(membership => membership.Group);
 
+        if (includeGroupWithAvatars)
+            query = query.Include(membership => membership.Group)
+                .ThenInclude(group => group.Avatars);
+        
         if (includeRole)
             query = query.Include(membership => membership.Role);
 

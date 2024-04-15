@@ -24,6 +24,7 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
 
         builder.HasMany(user => user.GroupMemberships)
             .WithOne(membership => membership.Member)
-            .HasForeignKey(membership => membership.MemberId);
+            .HasForeignKey(membership => membership.MemberId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

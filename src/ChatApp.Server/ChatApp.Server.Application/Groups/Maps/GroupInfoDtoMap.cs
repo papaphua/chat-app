@@ -8,6 +8,6 @@ public sealed class GroupInfoDtoMap : Profile
 {
     public GroupInfoDtoMap()
     {
-        CreateMap<Group, GroupInfoDto>();
+        CreateMap<GroupInfoDto, Group>();
     }
 }
