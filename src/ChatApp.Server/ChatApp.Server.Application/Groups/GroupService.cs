@@ -1,4 +1,5 @@
-﻿using ChatApp.Server.Application.Core.Abstractions;
+﻿using AutoMapper;
+using ChatApp.Server.Application.Core.Abstractions;
 using ChatApp.Server.Application.Groups.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core;
@@ -14,16 +15,17 @@ using Group = ChatApp.Server.Domain.Groups.Group;
 namespace ChatApp.Server.Application.Groups;
 
 public sealed class GroupService(
-    IGroupRepository groupRepository, 
+    IGroupRepository groupRepository,
     IGroupMembershipRepository groupMembershipRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IMapper mapper)
     : IGroupService
 {
     public async Task<Result<Guid>> CreateGroupAsync(Guid userId, NewGroupDto dto)
     {
         var group = new Group(dto.Name, userId);
         var membership = new GroupMembership(group.Id, userId);
-        
+
         try
         {
             await groupRepository.AddAsync(group);
@@ -39,7 +41,29 @@ public sealed class GroupService(
 
     public async Task<Result> UpdateGroupInfoAsync(Guid userId, Guid groupId, GroupInfoDto dto)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true,true);
+        
+        if(membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+        
+        if(membership.Group.OwnerId != userId 
+           || !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        mapper.Map(dto, membership.Group);
+
+        try
+        {
+            groupRepository.Update(membership.Group);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupErrors.UpdateError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, IFormFile file)
@@ -77,7 +101,8 @@ public sealed class GroupService(
         throw new NotImplementedException();
     }
 
-    public async Task<Result<PagedList<MessageDto>>> GetAllMessagesAsync(Guid userId, Guid groupId, MessageParameters parameters)
+    public async Task<Result<PagedList<MessageDto>>> GetAllMessagesAsync(Guid userId, Guid groupId,
+        MessageParameters parameters)
     {
         throw new NotImplementedException();
     }
@@ -97,7 +122,8 @@ public sealed class GroupService(
         throw new NotImplementedException();
     }
 
-    public async Task<Result<ReactionDto>> AddReactionAsync(Guid userId, Guid groupId, Guid messageId, ReactionType type)
+    public async Task<Result<ReactionDto>> AddReactionAsync(Guid userId, Guid groupId, Guid messageId,
+        ReactionType type)
     {
         throw new NotImplementedException();
     }
