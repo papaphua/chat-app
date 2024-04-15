@@ -16,9 +16,9 @@ public interface IGroupService
 
     Task<Result> UpdateGroupInfoAsync(Guid userId, Guid groupId, GroupInfoDto dto);
 
-    Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, IFormFile file);
+    Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, Guid groupId, IFormFile file);
 
-    Task<Result> RemoveAvatarAsync(Guid userId, Guid resourceId);
+    Task<Result> RemoveAvatarAsync(Guid userId, Guid groupId, Guid resourceId);
 
     Task<Result<GroupDto>> GetGroupAsync(Guid userId, Guid groupId);
 

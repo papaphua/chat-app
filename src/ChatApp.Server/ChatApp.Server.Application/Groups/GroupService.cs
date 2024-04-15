@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ChatApp.Server.Application.Core.Abstractions;
+using ChatApp.Server.Application.Core.Extensions;
 using ChatApp.Server.Application.Groups.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
 using ChatApp.Server.Domain.Core;
@@ -8,6 +9,8 @@ using ChatApp.Server.Domain.Core.Abstractions.Results;
 using ChatApp.Server.Domain.Groups;
 using ChatApp.Server.Domain.Groups.Errors;
 using ChatApp.Server.Domain.Groups.Repositories;
+using ChatApp.Server.Domain.Resources;
+using ChatApp.Server.Domain.Resources.Repositories;
 using ChatApp.Server.Domain.Shared;
 using Microsoft.AspNetCore.Http;
 using Group = ChatApp.Server.Domain.Groups.Group;
@@ -17,6 +20,8 @@ namespace ChatApp.Server.Application.Groups;
 public sealed class GroupService(
     IGroupRepository groupRepository,
     IGroupMembershipRepository groupMembershipRepository,
+    IResourceRepository resourceRepository,
+    IGroupAvatarRepository groupAvatarRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
     : IGroupService
@@ -66,12 +71,44 @@ public sealed class GroupService(
         return Result.Success();
     }
 
-    public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, IFormFile file)
+    public async Task<Result<AvatarDto>> AddAvatarAsync(Guid userId, Guid groupId, IFormFile file)
     {
-        throw new NotImplementedException();
+        var resource = file.ToResource();
+
+        if (!FileExtensionMapping.IsImage(resource))
+            return Result<AvatarDto>.Failure(GroupAvatarErrors.Invalid);
+        
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true,true);
+        
+        if(membership is null)
+            return Result<AvatarDto>.Failure(GroupMembershipErrors.NotFound);
+        
+        if(membership.Group.OwnerId != userId 
+           || !(membership.Role is not null && membership.Role.AllowChangeGroupInfo))
+            return Result<AvatarDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var avatar = new GroupAvatar(groupId, resource.Id);
+
+        var transaction = await unitOfWork.BeginTransactionAsync();
+
+        try
+        {
+            await resourceRepository.AddAsync(resource);
+            await groupAvatarRepository.AddAsync(avatar);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+
+            return Result<AvatarDto>.Failure(GroupAvatarErrors.CreateError);
+        }
+        
+        return Result<AvatarDto>.Success(mapper.Map<AvatarDto>(avatar));
     }
 
-    public async Task<Result> RemoveAvatarAsync(Guid userId, Guid resourceId)
+    public async Task<Result> RemoveAvatarAsync(Guid userId, Guid groupId, Guid resourceId)
     {
         throw new NotImplementedException();
     }
