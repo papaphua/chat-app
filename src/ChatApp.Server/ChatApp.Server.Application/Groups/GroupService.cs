@@ -283,12 +283,96 @@ public sealed class GroupService(
 
     public async Task<Result<MessageDto>> AddMessageAsync(Guid userId, Guid groupId, NewMessageDto dto)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true);
+
+        if (membership is null)
+            return Result<MessageDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if ((dto.Content is not null && !membership.Group.AllowSendTextMessages)
+            || dto.Attachments?.Count > 0 && !membership.Group.AllowSendFiles)
+            return Result<MessageDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var message = new GroupMessage(groupId, userId) { Content = dto.Content };
+
+        var hasAttachments = dto.Attachments.Count > 0;
+        List<Resource> resources = [];
+        List<GroupAttachment> attachments = [];
+
+        if (hasAttachments)
+        {
+            resources = dto.Attachments.ToResources();
+            attachments = resources.Select(resource => new GroupAttachment(message.Id, resource.Id)).ToList();
+        }
+
+        var transaction = await unitOfWork.BeginTransactionAsync();
+
+        try
+        {
+            await groupMessageRepository.AddAsync(message);
+
+            if (hasAttachments)
+            {
+                await resourceRepository.AddRangeAsync(resources);
+                await groupAttachmentRepository.AddRangeAsync(attachments);
+            }
+
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+
+            return Result<MessageDto>.Failure(GroupMessageErrors.CreateError);
+        }
+
+        await transaction.CommitAsync();
+
+        return Result<MessageDto>.Success(mapper.Map<MessageDto>(message));
     }
 
     public async Task<Result> RemoveMessageAsync(Guid userId, Guid groupId, Guid messageId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true, includeRole: true);
+
+        if (membership is null)
+            return Result<MessageDto>.Failure(GroupMembershipErrors.NotFound);
+
+        var message = await groupMessageRepository.GetByIdAsync(messageId);
+
+        var attachments = await groupAttachmentRepository.GetByMessageIdAsync(messageId, true);
+        var resources = attachments.Select(attachment => attachment.Resource).ToList();
+
+        if (message is null
+            || message.GroupId != groupId)
+            return Result.Failure(GroupMessageErrors.NotFound);
+
+        if (message.SenderId != userId
+            && membership.Role is not null && !membership.Role.AllowDeleteMessage)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        var transaction = await unitOfWork.BeginTransactionAsync();
+
+        try
+        {
+            if (resources.Count > 0)
+                resourceRepository.RemoveRange(resources);
+
+            groupMessageRepository.Remove(message);
+
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+
+            return Result.Failure(GroupMessageErrors.RemoveError);
+        }
+
+        await transaction.CommitAsync();
+
+        return Result.Success();
     }
 
     public async Task<Result> RemoveMessageForSelfAsync(Guid userId, Guid groupId, Guid messageId)

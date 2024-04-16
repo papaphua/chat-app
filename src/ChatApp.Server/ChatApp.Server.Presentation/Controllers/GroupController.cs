@@ -1,9 +1,12 @@
 using ChatApp.Server.Application.Groups;
 using ChatApp.Server.Application.Groups.Dtos;
+using ChatApp.Server.Application.Shared.Dtos;
+using ChatApp.Server.Domain.Shared;
 using ChatApp.Server.Presentation.Core.Abstractions;
 using ChatApp.Server.Presentation.Core.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ChatApp.Server.Presentation.Controllers;
 
@@ -95,6 +98,45 @@ public sealed class GroupController(IGroupService groupService)
     public async Task<IResult> JoinGroup(Guid groupId)
     {
         var result = await groupService.JoinGroupAsync(UserId, groupId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpGet("{groupId:guid}/messages")]
+    public async Task<IResult> GetAllMessages(Guid groupId, [FromQuery] MessageParameters parameters)
+    {
+        var result = await groupService.GetAllMessagesAsync(UserId, groupId, parameters);
+
+        if (!result.IsSuccess)
+            return result.ToProblemDetails();
+
+        Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
+
+        return Results.Ok(result.Value);
+    }
+    
+    [HttpPost("{groupId:guid}/message")]
+    public async Task<IResult> AddMessage(Guid groupId, NewMessageDto dto)
+    {
+        var result = await groupService.AddMessageAsync(
+            UserId,
+            groupId,
+            dto);
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+
+    [HttpDelete("{groupId:guid}/message/{messageId:guid}")]
+    public async Task<IResult> RemoveMessage(Guid groupId, Guid messageId)
+    {
+        var result = await groupService.RemoveMessageAsync(
+            UserId,
+            groupId,
+            messageId);
 
         return result.IsSuccess
             ? Results.Ok()
