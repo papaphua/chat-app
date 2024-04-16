@@ -142,4 +142,17 @@ public sealed class GroupController(IGroupService groupService)
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+    
+    [HttpDelete("{groupId:guid}/message/self/{messageId:guid}")]
+    public async Task<IResult> RemoveMessageForSelf(Guid groupId, Guid messageId)
+    {
+        var result = await groupService.RemoveMessageForSelfAsync(
+            UserId,
+            groupId,
+            messageId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }

@@ -26,6 +26,7 @@ public sealed class GroupService(
     IGroupMessageRepository groupMessageRepository,
     IGroupAttachmentRepository groupAttachmentRepository,
     IGroupReactionRepository groupReactionRepository,
+    IGroupDeletionRepository groupDeletionRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
     : IGroupService
@@ -377,7 +378,32 @@ public sealed class GroupService(
 
     public async Task<Result> RemoveMessageForSelfAsync(Guid userId, Guid groupId, Guid messageId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true, includeRole: true);
+
+        if (membership is null)
+            return Result<MessageDto>.Failure(GroupMembershipErrors.NotFound);
+
+        var message = await groupMessageRepository.GetByIdAsync(messageId);
+
+        if (message is null
+            || message.GroupId != groupId)
+            return Result.Failure(GroupMessageErrors.NotFound);
+
+        if (message.SenderId != userId)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        try
+        {
+            await groupDeletionRepository.AddAsync(new GroupDeletion(message.Id, userId));
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupMessageErrors.RemoveError);
+        }
+
+        return Result.Success();
     }
 
     public async Task<Result<ReactionDto>> AddReactionAsync(Guid userId, Guid groupId, Guid messageId,
