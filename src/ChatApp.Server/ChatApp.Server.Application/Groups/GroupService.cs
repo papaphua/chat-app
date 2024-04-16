@@ -23,6 +23,9 @@ public sealed class GroupService(
     IResourceRepository resourceRepository,
     IGroupAvatarRepository groupAvatarRepository,
     IGroupBanRepository groupBanRepository,
+    IGroupMessageRepository groupMessageRepository,
+    IGroupAttachmentRepository groupAttachmentRepository,
+    IGroupReactionRepository groupReactionRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
     : IGroupService
@@ -172,7 +175,7 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupErrors.RemoveError);
         }
-        
+
         return Result.Success();
     }
 
@@ -188,7 +191,7 @@ public sealed class GroupService(
             return Result.Failure(GroupRoleErrors.NotAllowed);
 
         mapper.Map(dto, membership.Group);
-        
+
         try
         {
             groupRepository.Update(membership.Group);
@@ -198,7 +201,7 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupErrors.UpdateError);
         }
-        
+
         return Result.Success();
     }
 
@@ -209,9 +212,9 @@ public sealed class GroupService(
 
         if (membership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
-        
+
         var transaction = await unitOfWork.BeginTransactionAsync();
-        
+
         try
         {
             groupMembershipRepository.Remove(membership);
@@ -221,28 +224,28 @@ public sealed class GroupService(
                 membership.Group.OwnerId = null;
                 groupRepository.Update(membership.Group);
             }
-            
+
             await unitOfWork.SaveChangesAsync();
         }
         catch (Exception)
         {
             await transaction.RollbackAsync();
-            
+
             return Result.Failure(GroupMembershipErrors.RemoveError);
         }
 
         await transaction.CommitAsync();
-        
+
         return Result.Success();
     }
 
     public async Task<Result> JoinGroupAsync(Guid userId, Guid groupId)
     {
         var group = await groupRepository.GetByIdAsync(groupId);
-        
-        if(group is null)
+
+        if (group is null)
             return Result.Failure(GroupErrors.NotFound);
-        
+
         var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId);
 
         if (membership is not null)
@@ -264,14 +267,18 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupMembershipErrors.CreateError);
         }
-        
+
         return Result.Success();
     }
 
     public async Task<Result<PagedList<MessageDto>>> GetAllMessagesAsync(Guid userId, Guid groupId,
         MessageParameters parameters)
     {
-        throw new NotImplementedException();
+        var messages = await groupMessageRepository.GetPagedByGroupIdAndUserIdAsync(groupId,
+            userId, parameters);
+
+        return Result<PagedList<MessageDto>>.Success(
+            messages.Select(mapper.Map<MessageDto>).ToPagedList(messages));
     }
 
     public async Task<Result<MessageDto>> AddMessageAsync(Guid userId, Guid groupId, NewMessageDto dto)
