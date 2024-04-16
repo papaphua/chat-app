@@ -30,6 +30,7 @@ public sealed class GroupService(
     IGroupReactionRepository groupReactionRepository,
     IGroupDeletionRepository groupDeletionRepository,
     IGroupInvitationRepository groupInvitationRepository,
+    IGroupRoleRepository groupRoleRepository,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
@@ -659,9 +660,12 @@ public sealed class GroupService(
         return Result.Success();
     }
 
-    public async Task<Result<PagedList<RoleDto>>> GetRolesAsync(Guid userId, Guid groupId)
+    public async Task<Result<PagedList<RoleDto>>> GetRolesAsync(Guid userId, Guid groupId, RoleParameters parameters)
     {
-        throw new NotImplementedException();
+        var roles = await groupRoleRepository.GetByGroupId(groupId, parameters);
+
+        return Result<PagedList<RoleDto>>.Success(
+            roles.Select(mapper.Map<RoleDto>).ToPagedList(roles));
     }
 
     public async Task<Result<RoleDto>> CreateRoleAsync(Guid userId, Guid groupId, NewRoleDto dto)

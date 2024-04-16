@@ -263,4 +263,17 @@ public sealed class GroupController(IGroupService groupService)
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+    
+    [HttpGet("{groupId:guid}/roles")]
+    public async Task<IResult> GetMembers(Guid groupId, [FromQuery] RoleParameters parameters)
+    {
+        var result = await groupService.GetRolesAsync(UserId, groupId, parameters);
+
+        if (!result.IsSuccess)
+            return result.ToProblemDetails();
+
+        Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
+
+        return Results.Ok(result.Value);
+    }
 }

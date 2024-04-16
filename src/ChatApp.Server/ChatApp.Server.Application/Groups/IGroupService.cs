@@ -72,7 +72,7 @@ public interface IGroupService
 
     //Role actions
 
-    Task<Result<PagedList<RoleDto>>> GetRolesAsync(Guid userId, Guid groupId);
+    Task<Result<PagedList<RoleDto>>> GetRolesAsync(Guid userId, Guid groupId, RoleParameters parameters);
 
     Task<Result<RoleDto>> CreateRoleAsync(Guid userId, Guid groupId, NewRoleDto dto);
 
