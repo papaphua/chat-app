@@ -90,4 +90,14 @@ public sealed class GroupController(IGroupService groupService)
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+
+    [HttpPost("{groupId:guid}/join")]
+    public async Task<IResult> JoinGroup(Guid groupId)
+    {
+        var result = await groupService.JoinGroupAsync(UserId, groupId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }

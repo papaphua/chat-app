@@ -22,6 +22,7 @@ public sealed class GroupService(
     IGroupMembershipRepository groupMembershipRepository,
     IResourceRepository resourceRepository,
     IGroupAvatarRepository groupAvatarRepository,
+    IGroupBanRepository groupBanRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
     : IGroupService
@@ -237,7 +238,34 @@ public sealed class GroupService(
 
     public async Task<Result> JoinGroupAsync(Guid userId, Guid groupId)
     {
-        throw new NotImplementedException();
+        var group = await groupRepository.GetByIdAsync(groupId);
+        
+        if(group is null)
+            return Result.Failure(GroupErrors.NotFound);
+        
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId);
+
+        if (membership is not null)
+            return Result.Failure(GroupMembershipErrors.AlreadyExist);
+
+        var ban = await groupBanRepository.GetByGroupIdAndMemberIdAsync(groupId, userId);
+
+        if (ban is not null)
+            return Result.Failure(GroupBanErrors.Banned);
+
+        membership = new GroupMembership(group.Id, userId);
+
+        try
+        {
+            await groupMembershipRepository.AddAsync(membership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupMembershipErrors.CreateError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result<PagedList<MessageDto>>> GetAllMessagesAsync(Guid userId, Guid groupId,
