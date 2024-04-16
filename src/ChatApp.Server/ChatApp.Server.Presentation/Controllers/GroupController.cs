@@ -1,6 +1,7 @@
 using ChatApp.Server.Application.Groups;
 using ChatApp.Server.Application.Groups.Dtos;
 using ChatApp.Server.Application.Shared.Dtos;
+using ChatApp.Server.Domain.Core;
 using ChatApp.Server.Domain.Shared;
 using ChatApp.Server.Presentation.Core.Abstractions;
 using ChatApp.Server.Presentation.Core.Extensions;
@@ -150,6 +151,34 @@ public sealed class GroupController(IGroupService groupService)
             UserId,
             groupId,
             messageId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpPost("{groupId:guid}/message/{messageId:guid}/reaction")]
+    public async Task<IResult> AddReaction(Guid groupId, Guid messageId, ReactionType type)
+    {
+        var result = await groupService.AddReactionAsync(
+            UserId,
+            groupId,
+            messageId,
+            type);
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+
+    [HttpDelete("{groupId:guid}/message/{messageId:guid}/reaction/{reactionId:guid}")]
+    public async Task<IResult> RemoveReaction(Guid groupId, Guid messageId, Guid reactionId)
+    {
+        var result = await groupService.RemoveReactionAsync(
+            UserId,
+            groupId,
+            messageId,
+            reactionId);
 
         return result.IsSuccess
             ? Results.Ok()

@@ -409,12 +409,72 @@ public sealed class GroupService(
     public async Task<Result<ReactionDto>> AddReactionAsync(Guid userId, Guid groupId, Guid messageId,
         ReactionType type)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true, includeRole: true);
+
+        if (membership is null)
+            return Result<ReactionDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (!membership.Group.AllowReactions)
+            return Result<ReactionDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var message = await groupMessageRepository.GetByIdAsync(messageId, true);
+
+        if (message is null
+            || message.Deletions.Any(deletion => deletion.UserId == userId))
+            return Result<ReactionDto>.Failure(GroupMessageErrors.NotFound);
+
+        var reaction = await groupReactionRepository.GetByMessageIdAndUserIdAndTypeAsync(message.Id, userId, type);
+
+        if (reaction is not null) return Result<ReactionDto>.Failure(GroupReactionErrors.AlreadyExist);
+
+        reaction = new GroupReaction(message.Id, userId, type);
+
+        try
+        {
+            await groupReactionRepository.AddAsync(reaction);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<ReactionDto>.Failure(GroupReactionErrors.CreateError);
+        }
+
+        return Result<ReactionDto>.Success(mapper.Map<ReactionDto>(reaction));
     }
 
     public async Task<Result> RemoveReactionAsync(Guid userId, Guid groupId, Guid messageId, Guid reactionId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true, includeRole: true);
+
+        if (membership is null)
+            return Result<ReactionDto>.Failure(GroupMembershipErrors.NotFound);
+
+        var message = await groupMessageRepository.GetByIdAsync(messageId, true);
+
+        if (message is null
+            || message.Deletions.Any(deletion => deletion.UserId == userId))
+            return Result<ReactionDto>.Failure(GroupMessageErrors.NotFound);
+
+        var reaction = await groupReactionRepository.GetByIdAsync(reactionId);
+
+        if (reaction is null
+            || reaction.UserId != userId
+            || reaction.MessageId != message.Id)
+            return Result.Failure(GroupReactionErrors.NotFound);
+
+        try
+        {
+            groupReactionRepository.Remove(reaction);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupReactionErrors.RemoveError);
+        }
+
+        return Result.Success();
     }
 
     public async Task<Result<PagedList<BanDto>>> GetBannedMemberAsync(Guid userId, Guid groupId)
