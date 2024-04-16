@@ -184,4 +184,17 @@ public sealed class GroupController(IGroupService groupService)
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+    
+    [HttpGet("{groupId:guid}/bans")]
+    public async Task<IResult> GetBannedMember(Guid groupId, [FromQuery] MemberParameters parameters)
+    {
+        var result = await groupService.GetBannedMemberAsync(UserId, groupId, parameters);
+
+        if (!result.IsSuccess)
+            return result.ToProblemDetails();
+
+        Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
+
+        return Results.Ok(result.Value);
+    }
 }

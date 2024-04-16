@@ -48,7 +48,7 @@ public interface IGroupService
 
     //Ban actions
 
-    Task<Result<PagedList<BanDto>>> GetBannedMemberAsync(Guid userId, Guid groupId);
+    Task<Result<PagedList<BanDto>>> GetBannedMemberAsync(Guid userId, Guid groupId, MemberParameters parameters);
     
     Task<Result> BanMemberAsync(Guid userId, Guid groupId, Guid memberToBanId);
 

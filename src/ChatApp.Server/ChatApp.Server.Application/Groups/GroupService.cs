@@ -296,7 +296,7 @@ public sealed class GroupService(
 
         var message = new GroupMessage(groupId, userId) { Content = dto.Content };
 
-        var hasAttachments = dto.Attachments.Count > 0;
+        var hasAttachments = dto.Attachments?.Count > 0;
         List<Resource> resources = [];
         List<GroupAttachment> attachments = [];
 
@@ -477,9 +477,13 @@ public sealed class GroupService(
         return Result.Success();
     }
 
-    public async Task<Result<PagedList<BanDto>>> GetBannedMemberAsync(Guid userId, Guid groupId)
+    public async Task<Result<PagedList<BanDto>>> GetBannedMemberAsync(Guid userId, Guid groupId,
+        MemberParameters parameters)
     {
-        throw new NotImplementedException();
+        var members = await groupBanRepository.GetByGroupIdAsync(groupId, parameters);
+
+        return Result<PagedList<BanDto>>.Success(
+            members.Select(mapper.Map<BanDto>).ToPagedList(members));
     }
 
     public async Task<Result> BanMemberAsync(Guid userId, Guid groupId, Guid memberToBanId)
