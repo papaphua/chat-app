@@ -582,9 +582,13 @@ public sealed class GroupService(
         throw new NotImplementedException();
     }
 
-    public async Task<Result<PagedList<GroupMemberDto>>> GetMemberAsync(Guid userId, Guid groupId)
+    public async Task<Result<PagedList<GroupMemberDto>>> GetMembersAsync(Guid userId, Guid groupId,
+        MemberParameters parameters)
     {
-        throw new NotImplementedException();
+        var members = await groupMembershipRepository.GetPagedByGroupIdAsync(groupId, parameters);
+
+        return Result<PagedList<GroupMemberDto>>.Success(
+            members.Select(mapper.Map<GroupMemberDto>).ToPagedList(members));
     }
 
     public async Task<Result> AddMemberAsync(Guid userId, Guid groupId, Guid memberToAddId)

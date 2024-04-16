@@ -230,4 +230,17 @@ public sealed class GroupController(IGroupService groupService)
 
         return Results.Ok(result.Value);
     }
+    
+    [HttpGet("{groupId:guid}/members")]
+    public async Task<IResult> GetMembers(Guid groupId, [FromQuery] MemberParameters parameters)
+    {
+        var result = await groupService.GetMembersAsync(UserId, groupId, parameters);
+
+        if (!result.IsSuccess)
+            return result.ToProblemDetails();
+
+        Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
+
+        return Results.Ok(result.Value);
+    }
 }
