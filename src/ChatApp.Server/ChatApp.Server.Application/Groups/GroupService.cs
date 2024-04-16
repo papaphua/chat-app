@@ -599,19 +599,19 @@ public sealed class GroupService(
 
         if (membership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
-        
-        if(!membership.Group.AllowAddMembers)
+
+        if (!membership.Group.AllowAddMembers)
             return Result.Failure(GroupRoleErrors.NotAllowed);
 
         var memberToAdd = await userRepository.GetByIdAsync(memberToAddId);
-        
-        if(memberToAdd is null)
+
+        if (memberToAdd is null)
             return Result.Failure(UserErrors.NotFound);
 
         var memberToAddMembership =
             await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToAddId);
-        
-        if(memberToAddMembership is not null)
+
+        if (memberToAddMembership is not null)
             return Result.Failure(GroupMembershipErrors.AlreadyExist);
 
         memberToAddMembership = new GroupMembership(groupId, memberToAddId);
@@ -626,7 +626,7 @@ public sealed class GroupService(
             return Result.Failure(GroupMembershipErrors.CreateError);
         }
 
-        
+
         return Result.Success();
     }
 
@@ -637,14 +637,14 @@ public sealed class GroupService(
 
         if (membership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
-        
-        if(!membership.Group.AllowAddMembers)
+
+        if (!membership.Group.AllowAddMembers)
             return Result.Failure(GroupRoleErrors.NotAllowed);
 
         var memberToRemoveMembership =
             await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToRemoveId);
-        
-        if(memberToRemoveMembership is null)
+
+        if (memberToRemoveMembership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
 
         try
@@ -656,13 +656,13 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupMembershipErrors.RemoveError);
         }
-        
+
         return Result.Success();
     }
 
     public async Task<Result<PagedList<RoleDto>>> GetRolesAsync(Guid userId, Guid groupId, RoleParameters parameters)
     {
-        var roles = await groupRoleRepository.GetByGroupId(groupId, parameters);
+        var roles = await groupRoleRepository.GetByGroupIdAsync(groupId, parameters);
 
         return Result<PagedList<RoleDto>>.Success(
             roles.Select(mapper.Map<RoleDto>).ToPagedList(roles));
@@ -670,21 +670,156 @@ public sealed class GroupService(
 
     public async Task<Result<RoleDto>> CreateRoleAsync(Guid userId, Guid groupId, NewRoleDto dto)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true);
+
+        if (membership is null)
+            return Result<RoleDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Group.OwnerId != userId)
+            return Result<RoleDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var role = mapper.Map<GroupRole>(dto);
+
+        try
+        {
+            await groupRoleRepository.AddAsync(role);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<RoleDto>.Failure(GroupRoleErrors.CreateError);
+        }
+
+        return Result<RoleDto>.Success(mapper.Map<RoleDto>(role));
+    }
+
+    public async Task<Result<RoleDto>> UpdateRoleAsync(Guid userId, Guid groupId, Guid roleId, NewRoleDto dto)
+    {
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true);
+
+        if (membership is null)
+            return Result<RoleDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Group.OwnerId != userId)
+            return Result<RoleDto>.Failure(GroupRoleErrors.NotAllowed);
+        
+        var role = await groupRoleRepository.GetByIdAsync(roleId);
+
+        if (role is null)
+            return Result<RoleDto>.Failure(GroupRoleErrors.NotFound);
+
+        mapper.Map(dto, role);
+
+        try
+        {
+            groupRoleRepository.Update(role);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<RoleDto>.Failure(GroupRoleErrors.UpdateError);
+        }
+
+        return Result<RoleDto>.Success(mapper.Map<RoleDto>(role));
     }
 
     public async Task<Result> RemoveRoleAsync(Guid userId, Guid groupId, Guid roleId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true);
+
+        if (membership is null)
+            return Result<RoleDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Group.OwnerId != userId)
+            return Result<RoleDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var role = await groupRoleRepository.GetByIdAsync(roleId);
+
+        if (role is null)
+            return Result.Failure(GroupRoleErrors.NotFound);
+
+        try
+        {
+            groupRoleRepository.Remove(role);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupRoleErrors.RemoveError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result> PromoteMemberAsync(Guid userId, Guid groupId, Guid memberToPromoteId, Guid roleId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true);
+
+        if (membership is null)
+            return Result<RoleDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Group.OwnerId != userId)
+            return Result<RoleDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var memberToPromoteMembership =
+            await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToPromoteId);
+        
+        if(memberToPromoteMembership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        var role = await groupRoleRepository.GetByIdAsync(roleId);
+        
+        if (role is null)
+            return Result.Failure(GroupRoleErrors.NotFound);
+
+        memberToPromoteMembership.RoleId = role.Id;
+
+        try
+        {
+            groupMembershipRepository.Update(memberToPromoteMembership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupRoleErrors.UpdateError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result> DemoteMemberAsync(Guid userId, Guid groupId, Guid memberToDemoteId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true);
+
+        if (membership is null)
+            return Result<RoleDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Group.OwnerId != userId)
+            return Result<RoleDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var memberToDemoteMembership =
+            await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToDemoteId);
+        
+        if(memberToDemoteMembership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        memberToDemoteMembership.RoleId = null;
+
+        try
+        {
+            groupMembershipRepository.Update(memberToDemoteMembership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupRoleErrors.UpdateError);
+        }
+        
+        return Result.Success();
     }
 }

@@ -6,5 +6,7 @@ namespace ChatApp.Server.Domain.Groups.Repositories;
 
 public interface IGroupRoleRepository : IRepository<GroupRole>
 {
-    Task<PagedList<GroupRole>> GetByGroupId(Guid groupId, RoleParameters parameters);
+    Task<GroupRole?> GetByIdAsync(Guid id);
+    
+    Task<PagedList<GroupRole>> GetByGroupIdAsync(Guid groupId, RoleParameters parameters);
 }

@@ -76,6 +76,8 @@ public interface IGroupService
 
     Task<Result<RoleDto>> CreateRoleAsync(Guid userId, Guid groupId, NewRoleDto dto);
 
+    Task<Result<RoleDto>> UpdateRoleAsync(Guid userId, Guid groupId, Guid roleId, NewRoleDto dto);
+
     Task<Result> RemoveRoleAsync(Guid userId, Guid groupId, Guid roleId);
 
     Task<Result> PromoteMemberAsync(Guid userId, Guid groupId, Guid memberToPromoteId, Guid roleId);
