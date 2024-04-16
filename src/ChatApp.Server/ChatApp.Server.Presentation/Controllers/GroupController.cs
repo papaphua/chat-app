@@ -80,4 +80,14 @@ public sealed class GroupController(IGroupService groupService)
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+
+    [HttpDelete("{groupId:guid}/leave")]
+    public async Task<IResult> LeaveGroup(Guid groupId)
+    {
+        var result = await groupService.LeaveGroupAsync(UserId, groupId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }

@@ -203,7 +203,36 @@ public sealed class GroupService(
 
     public async Task<Result> LeaveGroupAsync(Guid userId, Guid groupId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+        
+        var transaction = await unitOfWork.BeginTransactionAsync();
+        
+        try
+        {
+            groupMembershipRepository.Remove(membership);
+
+            if (membership.Group.OwnerId == userId)
+            {
+                membership.Group.OwnerId = null;
+                groupRepository.Update(membership.Group);
+            }
+            
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            
+            return Result.Failure(GroupMembershipErrors.RemoveError);
+        }
+
+        await transaction.CommitAsync();
+        
+        return Result.Success();
     }
 
     public async Task<Result> JoinGroupAsync(Guid userId, Guid groupId)

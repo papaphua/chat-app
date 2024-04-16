@@ -3,7 +3,7 @@ using ChatApp.Server.Domain.Users;
 
 namespace ChatApp.Server.Domain.Groups;
 
-public sealed class Group(string name, Guid ownerId)
+public sealed class Group(string name, Guid? ownerId)
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -11,9 +11,9 @@ public sealed class Group(string name, Guid ownerId)
 
     [MaxLength(128)] public string? Info { get; set; }
 
-    public Guid OwnerId { get; set; } = ownerId;
+    public Guid? OwnerId { get; set; } = ownerId;
 
-    public User Owner { get; set; } = default!;
+    public User? Owner { get; set; }
     
     public ICollection<GroupMembership> Memberships { get; set; } = default!;
 
