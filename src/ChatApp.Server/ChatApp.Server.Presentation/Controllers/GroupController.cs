@@ -70,4 +70,14 @@ public sealed class GroupController(IGroupService groupService)
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+
+    [HttpPut("{groupId:guid}/permission")]
+    public async Task<IResult> UpdatePermissions(Guid groupId, PermissionsDto dto)
+    {
+        var result = await groupService.UpdatePermissionsAsync(UserId, groupId, dto);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }

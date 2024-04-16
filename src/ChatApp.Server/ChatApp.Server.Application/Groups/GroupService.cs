@@ -175,9 +175,30 @@ public sealed class GroupService(
         return Result.Success();
     }
 
-    public Task<Result> UpdatePermissionsAsync(Guid userId, Guid groupId, PermissionsDto dto)
+    public async Task<Result> UpdatePermissionsAsync(Guid userId, Guid groupId, PermissionsDto dto)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Group.OwnerId != userId)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        mapper.Map(dto, membership.Group);
+        
+        try
+        {
+            groupRepository.Update(membership.Group);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupErrors.UpdateError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result> LeaveGroupAsync(Guid userId, Guid groupId)
