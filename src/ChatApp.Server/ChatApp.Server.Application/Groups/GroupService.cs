@@ -12,6 +12,8 @@ using ChatApp.Server.Domain.Groups.Repositories;
 using ChatApp.Server.Domain.Resources;
 using ChatApp.Server.Domain.Resources.Repositories;
 using ChatApp.Server.Domain.Shared;
+using ChatApp.Server.Domain.Users.Errors;
+using ChatApp.Server.Domain.Users.Repositories;
 using Microsoft.AspNetCore.Http;
 using Group = ChatApp.Server.Domain.Groups.Group;
 
@@ -27,6 +29,7 @@ public sealed class GroupService(
     IGroupAttachmentRepository groupAttachmentRepository,
     IGroupReactionRepository groupReactionRepository,
     IGroupDeletionRepository groupDeletionRepository,
+    IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
     : IGroupService
@@ -488,12 +491,74 @@ public sealed class GroupService(
 
     public async Task<Result> BanMemberAsync(Guid userId, Guid groupId, Guid memberToBanId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId, 
+            includeRole: true);
+
+        if (membership is null)
+            return Result<ReactionDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null || !membership.Role.AllowBanMembers)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+        
+        var userToBan = await userRepository.GetByIdAsync(userId);
+        
+        if(userToBan is null)
+            return Result.Failure(UserErrors.NotFound);
+
+        var userToBanMembership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userToBan.Id);
+
+        if (userToBanMembership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+        
+        var groupBan = new GroupBan(groupId, userToBan.Id);
+
+        var transaction = await unitOfWork.BeginTransactionAsync();
+
+        try
+        {
+            await groupBanRepository.AddAsync(groupBan);
+            groupMembershipRepository.Remove(userToBanMembership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            
+            return Result.Failure(GroupBanErrors.CreateError);
+        }
+
+        await transaction.CommitAsync();
+        
+        return Result.Success();
     }
 
     public async Task<Result> UnbanMemberAsync(Guid userId, Guid groupId, Guid memberToUnbanId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId, 
+            includeRole: true);
+
+        if (membership is null)
+            return Result<ReactionDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null || !membership.Role.AllowBanMembers)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        var groupBan = await groupBanRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToUnbanId);
+        
+        if(groupBan is null)
+            return Result.Failure(GroupBanErrors.NotFound);
+
+        try
+        {
+            groupBanRepository.Remove(groupBan);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupBanErrors.RemoveError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result<PagedList<GroupInvitationDto>>> GetInvitationsAsync(Guid userId, Guid groupId)

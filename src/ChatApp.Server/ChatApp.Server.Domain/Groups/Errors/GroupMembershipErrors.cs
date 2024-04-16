@@ -6,7 +6,7 @@ public static class GroupMembershipErrors
 {
     public static readonly Error NotFound = Error.NotFound(
         $"{nameof(GroupMembership)}.{nameof(NotFound)}",
-        "You are not a member of this group.");
+        "Group member not found.");
     
     public static readonly Error RemoveError = Error.Internal(
         $"{nameof(GroupMembership)}.{nameof(RemoveError)}",
