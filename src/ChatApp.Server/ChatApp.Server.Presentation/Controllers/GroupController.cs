@@ -243,4 +243,24 @@ public sealed class GroupController(IGroupService groupService)
 
         return Results.Ok(result.Value);
     }
+
+    [HttpPost("{groupId:guid}/member/{userToAddId:guid}")]
+    public async Task<IResult> AddMember(Guid groupId, Guid userToAddId)
+    {
+        var result = await groupService.AddMemberAsync(UserId, groupId, userToAddId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{groupId:guid}/member/{memberToRemoveId:guid}")]
+    public async Task<IResult> RemoveMember(Guid groupId, Guid userToAddId)
+    {
+        var result = await groupService.RemoveMemberAsync(UserId, groupId, userToAddId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }

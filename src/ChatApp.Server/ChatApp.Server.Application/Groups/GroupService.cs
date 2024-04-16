@@ -593,12 +593,70 @@ public sealed class GroupService(
 
     public async Task<Result> AddMemberAsync(Guid userId, Guid groupId, Guid memberToAddId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+        
+        if(!membership.Group.AllowAddMembers)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        var memberToAdd = await userRepository.GetByIdAsync(memberToAddId);
+        
+        if(memberToAdd is null)
+            return Result.Failure(UserErrors.NotFound);
+
+        var memberToAddMembership =
+            await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToAddId);
+        
+        if(memberToAddMembership is not null)
+            return Result.Failure(GroupMembershipErrors.AlreadyExist);
+
+        memberToAddMembership = new GroupMembership(groupId, memberToAddId);
+
+        try
+        {
+            await groupMembershipRepository.AddAsync(memberToAddMembership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupMembershipErrors.CreateError);
+        }
+
+        
+        return Result.Success();
     }
 
-    public async Task<Result> RemoveMemberAsync(Guid userId, Guid groupId, Guid memberToAddId)
+    public async Task<Result> RemoveMemberAsync(Guid userId, Guid groupId, Guid memberToRemoveId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true);
+
+        if (membership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+        
+        if(!membership.Group.AllowAddMembers)
+            return Result.Failure(GroupRoleErrors.NotAllowed);
+
+        var memberToRemoveMembership =
+            await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToRemoveId);
+        
+        if(memberToRemoveMembership is null)
+            return Result.Failure(GroupMembershipErrors.NotFound);
+
+        try
+        {
+            groupMembershipRepository.Remove(memberToRemoveMembership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupMembershipErrors.RemoveError);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result<PagedList<RoleDto>>> GetRolesAsync(Guid userId, Guid groupId)

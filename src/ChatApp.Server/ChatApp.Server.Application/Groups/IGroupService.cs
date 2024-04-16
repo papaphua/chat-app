@@ -68,7 +68,7 @@ public interface IGroupService
 
     Task<Result> AddMemberAsync(Guid userId, Guid groupId, Guid memberToAddId);
 
-    Task<Result> RemoveMemberAsync(Guid userId, Guid groupId, Guid memberToAddId);
+    Task<Result> RemoveMemberAsync(Guid userId, Guid groupId, Guid memberToRemoveId);
 
     //Role actions
 
