@@ -29,6 +29,7 @@ public sealed class GroupService(
     IGroupAttachmentRepository groupAttachmentRepository,
     IGroupReactionRepository groupReactionRepository,
     IGroupDeletionRepository groupDeletionRepository,
+    IGroupInvitationRepository groupInvitationRepository,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
@@ -491,7 +492,7 @@ public sealed class GroupService(
 
     public async Task<Result> BanMemberAsync(Guid userId, Guid groupId, Guid memberToBanId)
     {
-        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId, 
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
             includeRole: true);
 
         if (membership is null)
@@ -499,17 +500,17 @@ public sealed class GroupService(
 
         if (membership.Role is null || !membership.Role.AllowBanMembers)
             return Result.Failure(GroupRoleErrors.NotAllowed);
-        
+
         var userToBan = await userRepository.GetByIdAsync(userId);
-        
-        if(userToBan is null)
+
+        if (userToBan is null)
             return Result.Failure(UserErrors.NotFound);
 
         var userToBanMembership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userToBan.Id);
 
         if (userToBanMembership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
-        
+
         var groupBan = new GroupBan(groupId, userToBan.Id);
 
         var transaction = await unitOfWork.BeginTransactionAsync();
@@ -523,18 +524,18 @@ public sealed class GroupService(
         catch (Exception)
         {
             await transaction.RollbackAsync();
-            
+
             return Result.Failure(GroupBanErrors.CreateError);
         }
 
         await transaction.CommitAsync();
-        
+
         return Result.Success();
     }
 
     public async Task<Result> UnbanMemberAsync(Guid userId, Guid groupId, Guid memberToUnbanId)
     {
-        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId, 
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
             includeRole: true);
 
         if (membership is null)
@@ -544,8 +545,8 @@ public sealed class GroupService(
             return Result.Failure(GroupRoleErrors.NotAllowed);
 
         var groupBan = await groupBanRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToUnbanId);
-        
-        if(groupBan is null)
+
+        if (groupBan is null)
             return Result.Failure(GroupBanErrors.NotFound);
 
         try
@@ -557,13 +558,18 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupBanErrors.RemoveError);
         }
-        
+
         return Result.Success();
     }
 
-    public async Task<Result<PagedList<GroupInvitationDto>>> GetInvitationsAsync(Guid userId, Guid groupId)
+    public async Task<Result<PagedList<GroupInvitationDto>>> GetInvitationsAsync(Guid userId, Guid groupId,
+        InvitationParameters parameters)
     {
-        throw new NotImplementedException();
+        var invitations = await groupInvitationRepository.GetPagedByGroupIdAndUserIdAsync(groupId,
+            userId, parameters);
+
+        return Result<PagedList<GroupInvitationDto>>.Success(
+            invitations.Select(mapper.Map<GroupInvitationDto>).ToPagedList(invitations));
     }
 
     public async Task<Result<GroupInvitationDto>> CreateInvitationLinkAsync(Guid userId, Guid groupId)

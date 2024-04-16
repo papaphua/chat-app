@@ -49,21 +49,22 @@ public interface IGroupService
     //Ban actions
 
     Task<Result<PagedList<BanDto>>> GetBannedMemberAsync(Guid userId, Guid groupId, MemberParameters parameters);
-    
+
     Task<Result> BanMemberAsync(Guid userId, Guid groupId, Guid memberToBanId);
 
     Task<Result> UnbanMemberAsync(Guid userId, Guid groupId, Guid memberToUnbanId);
 
     //User add actions
 
-    Task<Result<PagedList<GroupInvitationDto>>> GetInvitationsAsync(Guid userId, Guid groupId);
-    
+    Task<Result<PagedList<GroupInvitationDto>>> GetInvitationsAsync(Guid userId, Guid groupId,
+        InvitationParameters parameters);
+
     Task<Result<GroupInvitationDto>> CreateInvitationLinkAsync(Guid userId, Guid groupId);
 
     Task<Result> RemoveInvitationLinkAsync(Guid userId, Guid groupId, Guid invitationId);
 
     Task<Result<PagedList<GroupMemberDto>>> GetMemberAsync(Guid userId, Guid groupId);
-    
+
     Task<Result> AddMemberAsync(Guid userId, Guid groupId, Guid memberToAddId);
 
     Task<Result> RemoveMemberAsync(Guid userId, Guid groupId, Guid memberToAddId);
@@ -71,7 +72,7 @@ public interface IGroupService
     //Role actions
 
     Task<Result<PagedList<RoleDto>>> GetRolesAsync(Guid userId, Guid groupId);
-    
+
     Task<Result<RoleDto>> CreateRoleAsync(Guid userId, Guid groupId, NewRoleDto dto);
 
     Task<Result> RemoveRoleAsync(Guid userId, Guid groupId, Guid roleId);

@@ -197,4 +197,37 @@ public sealed class GroupController(IGroupService groupService)
 
         return Results.Ok(result.Value);
     }
+
+    [HttpPost("{groupId:guid}/ban/{userToBanId:guid}")]
+    public async Task<IResult> BanMember(Guid groupId, Guid userToBanId)
+    {
+        var result = await groupService.BanMemberAsync(UserId, groupId, userToBanId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{groupId:guid}/ban/{userToBanId:guid}")]
+    public async Task<IResult> UnbanMember(Guid groupId, Guid userToBanId)
+    {
+        var result = await groupService.UnbanMemberAsync(UserId, groupId, userToBanId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+        
+    [HttpGet("{groupId:guid}/invitations")]
+    public async Task<IResult> GetInvitations(Guid groupId, [FromQuery] InvitationParameters parameters)
+    {
+        var result = await groupService.GetInvitationsAsync(UserId, groupId, parameters);
+
+        if (!result.IsSuccess)
+            return result.ToProblemDetails();
+
+        Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
+
+        return Results.Ok(result.Value);
+    }
 }
