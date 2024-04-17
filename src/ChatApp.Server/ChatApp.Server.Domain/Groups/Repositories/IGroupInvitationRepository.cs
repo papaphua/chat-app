@@ -8,4 +8,8 @@ public interface IGroupInvitationRepository : IRepository<GroupInvitation>
 {
     Task<PagedList<GroupInvitation>> GetPagedByGroupIdAndUserIdAsync(Guid groupId, Guid userId,
         InvitationParameters parameters);
+
+    Task<GroupInvitation?> GetByGroupIdAndCreatorIdAsync(Guid groupId, Guid creatorId);
+    
+    Task<GroupInvitation?> GetByGroupIdAndLinkAsync(Guid groupId, string link);
 }

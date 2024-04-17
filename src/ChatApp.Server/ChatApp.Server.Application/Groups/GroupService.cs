@@ -540,7 +540,7 @@ public sealed class GroupService(
             includeRole: true);
 
         if (membership is null)
-            return Result<ReactionDto>.Failure(GroupMembershipErrors.NotFound);
+            return Result.Failure(GroupMembershipErrors.NotFound);
 
         if (membership.Role is null || !membership.Role.AllowBanMembers)
             return Result.Failure(GroupRoleErrors.NotAllowed);
@@ -575,12 +575,84 @@ public sealed class GroupService(
 
     public async Task<Result<GroupInvitationDto>> CreateInvitationLinkAsync(Guid userId, Guid groupId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeRole: true);
+
+        if (membership is null)
+            return Result<GroupInvitationDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null || !membership.Role.AllowInviteUsersViaLink)
+            return Result<GroupInvitationDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var invitation = new GroupInvitation(groupId, membership.MemberId)
+        {
+            Link = Guid.NewGuid().ToString(),
+            Timestamp = DateTime.UtcNow
+        };
+
+        try
+        {
+            await groupInvitationRepository.AddAsync(invitation);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<GroupInvitationDto>.Failure(GroupInvitationErrors.CreateError);
+        }
+
+        return Result<GroupInvitationDto>.Success(mapper.Map<GroupInvitationDto>(invitation));
     }
 
-    public async Task<Result> RemoveInvitationLinkAsync(Guid userId, Guid groupId, Guid invitationId)
+    public async Task<Result> RemoveInvitationLinkAsync(Guid userId, Guid groupId, Guid creatorId)
     {
-        throw new NotImplementedException();
+        var membership = await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, userId,
+            includeGroup: true,
+            includeRole: true);
+
+        if (membership is null)
+            return Result<GroupInvitationDto>.Failure(GroupMembershipErrors.NotFound);
+
+        if (membership.Role is null || !membership.Role.AllowInviteUsersViaLink)
+            return Result<GroupInvitationDto>.Failure(GroupRoleErrors.NotAllowed);
+
+        var invitation = await groupInvitationRepository.GetByGroupIdAndCreatorIdAsync(groupId, creatorId);
+        
+        if(invitation is null)
+            return Result.Failure(GroupInvitationErrors.NotFound);
+
+        try
+        {
+            groupInvitationRepository.Remove(invitation);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result.Failure(GroupInvitationErrors.RemoveError);
+        }
+        
+        return Result.Success();
+    }
+
+    public async Task<Result<Guid>> AcceptInvitationAsync(Guid userId, Guid groupId, string link)
+    {
+        var invitation = await groupInvitationRepository.GetByGroupIdAndLinkAsync(groupId, link);
+        
+        if(invitation is null)
+            return Result<Guid>.Failure(GroupInvitationErrors.NotFound);
+
+        var membership = new GroupMembership(invitation.GroupId, userId);
+
+        try
+        {
+            await groupMembershipRepository.AddAsync(membership);
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return Result<Guid>.Failure(GroupMembershipErrors.CreateError);
+        }
+
+        return Result<Guid>.Success(membership.GroupId);
     }
 
     public async Task<Result<PagedList<GroupMemberDto>>> GetMembersAsync(Guid userId, Guid groupId,
@@ -704,7 +776,7 @@ public sealed class GroupService(
 
         if (membership.Group.OwnerId != userId)
             return Result<RoleDto>.Failure(GroupRoleErrors.NotAllowed);
-        
+
         var role = await groupRoleRepository.GetByIdAsync(roleId);
 
         if (role is null)
@@ -750,7 +822,7 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupRoleErrors.RemoveError);
         }
-        
+
         return Result.Success();
     }
 
@@ -767,12 +839,12 @@ public sealed class GroupService(
 
         var memberToPromoteMembership =
             await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToPromoteId);
-        
-        if(memberToPromoteMembership is null)
+
+        if (memberToPromoteMembership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
 
         var role = await groupRoleRepository.GetByIdAsync(roleId);
-        
+
         if (role is null)
             return Result.Failure(GroupRoleErrors.NotFound);
 
@@ -787,7 +859,7 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupRoleErrors.UpdateError);
         }
-        
+
         return Result.Success();
     }
 
@@ -804,8 +876,8 @@ public sealed class GroupService(
 
         var memberToDemoteMembership =
             await groupMembershipRepository.GetByGroupIdAndMemberIdAsync(groupId, memberToDemoteId);
-        
-        if(memberToDemoteMembership is null)
+
+        if (memberToDemoteMembership is null)
             return Result.Failure(GroupMembershipErrors.NotFound);
 
         memberToDemoteMembership.RoleId = null;
@@ -819,7 +891,7 @@ public sealed class GroupService(
         {
             return Result.Failure(GroupRoleErrors.UpdateError);
         }
-        
+
         return Result.Success();
     }
 }

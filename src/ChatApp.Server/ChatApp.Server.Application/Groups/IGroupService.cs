@@ -61,7 +61,9 @@ public interface IGroupService
 
     Task<Result<GroupInvitationDto>> CreateInvitationLinkAsync(Guid userId, Guid groupId);
 
-    Task<Result> RemoveInvitationLinkAsync(Guid userId, Guid groupId, Guid invitationId);
+    Task<Result> RemoveInvitationLinkAsync(Guid userId, Guid groupId, Guid creatorId);
+
+    Task<Result<Guid>> AcceptInvitationAsync(Guid userId, Guid groupId, string link);
 
     Task<Result<PagedList<GroupMemberDto>>> GetMembersAsync(Guid userId, Guid groupId,
         MemberParameters parameters);
