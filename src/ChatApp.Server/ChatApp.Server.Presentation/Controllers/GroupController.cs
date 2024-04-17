@@ -230,6 +230,36 @@ public sealed class GroupController(IGroupService groupService)
 
         return Results.Ok(result.Value);
     }
+
+    [HttpPost("{groupId:guid}/invitation")]
+    public async Task<IResult> CreateInvitationLink(Guid groupId)
+    {
+        var result = await groupService.CreateInvitationLinkAsync(UserId, groupId);
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+
+    [HttpDelete("{groupId:guid}/invitation/{creatorId:guid}")]
+    public async Task<IResult> RemoveInvitationLink(Guid groupId, Guid creatorId)
+    {
+        var result = await groupService.RemoveInvitationLinkAsync(UserId, groupId, creatorId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();  
+    }
+
+    [HttpPost("{groupId:guid}/invitation/{link}/accept")]
+    public async Task<IResult> AcceptInvitation(Guid groupId, string link)
+    {
+        var result = await groupService.AcceptInvitationAsync(UserId, groupId, link);
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();  
+    }
     
     [HttpGet("{groupId:guid}/members")]
     public async Task<IResult> GetMembers(Guid groupId, [FromQuery] MemberParameters parameters)
@@ -265,7 +295,7 @@ public sealed class GroupController(IGroupService groupService)
     }
     
     [HttpGet("{groupId:guid}/roles")]
-    public async Task<IResult> GetMembers(Guid groupId, [FromQuery] RoleParameters parameters)
+    public async Task<IResult> GetRoles(Guid groupId, [FromQuery] RoleParameters parameters)
     {
         var result = await groupService.GetRolesAsync(UserId, groupId, parameters);
 
@@ -275,5 +305,55 @@ public sealed class GroupController(IGroupService groupService)
         Response.Headers["X-PagedData"] = JsonConvert.SerializeObject(result.Value!.PagedData);
 
         return Results.Ok(result.Value);
+    }
+
+    [HttpPost("{groupId:guid}/role")]
+    public async Task<IResult> CreateRole(Guid groupId, NewRoleDto dto)
+    {
+        var result = await groupService.CreateRoleAsync(UserId, groupId, dto);
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
+    [HttpPut("{groupId:guid}/role/{roleId:guid}")]
+    public async Task<IResult> UpdateRole(Guid groupId, Guid roleId, NewRoleDto dto)
+    {
+        var result = await groupService.UpdateRoleAsync(UserId, groupId, roleId, dto);
+        
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{groupId:guid}/role/{roleId:guid}")]
+    public async Task<IResult> RemoveRole(Guid groupId, Guid roleId, NewRoleDto dto)
+    {
+        var result = await groupService.RemoveRoleAsync(UserId, groupId, roleId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpPost("{groupId:guid}/role/{roleId:guid}/member/{memberId:guid}")]
+    public async Task<IResult> RemoveRole(Guid groupId, Guid roleId, Guid memberId)
+    {
+        var result = await groupService.PromoteMemberAsync(UserId, groupId, memberId, roleId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+    
+    [HttpDelete("{groupId:guid}/role/member/{memberId:guid}")]
+    public async Task<IResult> DemoteMember(Guid groupId, Guid memberId)
+    {
+        var result = await groupService.DemoteMemberAsync(UserId, groupId, memberId);
+        
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
     }
 }
