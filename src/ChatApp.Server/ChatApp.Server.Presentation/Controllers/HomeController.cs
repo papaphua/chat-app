@@ -19,4 +19,14 @@ public sealed class HomeController(IHomeService homeService)
             ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
+
+    [HttpGet("search/{value}")]
+    public async Task<IResult> SearchChatsByName(string value)
+    {
+        var result = await homeService.SearchChatsByNameAsync(UserId, value);
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
 }

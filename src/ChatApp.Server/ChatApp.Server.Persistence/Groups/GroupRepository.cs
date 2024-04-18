@@ -10,6 +10,21 @@ public sealed class GroupRepository(ApplicationDbContext dbContext)
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 
+    public async Task<List<Group>> GetByNameAsync(Guid userId, string search, bool includeAvatars = false)
+    {
+        var query = _dbContext.Set<Group>()
+            .AsQueryable();
+
+        if (includeAvatars)
+            query = query.Include(group => group.Avatars
+                .OrderByDescending(avatar => avatar.Timestamp));
+
+        return await query.Where(group => EF.Functions.Like(group.Name, $"%{search}%")
+                                          && group.Memberships.All(membership => membership.MemberId != userId)
+                                          && group.IsPublic)
+            .ToListAsync();
+    }
+
     public async Task<List<Group>> GetAllByUserIdAsync(Guid userId, bool includeAvatars = false)
     {
         var query = _dbContext.Set<Group>()
@@ -21,7 +36,7 @@ public sealed class GroupRepository(ApplicationDbContext dbContext)
         return await query.Where(group => group.Memberships.Any(membership => membership.MemberId == userId))
             .ToListAsync();
     }
-    
+
     public async Task<Group?> GetByIdAsync(Guid id)
     {
         return await _dbContext.Set<Group>()

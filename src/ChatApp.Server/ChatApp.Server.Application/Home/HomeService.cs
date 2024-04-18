@@ -3,6 +3,7 @@ using ChatApp.Server.Domain.Contacts.Repositories;
 using ChatApp.Server.Domain.Core.Abstractions.Results;
 using ChatApp.Server.Domain.Directs.Repositories;
 using ChatApp.Server.Domain.Groups.Repositories;
+using ChatApp.Server.Domain.Users.Repositories;
 using IMapper = AutoMapper.IMapper;
 
 namespace ChatApp.Server.Application.Home;
@@ -13,6 +14,7 @@ public sealed class HomeService(
     IDirectMessageRepository directMessageRepository,
     IContactRepository contactRepository,
     IGroupMessageRepository groupMessageRepository,
+    IUserRepository userRepository,
     IMapper mapper)
     : IHomeService
 {
@@ -30,6 +32,74 @@ public sealed class HomeService(
                 .ToList());
     }
 
+    public async Task<Result<List<SearchPreviewDto>>> SearchChatsByNameAsync(Guid userId, string search)
+    {
+        List<SearchPreviewDto> previews = [];
+
+        var users = await SearchUsersByUserNameAsync(userId, search);
+        var groups = await SearchGroupsByNameAsync(userId, search);
+        previews.AddRange(users);
+        previews.AddRange(groups);
+
+        return Result<List<SearchPreviewDto>>.Success(previews);
+    }
+
+    private async Task<List<SearchPreviewDto>> SearchUsersByUserNameAsync(Guid userId, string search)
+    {
+        List<SearchPreviewDto> previews = [];
+
+        var users = await userRepository.GetByUserNameAsync(userId, search, true);
+
+        foreach (var user in users)
+        {
+            var preview = mapper.Map<SearchPreviewDto>(user);
+            
+            var contact = await contactRepository.GetByOwnerIdAndPartnerId(userId, user.Id, true);
+            
+            if (contact is not null)
+            {
+                preview.Name = $"{contact.FirstName} {contact.LastName}";
+
+                if (contact.Avatar is not null)
+                {
+                    preview.ResourceId = contact.Avatar.ResourceId;
+                }
+            }
+            else
+            {
+                preview.Name = string.IsNullOrEmpty(user.FirstName)
+                    ? string.IsNullOrEmpty(user.LastName) ? user.UserName! : user.LastName
+                    : string.IsNullOrEmpty(user.LastName)
+                        ? user.FirstName
+                        : $"{user.FirstName} {user.LastName}";
+
+                preview.ResourceId = user.Avatars.FirstOrDefault()?.ResourceId;
+            }
+            
+            previews.Add(preview);
+        }
+
+        return previews;
+    }
+
+    public async Task<List<SearchPreviewDto>> SearchGroupsByNameAsync(Guid userId, string search)
+    {
+        List<SearchPreviewDto> previews = [];
+
+        var groups = await groupRepository.GetByNameAsync(userId, search, true);
+
+        foreach (var group in groups)
+        {
+            var preview = mapper.Map<SearchPreviewDto>(group);
+            
+            preview.ResourceId = group.Avatars.FirstOrDefault()?.ResourceId;
+            
+            previews.Add(preview);
+        }
+
+        return previews;
+    }
+    
     private async Task<List<ChatPreviewDto>> GetDirectPreviewsAsync(Guid userId)
     {
         List<ChatPreviewDto> previews = [];
@@ -100,6 +170,8 @@ public sealed class HomeService(
                 preview.Timestamp = message.Timestamp;
             }
 
+            preview.ResourceId = group.Avatars.FirstOrDefault()?.ResourceId;
+            
             previews.Add(preview);
         }
 
