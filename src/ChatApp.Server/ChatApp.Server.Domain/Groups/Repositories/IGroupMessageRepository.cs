@@ -6,6 +6,8 @@ namespace ChatApp.Server.Domain.Groups.Repositories;
 
 public interface IGroupMessageRepository : IRepository<GroupMessage>
 {
+    Task<GroupMessage?> GetLastMessageAsync(Guid groupId, Guid userId, bool includeAttachments = false);
+    
     Task<PagedList<GroupMessage>> GetPagedByGroupIdAndUserIdAsync(Guid groupId, Guid userId,
         MessageParameters parameters);
 

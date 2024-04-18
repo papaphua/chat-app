@@ -12,6 +12,20 @@ public sealed class DirectMessageRepository(ApplicationDbContext dbContext)
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 
+    public async Task<DirectMessage?> GetLastMessageAsync(Guid directId, Guid userId, bool includeAttachments = false)
+    {
+        var query = _dbContext.Set<DirectMessage>()
+            .AsQueryable();
+
+        if (includeAttachments)
+            query = query.Include(message => message.Attachments);
+
+        return await query.Where(message => message.DirectId == directId
+                                            && message.Deletions.All(deletion => deletion.UserId != userId))
+            .OrderByDescending(message => message.Timestamp)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<PagedList<DirectMessage>> GetPagedByDirectIdAndUserIdAsync(Guid directId, Guid userId,
         MessageParameters parameters)
     {

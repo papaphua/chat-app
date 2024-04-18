@@ -10,6 +10,26 @@ public sealed class DirectRepository(ApplicationDbContext dbContext)
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 
+    public async Task<List<Direct>> GetAllByUserIdAsync(Guid userId, bool includeMembers = false,
+        bool includeMemberAvatars = false)
+    {
+        var query = _dbContext.Set<Direct>()
+            .AsQueryable();
+
+        if (includeMembers)
+            query = query.Include(direct => direct.Memberships)
+                .ThenInclude(membership => membership.Member);
+
+        if (includeMemberAvatars)
+            query = query.Include(direct => direct.Memberships)
+                .ThenInclude(membership =>
+                    membership.Member.Avatars.OrderByDescending(avatar => avatar.Timestamp));
+
+        return await query.Where(direct =>
+                direct.Memberships.Any(membership => membership.MemberId == userId && !membership.IsChatSelfDeleted))
+            .ToListAsync();
+    }
+
     public async Task<Direct?> GetByIdAsync(Guid id, bool includeMembers = false, bool includeMemberAvatars = false)
     {
         var query = _dbContext.Set<Direct>()

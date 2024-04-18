@@ -12,6 +12,20 @@ public sealed class GroupMessageRepository(ApplicationDbContext dbContext)
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 
+    public async Task<GroupMessage?> GetLastMessageAsync(Guid groupId, Guid userId, bool includeAttachments = false)
+    {
+        var query = _dbContext.Set<GroupMessage>()
+            .AsQueryable();
+
+        if (includeAttachments)
+            query = query.Include(message => message.Attachments);
+
+        return await query.Where(message => message.GroupId == groupId
+                                            && message.Deletions.All(deletion => deletion.UserId != userId))
+            .OrderByDescending(message => message.Timestamp)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<PagedList<GroupMessage>> GetPagedByGroupIdAndUserIdAsync(Guid groupId, Guid userId,
         MessageParameters parameters)
     {
